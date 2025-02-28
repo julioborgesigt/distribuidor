@@ -1,0 +1,249 @@
+<!-- /public/admin.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Página do Administrador</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
+<body class="p-3">
+  <div class="container">
+    <h1>Página do Administrador</h1>
+
+    <!-- 1) Atualizar Lista (Upload de CSV) -->
+    <div class="mb-4">
+      <h3>Atualizar Lista</h3>
+      <form id="csvUploadForm" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="csvFile" class="form-label">Selecione a planilha CSV:</label>
+          <input type="file" class="form-control" id="csvFile" name="csvFile" accept=".csv" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload CSV</button>
+      </form>
+    </div>
+
+    <!-- 2) Pré-cadastro de Usuário -->
+    <div class="mb-4">
+      <h3>Pré-Cadastro de Usuário</h3>
+      <form id="preCadastroForm">
+        <div class="mb-3">
+          <label for="matricula" class="form-label">Matrícula (8 caracteres):</label>
+          <input type="text" class="form-control" id="matricula" name="matricula" maxlength="8" required>
+        </div>
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome:</label>
+          <input type="text" class="form-control" id="nome" name="nome" required>
+        </div>
+        <div class="mb-3">
+          <label for="senha" class="form-label">Senha:</label>
+          <input type="password" class="form-control" id="senha" name="senha" required>
+        </div>
+        <button type="submit" class="btn btn-success">Cadastrar</button>
+      </form>
+    </div>
+
+    <!-- 3) Reset de Senha -->
+    <div class="mb-4">
+      <h3>Reset de Senha</h3>
+      <form id="resetPasswordForm">
+        <div class="mb-3">
+          <label for="matriculaReset" class="form-label">Matrícula:</label>
+          <input type="text" class="form-control" id="matriculaReset" name="matriculaReset" required>
+        </div>
+        <div class="mb-3">
+          <label for="newPassword" class="form-label">Nova Senha:</label>
+          <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+        </div>
+        <button type="submit" class="btn btn-warning">Resetar Senha</button>
+      </form>
+    </div>
+
+    <!-- 4) Lista Geral Atualizada (Tabela de Processos) -->
+    <div class="mb-4">
+      <h3>Lista Geral Atualizada</h3>
+      <button id="assignBtn" class="btn btn-secondary mb-3">Atribuir (Automático)</button>
+      <table class="table table-bordered" id="processTable">
+        <thead class="table-light">
+          <tr>
+            <th>Número do Processo</th>
+            <th>Prazo Processual</th>
+            <th>Classe Principal</th>
+            <th>Assunto Principal</th>
+            <th>Tarjas</th>
+            <th>Data da Intimação</th>
+            <th>Usuário</th>
+            <th>Dias Restantes</th>
+            <th>Atribuir Manualmente</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- As linhas serão inseridas via JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (Popper incluso) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Ao carregar a página, buscar processos
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchProcesses();
+    });
+
+    // 1) Buscar lista de processos e montar a tabela
+    function fetchProcesses() {
+      fetch('/admin/processes')
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.querySelector('#processTable tbody');
+          tbody.innerHTML = '';
+
+          data.forEach(proc => {
+            const prazoMatch = proc.prazo_processual ? proc.prazo_processual.match(/(\d+)/) : null;
+            const prazoDias = prazoMatch ? parseInt(prazoMatch[1]) : 0;
+
+            // Calcula dias restantes = (dataIntimacao + prazo) - dataAtual
+            let diasRestantes = 'N/A';
+            if (proc.data_intimacao) {
+              const dataIntimacao = new Date(proc.data_intimacao);
+              // soma o prazo em dias
+              const prazoDate = new Date(dataIntimacao);
+              prazoDate.setDate(prazoDate.getDate() + prazoDias);
+
+              const hoje = new Date();
+              const diff = prazoDate - hoje; // diferença em milissegundos
+              diasRestantes = Math.ceil(diff / (1000 * 60 * 60 * 24)); // converte para dias
+            }
+
+            // Se houver um usuário associado, mostra o nome; senão "nenhum"
+            const userName = proc.User ? proc.User.nome : 'nenhum';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${proc.numero_processo}</td>
+              <td>${proc.prazo_processual || ''}</td>
+              <td>${proc.classe_principal || ''}</td>
+              <td>${proc.assunto_principal || ''}</td>
+              <td>${proc.tarjas || ''}</td>
+              <td>${proc.data_intimacao || ''}</td>
+              <td>${userName}</td>
+              <td>${diasRestantes}</td>
+              <td>
+                <form class="manual-assign-form">
+                  <input type="hidden" name="numeroProcesso" value="${proc.numero_processo}">
+                  <input type="text" class="form-control form-control-sm mb-2" 
+                         name="matricula" placeholder="Matrícula" required>
+                  <button type="submit" class="btn btn-sm btn-primary">Atribuir</button>
+                </form>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+
+          // Adiciona listener para cada formulário de atribuição manual
+          document.querySelectorAll('.manual-assign-form').forEach(form => {
+            form.addEventListener('submit', e => {
+              e.preventDefault();
+              const formData = new FormData(form);
+              const data = {
+                numeroProcesso: formData.get('numeroProcesso'),
+                matricula: formData.get('matricula')
+              };
+              fetch('/admin/manual-assign', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+              })
+              .then(res => res.text())
+              .then(msg => {
+                alert(msg);
+                fetchProcesses(); // atualiza a tabela
+              })
+              .catch(err => console.error(err));
+            });
+          });
+        })
+        .catch(err => console.error(err));
+    }
+
+    // 2) Upload de CSV
+    const csvUploadForm = document.getElementById('csvUploadForm');
+    csvUploadForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const formData = new FormData(csvUploadForm);
+      fetch('/admin/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        fetchProcesses();
+      })
+      .catch(err => console.error(err));
+    });
+
+    // 3) Pré-cadastro de usuário
+    const preCadastroForm = document.getElementById('preCadastroForm');
+    preCadastroForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const formData = new FormData(preCadastroForm);
+      const data = {
+        matricula: formData.get('matricula'),
+        nome: formData.get('nome'),
+        senha: formData.get('senha')
+      };
+      fetch('/admin/pre-cadastro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        preCadastroForm.reset();
+      })
+      .catch(err => console.error(err));
+    });
+
+    // 4) Reset de senha
+    const resetPasswordForm = document.getElementById('resetPasswordForm');
+    resetPasswordForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const formData = new FormData(resetPasswordForm);
+      const data = {
+        matricula: formData.get('matriculaReset'),
+        newPassword: formData.get('newPassword')
+      };
+      fetch('/admin/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        resetPasswordForm.reset();
+      })
+      .catch(err => console.error(err));
+    });
+
+    // 5) Atribuição automática
+    const assignBtn = document.getElementById('assignBtn');
+    assignBtn.addEventListener('click', () => {
+      fetch('/admin/assign', {
+        method: 'POST'
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        fetchProcesses(); // atualiza a tabela
+      })
+      .catch(err => console.error(err));
+    });
+  </script>
+</body>
+</html>
