@@ -4,7 +4,7 @@ const UserModel = require('./user');
 const ProcessModel = require('./process');
 
 // Ajuste aqui suas credenciais e nome do banco
-const sequelize = new Sequelize('gerenciador_proc', 'gerenciador_proc', 'N65xmbjwc3FJH9', {
+const sequelize = new Sequelize('distribuidor_proc', 'distribuidor', '-C)W1aQ6nG9(Vbr1s7', {
   host: 'db4free.net',
   dialect: 'mysql',
   port: 3306,  // descomente caso precise especificar porta
