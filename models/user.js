@@ -3,10 +3,10 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
   const User = sequelize.define('User', {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+    id: { 
+      type: DataTypes.INTEGER, 
+      autoIncrement: true, 
+      primaryKey: true 
     },
     matricula: {
       type: DataTypes.STRING(20),
@@ -20,6 +20,12 @@ module.exports = (sequelize) => {
     senha: {
       type: DataTypes.STRING(100),
       allowNull: false
+    },
+    // Novo campo para identificar se \u00e9 a senha padr\u00e3o
+    senha_padrao: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
     }
   }, {
     tableName: 'usuarios',

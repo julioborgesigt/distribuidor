@@ -28,4 +28,8 @@ router.post('/pre-cadastro', adminController.preCadastro);
 // Rota para reset de senha
 router.post('/reset-password', adminController.resetPassword);
 
+router.post('/bulk-assign', adminController.bulkAssign);
+router.post('/bulk-delete', adminController.bulkDelete);
+router.post('/bulk-cumprido', adminController.bulkCumprido);
+
 module.exports = router;

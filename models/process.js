@@ -10,7 +10,8 @@ module.exports = (sequelize) => {
     },
     numero_processo: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: false,
+      unique: true // Define o campo como único
     },
     prazo_processual: {
       type: DataTypes.STRING(20),
@@ -27,7 +28,17 @@ module.exports = (sequelize) => {
     },
     data_intimacao: {
       type: DataTypes.DATEONLY
-    }
+    },
+    cumprido: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    reiteracoes: { 
+      type: DataTypes.INTEGER, 
+      allowNull: false, 
+      defaultValue: 0 }
+    
   }, {
     tableName: 'processos',
     timestamps: false

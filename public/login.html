@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Login do Usuário</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
+<body class="p-3">
+  <div class="container">
+    <h1>Login</h1>
+    <form id="loginForm">
+      <div class="mb-3">
+        <label for="matricula" class="form-label">Matrícula:</label>
+        <input type="text" class="form-control" id="matricula" required>
+      </div>
+      <div class="mb-3">
+        <label for="senha" class="form-label">Senha:</label>
+        <input type="password" class="form-control" id="senha" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Entrar</button>
+    </form>
+  </div>
+
+  <!-- Modal de Troca de Senha para Primeiro Login -->
+  <div class="modal" tabindex="-1" id="modalTrocaSenha">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Troque sua senha</h5>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="novaSenha" class="form-label">Nova Senha:</label>
+            <input type="password" class="form-control" id="novaSenha" required>
+          </div>
+          <div class="mb-3">
+            <label for="confirmarSenha" class="form-label">Confirmar Nova Senha:</label>
+            <input type="password" class="form-control" id="confirmarSenha" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="salvarSenhaBtn" class="btn btn-success">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const matricula = document.getElementById('matricula').value;
+      const senha = document.getElementById('senha').value;
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ matricula, senha })
+      });
+      const data = await res.json();
+      if (data.firstLogin) {
+        // Armazena o id do usu\u00e1rio para troca de senha
+        window.tempUserId = data.userId;
+        // Exibe o modal de troca de senha
+        const modal = new bootstrap.Modal(document.getElementById('modalTrocaSenha'));
+        modal.show();
+      } else if (data.token) {
+        localStorage.setItem('token', data.token);
+        window.location.href = 'usuario';
+      } else {
+        alert('Erro no login: ' + (data.error || 'credenciais inv\u00e1lidas'));
+      }
+    });
+
+    document.getElementById('salvarSenhaBtn').addEventListener('click', async () => {
+      const novaSenha = document.getElementById('novaSenha').value;
+      const confirmarSenha = document.getElementById('confirmarSenha').value;
+      if (novaSenha !== confirmarSenha) {
+        alert('As senhas n\u00e3o conferem.');
+        return;
+      }
+      const res = await fetch('/primeiro-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: window.tempUserId, novaSenha })
+      });
+      const data = await res.json();
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        window.location.href = 'usuario';
+      } else {
+        alert('Erro ao atualizar a senha.');
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -7,6 +7,9 @@ const ProcessModel = require('./process');
 const sequelize = new Sequelize('distribuidor_proc', 'distribuidor', '-C)W1aQ6nG9(Vbr1s7', {
   host: 'sao.domcloud.co',
   dialect: 'mysql',
+  dialectOptions: {
+    charset: 'utf8mb4',
+  },
   port: 3306,  // descomente caso precise especificar porta
   logging: false // para não ficar exibindo queries no console
 });
