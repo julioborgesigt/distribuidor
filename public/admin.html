@@ -84,6 +84,9 @@
       max-width: 650px;
       align-items: center;
     }
+   
+
+
     .chart-group {
       flex: 1;
       min-width: 120px;
@@ -100,18 +103,9 @@
     .chart-circle {
       display: inline-block;
       position: relative;
-      width: 120px;
-      height: 120px;
       padding: 5px;
     }
-    .chart-circle .progress-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 14px;
-      text-align: center;
-    }
+
 
     /* Loader de carregamento */
     .loading-overlay {
@@ -332,43 +326,47 @@
 
     // Função para criar um progress ring usando ProgressBar.js
     function createChartCircle(label, percentage, count) {
-      const size = 100;
-      const strokeWidth = 8;
-      var wrapper = document.createElement("div");
-      wrapper.className = "chart-circle";
-      wrapper.style.width = size + "px";
-      wrapper.style.height = size + "px";
-      wrapper.style.position = "relative";
+    // Calcula o tamanho conforme a largura da tela
+    const size =  window.innerWidth < 400 ? 90 : (window.innerWidth > 400 && window.innerWidth < 768) ? 100 : window.innerWidth >= 768 ? 100 : 100;
+    const strokeWidth = 8;
+    var wrapper = document.createElement("div");
+    wrapper.className = "chart-circle";
+    wrapper.style.width = size + "px";
+    wrapper.style.height = size + "px";
+    wrapper.style.position = "relative";
 
-      var progressContainer = document.createElement("div");
-      progressContainer.style.width = "100%";
-      progressContainer.style.height = "100%";
-      wrapper.appendChild(progressContainer);
+    var progressContainer = document.createElement("div");
+    progressContainer.style.width = "100%";
+    progressContainer.style.height = "100%";
+    wrapper.appendChild(progressContainer);
 
-      setTimeout(function() {
-        var circle = new ProgressBar.Circle(progressContainer, {
-          color: '#007bff',
-          strokeWidth: strokeWidth,
-          trailWidth: strokeWidth,
-          trailColor: '#eee',
-          easing: 'easeInOut',
-          duration: 1400,
-          text: {
-            autoStyleContainer: false
-          },
-          from: { color: '#aaa', width: strokeWidth },
-          to: { color: '#007bff', width: strokeWidth },
-          step: function(state, circleInstance) {
-            circleInstance.setText("<strong>" + label + "</strong><br>" + count + "<br>(" + Math.round(circleInstance.value() * 100) + "%)");
-          }
-        });
-        circle.text.style.fontFamily = '"Arial", sans-serif';
-        circle.text.style.fontSize = '12px';
-        circle.animate(percentage / 100);
-      }, 10);
+    setTimeout(function() {
+      var circle = new ProgressBar.Circle(progressContainer, {
+        color: '#007bff',
+        strokeWidth: strokeWidth,
+        trailWidth: strokeWidth,
+        trailColor: '#eee',
+        easing: 'easeInOut',
+        duration: 1400,
+        text: {
+          autoStyleContainer: false
+        },
+        from: { color: '#aaa', width: strokeWidth },
+        to: { color: '#007bff', width: strokeWidth },
+        step: function(state, circleInstance) {
+          circleInstance.setText("<strong>" + label + "</strong><br>" + count + "<br>(" + Math.round(circleInstance.value() * 100) + "%)");
+        }
+      });
+      // Ajusta a fonte proporcional ao tamanho do círculo
+      circle.text.style.fontFamily = '"Arial", sans-serif';
+      circle.text.style.fontSize = (size / 8) + "px";
+      circle.animate(percentage / 100);
+    }, 10);
 
-      return wrapper;
-    }
+    return wrapper;
+  }
+
+
 
     // Função para calcular dias restantes
     function calcDias(proc) {
