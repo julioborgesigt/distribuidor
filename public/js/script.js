@@ -325,7 +325,7 @@
           <td class="hide-mobile">
             <form class="manual-assign-form">
               <input type="hidden" name="numeroProcesso" value="${proc.numero_processo}">
-              <input type="text" class="form-control form-control-sm mb-2" name="matricula" placeholder="Matrícula" required>
+              <input type="text" class="form-control form-control-sm mb-2" name="matricula" placeholder="Matrícula" required maxlength="8" required>
               <button type="submit" class="btn btn-sm btn-primary">Atribuir</button>
             </form>
           </td>

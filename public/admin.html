@@ -48,7 +48,7 @@
           </div>
           <div class="mb-2">
             <label for="senha" class="form-label">Senha</label>
-            <input type="password" class="form-control" id="senha" name="senha" required>
+            <input type="password" class="form-control" id="senha" name="senha" maxlength="8" required>
           </div>
           <button type="submit" class="btn btn-success w-100">Cadastrar</button>
         </form>
@@ -71,7 +71,7 @@
           <form id="resetPasswordForm">
             <div class="mb-2">
               <label for="matriculaReset" class="form-label">Matrícula</label>
-              <input type="text" class="form-control" id="matriculaReset" name="matriculaReset" required>
+              <input type="text" class="form-control" id="matriculaReset" name="matriculaReset" maxlength="8" required>
             </div>
             <button type="submit" class="btn btn-warning w-100">Resetar</button>
           </form>
@@ -143,7 +143,7 @@
         </div>
         <div class="col-md-3">
           <label for="buscaProcesso" class="form-label">Busca por Nº P.</label>
-          <input type="text" id="buscaProcesso" class="form-control" placeholder="0030218-07.2011.8.06.0091">
+          <input type="text" id="buscaProcesso" class="form-control" placeholder="xxxxxxx-xx.xxxx.x.xx.xxxx">
         </div>
       </div>
       <div class="row g-2 align-items-center mt-3">
@@ -151,7 +151,7 @@
           <label for="bulkMatricula" class="form-label">Para atribuir selecione 1 ou mais processos:</label>
         </div>
         <div class="col-md-2">
-          <input type="text" id="bulkMatricula" class="form-control" placeholder="Matrícula destino">
+          <input type="text" id="bulkMatricula" class="form-control" placeholder="Matrícula destino" maxlength="8">
         </div>
         <div class="col-md-2">
           <button id="bulkAtribuirBtn" class="btn btn-primary me-2 w-100">Atribuir</button>
