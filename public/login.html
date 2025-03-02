@@ -2,46 +2,32 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Login do Usuário</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login</title>
+  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-  <style src="styles.css"></style>
+  <!-- Seu CSS personalizado, se necessário -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="p-3">
-  <div class="container">
-    <h1>Login</h1>
-    <form id="loginForm">
-      <div class="mb-3">
-        <label for="matricula" class="form-label">Matrícula:</label>
-        <input type="text" class="form-control" id="matricula" required>
-      </div>
-      <div class="mb-3">
-        <label for="senha" class="form-label">Senha:</label>
-        <input type="password" class="form-control" id="senha" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Entrar</button>
-    </form>
-  </div>
-
-  <!-- Modal de Troca de Senha para Primeiro Login -->
-  <div class="modal" tabindex="-1" id="modalTrocaSenha">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Troque sua senha</h5>
-        </div>
-        <div class="modal-body">
+<body class="bg-light">
+  <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <div class="card shadow-sm" style="width: 100%; max-width: 250px;">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-4">Login</h2>
+        <form action="/login" method="post">
           <div class="mb-3">
-            <label for="novaSenha" class="form-label">Nova Senha:</label>
-            <input type="password" class="form-control" id="novaSenha" required>
+            <label for="username" class="form-label">Usuário</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Digite seu usuário" required>
           </div>
           <div class="mb-3">
-            <label for="confirmarSenha" class="form-label">Confirmar Nova Senha:</label>
-            <input type="password" class="form-control" id="confirmarSenha" required>
+            <label for="password" class="form-label">Senha</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Digite sua senha" required>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" id="salvarSenhaBtn" class="btn btn-success">Salvar</button>
-        </div>
+          <button type="submit" class="btn btn-primary w-100">Entrar</button>
+          <div class="mt-3 text-center">
+            <a href="/admin" class="btn btn-secondary">Página do Administrador</a>
+          </div>
+        </form>
       </div>
     </div>
   </div>

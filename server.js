@@ -20,6 +20,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', adminRoutes);
 app.use('/', authRoutes);   // para login e primeiro acesso
 app.use('/', userRoutes);   // para rotas de usu\u00e1rio (ex: /processos)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
 
 // Sincroniza com o banco e realiza seed inicial
 sequelize.sync({ })
