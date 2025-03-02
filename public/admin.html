@@ -116,11 +116,75 @@
       font-size: 14px;
       text-align: center;
     }
+
+    /* Estilo para a sobreposição de carregamento */
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Estilo do círculo de carregamento */
+  .loader {
+    border: 6px solid #f3f3f3; /* Cor de fundo */
+    border-top: 6px solid #3498db; /* Cor de carregamento */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+  }
+
+  /* Animação de rotação */
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+   /* Esconde as colunas em dispositivos menores */
+   @media (max-width: 768px) {
+    /* Esconde as colunas que não queremos exibir em dispositivos pequenos */
+    .table th:nth-child(3),
+    .table td:nth-child(3),
+    .table th:nth-child(4),
+    .table td:nth-child(4),
+    .table th:nth-child(5),
+    .table td:nth-child(5),
+    .table th:nth-child(7),
+    .table td:nth-child(7),
+    .table th:nth-child(10),
+    .table td:nth-child(10),
+    .table th:nth-child(11),
+    .table td:nth-child(11) {
+      display: none !important;
+    }
+
+    /* Ajuste para tornar a tabela ainda mais flexível em dispositivos móveis */
+    .table-responsive {
+      overflow-x: auto !important;  /* Adiciona rolagem somente quando necessário */
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .table th, .table td {
+      padding: 8px !important;
+    }
+  }
   </style>
 </head>
 <body class="p-3">
   <div class="container">
     <h1>Página do Administrador</h1>
+
+    <!-- Loader de Carregamento -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+      <div class="loader"></div>
+    </div>
 
     <!-- Formulários agrupados em container flex -->
     <div class="form-container">
@@ -183,7 +247,7 @@
 
     <!-- Container para filtros -->
     <div class="auto-container">
-      <h2>Filtros</h2>
+      <h2>Filtros e ações</h2>
       <div class="row g-2">
         <div class="col-md-2">
           <label for="filtroClasse" class="form-label">Classe</label>
@@ -211,7 +275,7 @@
         </div>
 
         <div class="col-md-1">
-          <label for="ordenarPrazo" class="form-label">Prazo</label>
+          <label for="ordenarPrazo" class="form-label">P. P.</label>
           <select id="ordenarPrazo" class="form-select">
             <option value="">Selecione</option>
             <option value="asc">Crescente</option>
@@ -220,7 +284,7 @@
         </div>
 
         <div class="col-md-1">
-          <label for="ordenarData" class="form-label">Data da Int.</label>
+          <label for="ordenarData" class="form-label">Dt. Int.</label>
           <select id="ordenarData" class="form-select">
             <option value="">Selecione</option>
             <option value="asc">Crescente</option>
@@ -229,7 +293,7 @@
         </div>
 
         <div class="col-md-1">
-          <label for="ordenarDias" class="form-label">Prazo</label>
+          <label for="ordenarDias" class="form-label">Dias R.</label>
           <select id="ordenarDias" class="form-select">
             <option value="">Selecione</option>
             <option value="asc">Crescente</option>
@@ -239,46 +303,49 @@
 
         <!-- Campo de busca pelo número do processo -->
         <div class="col-md-3">
-          <label for="buscaProcesso" class="form-label">Buscar Pelo Número do Processo</label>
+          <label for="buscaProcesso" class="form-label">Busca por Nº P.</label>
           <input type="text" id="buscaProcesso" class="form-control" placeholder="0030218-07.2011.8.06.0091">
         </div>
       </div>
+
+
+      <div class="row g-2 align-items-center mt-3">
+        <div class="col-md-2">
+          <input type="text" id="bulkMatricula" class="form-control" placeholder="Matrícula destino">
+        </div>
+        <div class="col-md-8">
+          <button id="bulkAtribuirBtn" class="btn btn-primary me-2">Atribuir em Massa</button>
+          <button id="bulkExcluirBtn" class="btn btn-danger me-2">Excluir sel.</button>
+          <button id="bulkCumpridoBtn" class="btn btn-success">Cumprir sel.</button>
+        </div>
+      </div>
+
+
     </div>
 
+    
     <!-- Container para a tabela -->
     <div class="auto-container">
       <h2>Lista Geral Atualizada</h2>
-      <div class="mb-3">
-        <div class="row g-2 align-items-center">
-          <div class="col-md-2">
-            <input type="text" id="bulkMatricula" class="form-control" placeholder="Matrícula destino">
-          </div>
-          <div class="col-md-8">
-            <button id="bulkAtribuirBtn" class="btn btn-primary me-2">Atribuir em Massa</button>
-            <button id="bulkExcluirBtn" class="btn btn-danger me-2">Excluir Selecionados</button>
-            <button id="bulkCumpridoBtn" class="btn btn-success">Marcar como Cumprido em Massa</button>
-          </div>
-        </div>
-      </div>
       
       <!-- Contêiner com a barra de rolagem horizontal -->
-      <!-- Tabela -->
+    
       <div class="table-responsive">
         <table class="table table-bordered" id="processTable">
           <thead class="table-light">
             <tr>
               <th><input type="checkbox" id="select-all"></th>
               <th>Número do Processo</th>
-              <th>Prazo Processual</th>
-              <th>Classe Principal</th>
-              <th class="text-wrap">Assunto Principal</th> <!-- Quebra de linha para conteúdo longo -->
+              <th class="hide-mobile">Prazo Processual</th>
+              <th class="hide-mobile">Classe Principal</th>
+              <th class="hide-mobile">Assunto Principal</th>
               <th>Tarjas</th>
-              <th>Data da Intimação</th>
+              <th class="hide-mobile">Data da Intimação</th>
               <th>Usuário</th>
               <th>Dias Restantes</th>
               <th>Reiterações</th>
-              <th>Cumprido?</th>
-              <th>Atribuir Manualmente</th>
+              <th class="hide-mobile">Cumprido?</th>
+              <th class="hide-mobile">Atribuir Manualmente</th>
             </tr>
           </thead>
           <tbody>
@@ -291,6 +358,10 @@
 
   <!-- Bootstrap JS (Popper incluso) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
 
 
   <script>
@@ -660,20 +731,34 @@ function updateCharts() {
 
     // Upload de CSV
     const csvUploadForm = document.getElementById('csvUploadForm');
-    csvUploadForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const formData = new FormData(csvUploadForm);
-      fetch('/admin/upload', {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        fetchProcesses();
-      })
-      .catch(err => console.error(err));
+    document.getElementById('csvUploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Exibe o overlay de carregamento
+    document.getElementById('loading-overlay').style.display = 'flex';
+
+    // Cria um objeto FormData para enviar o arquivo
+    const formData = new FormData(this);
+
+    // Envia o arquivo para o servidor
+    fetch('/admin/upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.text())
+    .then(msg => {
+      // Oculta o carregamento após a resposta do servidor
+      document.getElementById('loading-overlay').style.display = 'none';
+      alert(msg); // Exibe a mensagem de sucesso
+      fetchProcesses(); // Atualiza a lista de processos
+    })
+    .catch(err => {
+      // Oculta o carregamento em caso de erro
+      document.getElementById('loading-overlay').style.display = 'none';
+      console.error('Erro ao enviar o arquivo:', err);
     });
+  });
+
 
     // Pré-cadastro de usuário
     const preCadastroForm = document.getElementById('preCadastroForm');
@@ -720,86 +805,91 @@ function updateCharts() {
       .catch(err => console.error(err));
     });
 
-    // Atribuição automática
-    const assignBtn = document.getElementById('assignBtn');
-    assignBtn.addEventListener('click', () => {
-      fetch('/admin/assign', { method: 'POST' })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        fetchProcesses();
-      })
-      .catch(err => console.error(err));
-    });
 
-    // Ações em massa
-    document.getElementById('bulkAtribuirBtn').addEventListener('click', () => {
-      const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
-        .filter(cb => cb.checked)
-        .map(cb => cb.getAttribute('data-id'));
-      const matriculaDestino = document.getElementById('bulkMatricula').value.trim();
-      if (selectedIds.length === 0) {
-        alert('Nenhum processo selecionado.');
-        return;
-      }
-      if (!matriculaDestino) {
-        alert('Digite a matrícula destino para a atribuição em massa.');
-        return;
-      }
-      fetch('/admin/bulk-assign', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ processIds: selectedIds, matricula: matriculaDestino })
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        fetchProcesses();
-      })
-      .catch(err => console.error(err));
-    });
 
-    document.getElementById('bulkExcluirBtn').addEventListener('click', () => {
-      const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
-        .filter(cb => cb.checked)
-        .map(cb => cb.getAttribute('data-id'));
-      if (selectedIds.length === 0) {
-        alert('Nenhum processo selecionado.');
-        return;
-      }
-      fetch('/admin/bulk-delete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ processIds: selectedIds })
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        fetchProcesses();
-      })
-      .catch(err => console.error(err));
-    });
+    // Atribuição em massa
+document.getElementById('bulkAtribuirBtn').addEventListener('click', () => {
+  const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
+    .filter(cb => cb.checked)
+    .map(cb => cb.getAttribute('data-id'));
+  const matriculaDestino = document.getElementById('bulkMatricula').value.trim();
+  
+  console.log('IDs selecionados para atribuição:', selectedIds); // Verifique se está obtendo os IDs corretos
+  
+  if (selectedIds.length === 0) {
+    alert('Nenhum processo selecionado.');
+    return;
+  }
+  if (!matriculaDestino) {
+    alert('Digite a matrícula destino para a atribuição em massa.');
+    return;
+  }
+  
+  fetch('/admin/bulk-assign', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ processIds: selectedIds, matricula: matriculaDestino })
+  })
+  .then(res => res.text())
+  .then(msg => {
+    alert(msg);
+    fetchProcesses();
+  })
+  .catch(err => console.error('Erro no bulk-assign:', err));
+});
 
-    document.getElementById('bulkCumpridoBtn').addEventListener('click', () => {
-      const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
-        .filter(cb => cb.checked)
-        .map(cb => cb.getAttribute('data-id'));
-      if (selectedIds.length === 0) {
-        alert('Nenhum processo selecionado.');
-        return;
-      }
-      fetch('/admin/bulk-cumprido', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ processIds: selectedIds })
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        fetchProcesses();
-      })
-      .catch(err => console.error(err));
-    });
+// Exclusão em massa
+document.getElementById('bulkExcluirBtn').addEventListener('click', () => {
+  const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
+    .filter(cb => cb.checked)
+    .map(cb => cb.getAttribute('data-id'));
+  
+  console.log('IDs selecionados para exclusão:', selectedIds); // Verifique os IDs selecionados
+  
+  if (selectedIds.length === 0) {
+    alert('Nenhum processo selecionado.');
+    return;
+  }
+  
+  fetch('/admin/bulk-delete', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ processIds: selectedIds })
+  })
+  .then(res => res.text())
+  .then(msg => {
+    alert(msg);
+    fetchProcesses();
+  })
+  .catch(err => console.error('Erro no bulk-delete:', err));
+});
+
+// Marcar como cumprido em massa
+document.getElementById('bulkCumpridoBtn').addEventListener('click', () => {
+  const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
+    .filter(cb => cb.checked)
+    .map(cb => cb.getAttribute('data-id'));
+  
+  console.log('IDs selecionados para marcar como cumprido:', selectedIds); // Verifique os IDs
+  
+  if (selectedIds.length === 0) {
+    alert('Nenhum processo selecionado.');
+    return;
+  }
+  
+  fetch('/admin/bulk-cumprido', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ processIds: selectedIds })
+  })
+  .then(res => res.text())
+  .then(msg => {
+    alert(msg);
+    fetchProcesses();
+  })
+  .catch(err => console.error('Erro no bulk-cumprido:', err));
+});
+
   </script>
 </body>
 </html>
