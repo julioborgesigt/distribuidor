@@ -6,7 +6,7 @@
     // Função para criar um progress ring usando ProgressBar.js
     function createChartCircle(label, percentage, count) {
     // Calcula o tamanho conforme a largura da tela
-    const size =  window.innerWidth  >= 768 ? 80 : 80;
+    const size =  window.innerWidth  < 768 ? 80 : 100;
     const strokeWidth = 8;
     var wrapper = document.createElement("div");
     wrapper.className = "chart-circle";
