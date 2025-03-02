@@ -71,7 +71,13 @@
     }
     /* Limitar a largura da coluna "Assunto" */
     .table th.assunto, .table td.assunto {
-      max-width: 150px;
+      max-width: 200px;
+    }
+    .table th.tarjas, .table td.tarjas {
+      max-width: 100px;
+    }
+    .table th.dintim, .table td.dintim {
+      min-width: 100px;
     }
 
     /* Container para os gráficos */
@@ -636,10 +642,9 @@
           <td>${proc.numero_processo}</td>
           <td class="hide-mobile">${proc.prazo_processual || ''}</td>
           <td class="hide-mobile">${proc.classe_principal || ''}</td>
-          <!-- Adicione a classe "assunto" aqui -->
           <td class="hide-mobile assunto">${proc.assunto_principal || ''}</td>
-          <td>${proc.tarjas || ''}</td>
-          <td class="hide-mobile">${proc.data_intimacao || ''}</td>
+          <td class="tarjas">${proc.tarjas || ''}</td>
+          <td class="hide-mobile dintim">${proc.data_intimacao || ''}</td>
           <td>${userName}</td>
           <td>${diasRestantes}</td>
           <td>${reiteracoes}</td>
