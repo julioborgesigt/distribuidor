@@ -2,6 +2,8 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <!-- Meta tag responsiva -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Página do Administrador</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
@@ -11,6 +13,10 @@
     /* Container principal para os formulários */
     .form-container {
       display: flex;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 10px;
       gap: 20px;
       margin-bottom: 20px;
       flex-wrap: wrap;
@@ -49,46 +55,41 @@
       margin-bottom: 20px;
     }
 
-    /* Ajuste da tabela para que as colunas se adaptem ao conteúdo */
-    .table {
-      table-layout: auto;
-      width: 100%; /* Garante que a tabela ocupe toda a largura disponível */
-    }
-
-    /* Ajuste da largura da coluna 'Assunto Principal' */
-    .table th, .table td {
-      white-space: normal;
-      word-wrap: break-word;
-    }
-
-    /* Ajuste da largura da coluna 'Assunto Principal' */
-    .table th:nth-child(5), .table td:nth-child(5) {
-      max-width: 150px; /* Ajusta o limite de largura */
-      word-wrap: break-word; /* Quebra a linha quando necessário */
-    }
-
     .auto-container h3 {
       font-size: 18px;
       margin-bottom: 15px;
       text-align: center;
     }
 
-    /* Container para os gráficos, alinhando-os horizontalmente */
+    /* Tabela: layout automático */
+    .table {
+      table-layout: auto;
+      width: 100%;
+    }
+    .table th, .table td {
+      white-space: normal;
+      word-wrap: break-word;
+    }
+    /* Se desejar limitar a largura da coluna "Assunto Principal" */
+    .table th.assunto, .table td.assunto {
+      max-width: 150px;
+    }
+
+    /* Container para os gráficos */
     .chart-container {
       display: flex;
       gap: 20px;
-      justify-content: flex-start; /* Garante o alinhamento dos gráficos à esquerda */
+      justify-content: flex-start;
       align-items: flex-start;
-      margin-bottom: 20px;
       flex-wrap: wrap;
       max-width: 650px;
+      
     }
-
-    /* Cada grupo de gráficos */
     .chart-group {
       flex: 1;
       min-width: 120px;
       padding: 10px;
+      padding-left: 20px;
       border: 1px solid #ddd;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -98,8 +99,6 @@
       gap: 10px;
       align-items: center;
     }
-
-    /* Para os círculos dentro de cada grupo */
     .chart-circle {
       display: inline-block;
       position: relative;
@@ -107,7 +106,6 @@
       height: 120px;
       padding: 5px;
     }
-
     .chart-circle .progress-text {
       position: absolute;
       top: 50%;
@@ -117,64 +115,41 @@
       text-align: center;
     }
 
-    /* Estilo para a sobreposição de carregamento */
-  .loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* Estilo do círculo de carregamento */
-  .loader {
-    border: 6px solid #f3f3f3; /* Cor de fundo */
-    border-top: 6px solid #3498db; /* Cor de carregamento */
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
-  }
-
-  /* Animação de rotação */
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
-   /* Esconde as colunas em dispositivos menores */
-   @media (max-width: 768px) {
-    /* Esconde as colunas que não queremos exibir em dispositivos pequenos */
-    .table th:nth-child(3),
-    .table td:nth-child(3),
-    .table th:nth-child(4),
-    .table td:nth-child(4),
-    .table th:nth-child(5),
-    .table td:nth-child(5),
-    .table th:nth-child(7),
-    .table td:nth-child(7),
-    .table th:nth-child(10),
-    .table td:nth-child(10),
-    .table th:nth-child(11),
-    .table td:nth-child(11) {
-      display: none !important;
+    /* Loader de carregamento */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    /* Ajuste para tornar a tabela ainda mais flexível em dispositivos móveis */
-    .table-responsive {
-      overflow-x: auto !important;  /* Adiciona rolagem somente quando necessário */
-      -webkit-overflow-scrolling: touch;
+    /* Responsividade: ocultar colunas com a classe hide-mobile */
+    @media (max-width: 768px) {
+      .hide-mobile {
+        display: none !important;
+      }
+      .table th, .table td {
+        padding: 8px !important;
+      }
     }
-
-    .table th, .table td {
-      padding: 8px !important;
-    }
-  }
   </style>
 </head>
 <body class="p-3">
@@ -188,7 +163,7 @@
 
     <!-- Formulários agrupados em container flex -->
     <div class="form-container">
-      <!-- Pré-Cadastro de Usuário (à esquerda) -->
+      <!-- Pré-Cadastro de Usuário -->
       <div class="small-container">
         <h3>Pré-Cadastro</h3>
         <form id="preCadastroForm">
@@ -204,12 +179,11 @@
             <label for="senha" class="form-label">Senha</label>
             <input type="password" class="form-control" id="senha" name="senha" required>
           </div>
-          
           <button type="submit" class="btn btn-success w-100">Cadastrar</button>
         </form>
       </div>
 
-      <!-- Atualizar Lista e Reset de Senha (ao centro, empilhados) -->
+      <!-- Atualizar Lista e Reset de Senha -->
       <div class="vertical-container">
         <div class="small-container">
           <h3>Atualizar Lista</h3>
@@ -228,7 +202,6 @@
               <label for="matriculaReset" class="form-label">Matrícula</label>
               <input type="text" class="form-control" id="matriculaReset" name="matriculaReset" required>
             </div>
-  
             <button type="submit" class="btn btn-warning w-100">Resetar</button>
           </form>
         </div>
@@ -237,15 +210,15 @@
       <!-- Container para gráficos -->
       <div class="chart-container" id="chartContainer">
         <div class="chart-group">
-            <h4>Estatísticas</h4>
-            <div class="chart-row" id="statsRow">
-                <!-- Gráficos serão inseridos aqui -->
-            </div>
+          <h4>Estatísticas</h4>
+          <div class="chart-row" id="statsRow">
+            <!-- Gráficos serão inseridos aqui -->
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Container para filtros -->
+    <!-- Container para filtros e ações -->
     <div class="auto-container">
       <h2>Filtros e ações</h2>
       <div class="row g-2">
@@ -273,7 +246,6 @@
             <option value="">Todos</option>
           </select>
         </div>
-
         <div class="col-md-1">
           <label for="ordenarPrazo" class="form-label">P. P.</label>
           <select id="ordenarPrazo" class="form-select">
@@ -282,7 +254,6 @@
             <option value="desc">Decrescente</option>
           </select>
         </div>
-
         <div class="col-md-1">
           <label for="ordenarData" class="form-label">Dt. Int.</label>
           <select id="ordenarData" class="form-select">
@@ -291,7 +262,6 @@
             <option value="desc">Decrescente</option>
           </select>
         </div>
-
         <div class="col-md-1">
           <label for="ordenarDias" class="form-label">Dias R.</label>
           <select id="ordenarDias" class="form-select">
@@ -300,52 +270,64 @@
             <option value="desc">Decrescente</option>
           </select>
         </div>
-
-        <!-- Campo de busca pelo número do processo -->
         <div class="col-md-3">
           <label for="buscaProcesso" class="form-label">Busca por Nº P.</label>
           <input type="text" id="buscaProcesso" class="form-control" placeholder="0030218-07.2011.8.06.0091">
         </div>
       </div>
 
-
-      <div class="row g-2 align-items-center mt-3">
+      <div class="row g-2 mt-3 align-items-center">
+        
         <div class="col-md-2">
-          <input type="text" id="bulkMatricula" class="form-control" placeholder="Matrícula destino">
+          <label for="bulkMatricula" class="form-label">Para atribuir selecione 1 ou mais processos :</label>
+
         </div>
-        <div class="col-md-8">
-          <button id="bulkAtribuirBtn" class="btn btn-primary me-2">Atribuir em Massa</button>
-          <button id="bulkExcluirBtn" class="btn btn-danger me-2">Excluir sel.</button>
-          <button id="bulkCumpridoBtn" class="btn btn-success">Cumprir sel.</button>
+
+        <div class="col-md-2">
+          
+          <input type="text" id="bulkMatricula" class="form-control" placeholder="Matrícula destino">          
         </div>
+
+        <div class="col-md-2">
+          <button id="bulkAtribuirBtn" class="btn btn-primary me-2 w-100 ">Atribuir</button>
+        </div>
+
+        <div class="col-md-2">
+          
+          <button id="bulkExcluirBtn" class="btn btn-danger me-2 w-100">Excluir sel.</button>
+
+        </div>
+
+        <div class="col-md-2">
+         
+          <button id="bulkCumpridoBtn" class="btn btn-success w-100">Cumprir sel.</button>
+
+        </div>
+
       </div>
 
 
     </div>
 
-    
     <!-- Container para a tabela -->
     <div class="auto-container">
       <h2>Lista Geral Atualizada</h2>
-      
-      <!-- Contêiner com a barra de rolagem horizontal -->
-    
       <div class="table-responsive">
         <table class="table table-bordered" id="processTable">
           <thead class="table-light">
             <tr>
               <th><input type="checkbox" id="select-all"></th>
               <th>Número do Processo</th>
-              <th class="hide-mobile">Prazo Processual</th>
+              <th class="hide-mobile">Prazo P.</th>
               <th class="hide-mobile">Classe Principal</th>
-              <th class="hide-mobile">Assunto Principal</th>
+              <th class="hide-mobile">Assunto</th>
               <th>Tarjas</th>
-              <th class="hide-mobile">Data da Intimação</th>
+              <th class="hide-mobile">Data Int.</th>
               <th>Usuário</th>
-              <th>Dias Restantes</th>
-              <th>Reiterações</th>
-              <th class="hide-mobile">Cumprido?</th>
-              <th class="hide-mobile">Atribuir Manualmente</th>
+              <th>Dias praz.</th>
+              <th>Nº Intim.</th>
+              <th class="hide-mobile">Cump.</th>
+              <th class="hide-mobile">Atribuir Matricula.</th>
             </tr>
           </thead>
           <tbody>
@@ -358,11 +340,6 @@
 
   <!-- Bootstrap JS (Popper incluso) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-
-
-
 
   <script>
     // Variáveis globais para armazenar processos
@@ -371,45 +348,43 @@
 
     // Função para criar um progress ring usando ProgressBar.js
     function createChartCircle(label, percentage, count) {
-    const size = 100;
-    const strokeWidth = 8;
-    var wrapper = document.createElement("div");
-    wrapper.className = "chart-circle";
-    wrapper.style.width = size + "px";
-    wrapper.style.height = size + "px";
-    wrapper.style.position = "relative";
+      const size = 100;
+      const strokeWidth = 8;
+      var wrapper = document.createElement("div");
+      wrapper.className = "chart-circle";
+      wrapper.style.width = size + "px";
+      wrapper.style.height = size + "px";
+      wrapper.style.position = "relative";
 
-    var progressContainer = document.createElement("div");
-    progressContainer.style.width = "100%";
-    progressContainer.style.height = "100%";
-    wrapper.appendChild(progressContainer);
+      var progressContainer = document.createElement("div");
+      progressContainer.style.width = "100%";
+      progressContainer.style.height = "100%";
+      wrapper.appendChild(progressContainer);
 
-    setTimeout(function() {
-      var circle = new ProgressBar.Circle(progressContainer, {
-        color: '#007bff',
-        strokeWidth: strokeWidth,
-        trailWidth: strokeWidth,
-        trailColor: '#eee',
-        easing: 'easeInOut',
-        duration: 1400,
-        text: {
-          autoStyleContainer: false
-        },
-        from: { color: '#aaa', width: strokeWidth },
-        to: { color: '#007bff', width: strokeWidth },
-        step: function(state, circleInstance) {
-          circleInstance.setText("<strong>" + label + "</strong><br>" + count + "<br>(" + Math.round(circleInstance.value() * 100) + "%)");
-        }
-      });
-      circle.text.style.fontFamily = '"Arial", sans-serif';
-      circle.text.style.fontSize = '12px';
-      circle.animate(percentage / 100);
-    }, 10);
+      setTimeout(function() {
+        var circle = new ProgressBar.Circle(progressContainer, {
+          color: '#007bff',
+          strokeWidth: strokeWidth,
+          trailWidth: strokeWidth,
+          trailColor: '#eee',
+          easing: 'easeInOut',
+          duration: 1400,
+          text: {
+            autoStyleContainer: false
+          },
+          from: { color: '#aaa', width: strokeWidth },
+          to: { color: '#007bff', width: strokeWidth },
+          step: function(state, circleInstance) {
+            circleInstance.setText("<strong>" + label + "</strong><br>" + count + "<br>(" + Math.round(circleInstance.value() * 100) + "%)");
+          }
+        });
+        circle.text.style.fontFamily = '"Arial", sans-serif';
+        circle.text.style.fontSize = '12px';
+        circle.animate(percentage / 100);
+      }, 10);
 
-    return wrapper;
-  }
-
-
+      return wrapper;
+    }
 
     // Função para calcular dias restantes
     function calcDias(proc) {
@@ -424,74 +399,65 @@
     }
 
     // Função para atualizar os gráficos
-function updateCharts() {
-    const container = document.getElementById('statsRow'); // Selecionando o container onde os gráficos serão inseridos
-    container.innerHTML = ''; // Limpa o conteúdo do container de gráficos
+    function updateCharts() {
+      const container = document.getElementById('statsRow'); // Container dos gráficos
+      container.innerHTML = ''; // Limpa os gráficos
 
-    // Criação do grupo de gráficos de usuários
-    const total = allProcesses.length;
-    
-    // Adicionando gráfico TOTAL
-    container.appendChild(createChartCircle('TOTAL', 100, total));
-    
-    const userCounts = {};
-    allProcesses.forEach(proc => {
+      const total = allProcesses.length;
+      container.appendChild(createChartCircle('TOTAL', 100, total));
+
+      const userCounts = {};
+      allProcesses.forEach(proc => {
         if (proc.User && proc.User.nome) {
-            const name = proc.User.nome;
-            userCounts[name] = (userCounts[name] || 0) + 1;
+          const name = proc.User.nome;
+          userCounts[name] = (userCounts[name] || 0) + 1;
         }
-    });
+      });
 
-    Object.entries(userCounts).forEach(([name, count]) => {
+      Object.entries(userCounts).forEach(([name, count]) => {
         const abbrev = name.substring(0, 8);
         const percentage = (count / total) * 100;
         container.appendChild(createChartCircle(abbrev, percentage, count));
-    });
-    
-    // Estatísticas de prazos
-    let overdue = 0, urgent = 0, upcoming = 0, preso = 0, homicid = 0, furtos = 0, roubos = 0;
-    allProcesses.forEach(proc => {
+      });
+
+      let overdue = 0, urgent = 0, upcoming = 0, preso = 0, homicid = 0, furtos = 0, roubos = 0;
+      allProcesses.forEach(proc => {
         const dias = proc.data_intimacao ? calcDias(proc) : 0;
         if (dias <= 0) {
-            overdue++;
+          overdue++;
         } else if (dias < 10) {
-            urgent++;
+          urgent++;
         } else if (dias < 30) {
-            upcoming++;
+          upcoming++;
         }
         if (proc.tarjas && proc.tarjas.trim().toLowerCase().includes('réu preso')) {
-            preso++;
+          preso++;
         }
-        if (proc.assunto_principal && 
-        ['homicídio qualificado', 'homicídio simples', 'homicídio culposo']
-        .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
-        homicid++;
+        if (proc.assunto_principal &&
+            ['homicídio qualificado', 'homicídio simples', 'homicídio culposo']
+            .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
+          homicid++;
         }
-        if (proc.assunto_principal && 
-        ['roubo', 'roubo qualificado']
-        .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
-        roubos++;
+        if (proc.assunto_principal &&
+            ['roubo', 'roubo qualificado']
+            .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
+          roubos++;
         }
-        if (proc.assunto_principal && 
-        ['furto', 'furto qualificado']
-        .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
-        furtos++;
+        if (proc.assunto_principal &&
+            ['furto', 'furto qualificado']
+            .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
+          furtos++;
         }
-    });
+      });
 
-    // Adicionando gráficos dos prazos
-    container.appendChild(createChartCircle('Vencidos', (overdue / total) * 100, overdue));
-    container.appendChild(createChartCircle('P < 10d', (urgent / total) * 100, urgent));
-    container.appendChild(createChartCircle('P < 30d', (upcoming / total) * 100, upcoming));
-    container.appendChild(createChartCircle('R.Preso', (preso / total) * 100, preso));
-    container.appendChild(createChartCircle('Homic.', (homicid / total) * 100, homicid));
-    container.appendChild(createChartCircle('Roubos', (roubos / total) * 100, roubos));
-    container.appendChild(createChartCircle('Furtos', (furtos / total) * 100, furtos));
-}
-
-
-
-
+      container.appendChild(createChartCircle('Vencidos', (overdue / total) * 100, overdue));
+      container.appendChild(createChartCircle('P < 10d', (urgent / total) * 100, urgent));
+      container.appendChild(createChartCircle('P < 30d', (upcoming / total) * 100, upcoming));
+      container.appendChild(createChartCircle('R.Preso', (preso / total) * 100, preso));
+      container.appendChild(createChartCircle('Homic.', (homicid / total) * 100, homicid));
+      container.appendChild(createChartCircle('Roubos', (roubos / total) * 100, roubos));
+      container.appendChild(createChartCircle('Furtos', (furtos / total) * 100, furtos));
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       fetchProcesses();
@@ -686,16 +652,16 @@ function updateCharts() {
         tr.innerHTML = `
           <td><input type="checkbox" class="bulk-checkbox" data-id="${proc.id}"></td>
           <td>${proc.numero_processo}</td>
-          <td>${proc.prazo_processual || ''}</td>
-          <td>${proc.classe_principal || ''}</td>
-          <td>${proc.assunto_principal || ''}</td>
+          <td class="hide-mobile">${proc.prazo_processual || ''}</td>
+          <td class="hide-mobile">${proc.classe_principal || ''}</td>
+          <td class="hide-mobile">${proc.assunto_principal || ''}</td>
           <td>${proc.tarjas || ''}</td>
-          <td>${proc.data_intimacao || ''}</td>
+          <td class="hide-mobile">${proc.data_intimacao || ''}</td>
           <td>${userName}</td>
           <td>${diasRestantes}</td>
           <td>${reiteracoes}</td>
-          <td>${statusCumprido}</td>
-          <td>
+          <td class="hide-mobile">${statusCumprido}</td>
+          <td class="hide-mobile">
             <form class="manual-assign-form">
               <input type="hidden" name="numeroProcesso" value="${proc.numero_processo}">
               <input type="text" class="form-control form-control-sm mb-2" name="matricula" placeholder="Matrícula" required>
@@ -732,33 +698,31 @@ function updateCharts() {
     // Upload de CSV
     const csvUploadForm = document.getElementById('csvUploadForm');
     document.getElementById('csvUploadForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+      e.preventDefault();
 
-    // Exibe o overlay de carregamento
-    document.getElementById('loading-overlay').style.display = 'flex';
+      // Exibe o overlay de carregamento
+      document.getElementById('loading-overlay').style.display = 'flex';
 
-    // Cria um objeto FormData para enviar o arquivo
-    const formData = new FormData(this);
+      // Cria um objeto FormData para enviar o arquivo
+      const formData = new FormData(this);
 
-    // Envia o arquivo para o servidor
-    fetch('/admin/upload', {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.text())
-    .then(msg => {
-      // Oculta o carregamento após a resposta do servidor
-      document.getElementById('loading-overlay').style.display = 'none';
-      alert(msg); // Exibe a mensagem de sucesso
-      fetchProcesses(); // Atualiza a lista de processos
-    })
-    .catch(err => {
-      // Oculta o carregamento em caso de erro
-      document.getElementById('loading-overlay').style.display = 'none';
-      console.error('Erro ao enviar o arquivo:', err);
+      // Envia o arquivo para o servidor
+      fetch('/admin/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.text())
+      .then(msg => {
+        // Oculta o overlay de carregamento após a resposta
+        document.getElementById('loading-overlay').style.display = 'none';
+        alert(msg);
+        fetchProcesses();
+      })
+      .catch(err => {
+        document.getElementById('loading-overlay').style.display = 'none';
+        console.error('Erro ao enviar o arquivo:', err);
+      });
     });
-  });
-
 
     // Pré-cadastro de usuário
     const preCadastroForm = document.getElementById('preCadastroForm');
@@ -805,91 +769,88 @@ function updateCharts() {
       .catch(err => console.error(err));
     });
 
-
-
     // Atribuição em massa
-document.getElementById('bulkAtribuirBtn').addEventListener('click', () => {
-  const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
-    .filter(cb => cb.checked)
-    .map(cb => cb.getAttribute('data-id'));
-  const matriculaDestino = document.getElementById('bulkMatricula').value.trim();
-  
-  console.log('IDs selecionados para atribuição:', selectedIds); // Verifique se está obtendo os IDs corretos
-  
-  if (selectedIds.length === 0) {
-    alert('Nenhum processo selecionado.');
-    return;
-  }
-  if (!matriculaDestino) {
-    alert('Digite a matrícula destino para a atribuição em massa.');
-    return;
-  }
-  
-  fetch('/admin/bulk-assign', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ processIds: selectedIds, matricula: matriculaDestino })
-  })
-  .then(res => res.text())
-  .then(msg => {
-    alert(msg);
-    fetchProcesses();
-  })
-  .catch(err => console.error('Erro no bulk-assign:', err));
-});
+    document.getElementById('bulkAtribuirBtn').addEventListener('click', () => {
+      const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
+        .filter(cb => cb.checked)
+        .map(cb => cb.getAttribute('data-id'));
+      const matriculaDestino = document.getElementById('bulkMatricula').value.trim();
+      
+      console.log('IDs selecionados para atribuição:', selectedIds);
+      
+      if (selectedIds.length === 0) {
+        alert('Nenhum processo selecionado.');
+        return;
+      }
+      if (!matriculaDestino) {
+        alert('Digite a matrícula destino para a atribuição em massa.');
+        return;
+      }
+      
+      fetch('/admin/bulk-assign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ processIds: selectedIds, matricula: matriculaDestino })
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        fetchProcesses();
+      })
+      .catch(err => console.error('Erro no bulk-assign:', err));
+    });
 
-// Exclusão em massa
-document.getElementById('bulkExcluirBtn').addEventListener('click', () => {
-  const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
-    .filter(cb => cb.checked)
-    .map(cb => cb.getAttribute('data-id'));
-  
-  console.log('IDs selecionados para exclusão:', selectedIds); // Verifique os IDs selecionados
-  
-  if (selectedIds.length === 0) {
-    alert('Nenhum processo selecionado.');
-    return;
-  }
-  
-  fetch('/admin/bulk-delete', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ processIds: selectedIds })
-  })
-  .then(res => res.text())
-  .then(msg => {
-    alert(msg);
-    fetchProcesses();
-  })
-  .catch(err => console.error('Erro no bulk-delete:', err));
-});
+    // Exclusão em massa
+    document.getElementById('bulkExcluirBtn').addEventListener('click', () => {
+      const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
+        .filter(cb => cb.checked)
+        .map(cb => cb.getAttribute('data-id'));
+      
+      console.log('IDs selecionados para exclusão:', selectedIds);
+      
+      if (selectedIds.length === 0) {
+        alert('Nenhum processo selecionado.');
+        return;
+      }
+      
+      fetch('/admin/bulk-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ processIds: selectedIds })
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        fetchProcesses();
+      })
+      .catch(err => console.error('Erro no bulk-delete:', err));
+    });
 
-// Marcar como cumprido em massa
-document.getElementById('bulkCumpridoBtn').addEventListener('click', () => {
-  const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
-    .filter(cb => cb.checked)
-    .map(cb => cb.getAttribute('data-id'));
-  
-  console.log('IDs selecionados para marcar como cumprido:', selectedIds); // Verifique os IDs
-  
-  if (selectedIds.length === 0) {
-    alert('Nenhum processo selecionado.');
-    return;
-  }
-  
-  fetch('/admin/bulk-cumprido', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ processIds: selectedIds })
-  })
-  .then(res => res.text())
-  .then(msg => {
-    alert(msg);
-    fetchProcesses();
-  })
-  .catch(err => console.error('Erro no bulk-cumprido:', err));
-});
-
+    // Marcar como cumprido em massa
+    document.getElementById('bulkCumpridoBtn').addEventListener('click', () => {
+      const selectedIds = Array.from(document.querySelectorAll('.bulk-checkbox'))
+        .filter(cb => cb.checked)
+        .map(cb => cb.getAttribute('data-id'));
+      
+      console.log('IDs selecionados para marcar como cumprido:', selectedIds);
+      
+      if (selectedIds.length === 0) {
+        alert('Nenhum processo selecionado.');
+        return;
+      }
+      
+      fetch('/admin/bulk-cumprido', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ processIds: selectedIds })
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert(msg);
+        fetchProcesses();
+      })
+      .catch(err => console.error('Erro no bulk-cumprido:', err));
+    });
   </script>
 </body>
 </html>

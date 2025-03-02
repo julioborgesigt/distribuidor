@@ -22,7 +22,7 @@ app.use('/', authRoutes);   // para login e primeiro acesso
 app.use('/', userRoutes);   // para rotas de usu\u00e1rio (ex: /processos)
 
 // Sincroniza com o banco e realiza seed inicial
-sequelize.sync({ alter: true })
+sequelize.sync({ })
   .then(async () => {
     console.log('Banco de dados sincronizado.');
 
