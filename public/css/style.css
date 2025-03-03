@@ -312,10 +312,9 @@
       .chart-row {
       
         justify-content: space-between;
-        align-items: center;
+        align-items:left;
         width: 100%; /* Garante que ocupe toda a largura disponível */
-        margin-left: 5%;
-        margin-right: 5%;
+       
       }
       
       
