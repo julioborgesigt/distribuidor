@@ -265,7 +265,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: #ccc;
+      background-color: #b8b8b8;
       transition: 0.4s;
       border-radius: 34px;
     }
@@ -275,9 +275,9 @@
       content: "";
       height: 16px;
       width: 16px;
-      left: 1px;
+      left: 0px;
       bottom: -1px;
-      background-color: white;
+      background-color: rgb(117, 117, 117);
       transition: 0.4s;
       border-radius: 50%;
     }
@@ -287,6 +287,6 @@
     }
     
     input:checked + .slider:before {
-      transform: translateX(18px);
+      transform: translateX(20px);
     }
     
