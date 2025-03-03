@@ -122,12 +122,10 @@
 
     @media (max-width: 768px) {
       .chart-group {
-        width: 320px;
-        max-width: 320px;
-        /* Remova a min-width que pode estar forçando um valor maior */
-        min-width: 0;
-        margin: 0 auto; /* Centraliza o elemento, se desejado */
-        /* Mantenha os demais estilos conforme necessário */
+        width: 320px !important;
+        max-width: 320px !important;
+        min-width: 320px !important;
+        margin: 0 auto; /* opcional, se quiser centralizar */
         min-height: 440px;
         padding-left: 2%;
         padding-top: 1%;
@@ -138,10 +136,10 @@
         background: #fff;
         display: flex;
         flex-direction: column;
-        /* Se a propriedade align-items: left não funcionar, utilize flex-start */
         align-items: flex-start;
       }
     }
+    
     
     /* Loader de carregamento */
     .loading-overlay {
