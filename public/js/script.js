@@ -161,7 +161,7 @@
     function limitChartContainerWidth() {
       const chartContainer = document.getElementById('chartContainer');
       if (window.innerWidth < 768) {
-        chartContainer.style.width = '320px';
+        chartContainer.style.width = '200px';
       } else {
         chartContainer.style.width = ''; // Remove a largura fixa para telas maiores
       }
