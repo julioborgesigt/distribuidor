@@ -2,6 +2,8 @@
     // Variáveis globais para armazenar processos
     let allProcesses = [];
     let filteredProcesses = [];
+    let currentChartType = 'todos';
+
 
     // Função para criar um progress ring usando ProgressBar.js
     function createChartCircle(label, percentage, count) {
@@ -59,66 +61,90 @@
       return Math.ceil(diff / (1000 * 60 * 60 * 24));
     }
 
-    // Função para atualizar os gráficos
     function updateCharts() {
-      const container = document.getElementById('statsRow'); // Container dos gráficos
-      container.innerHTML = ''; // Limpa os gráficos
-
-      const total = allProcesses.length;
-      container.appendChild(createChartCircle('TOTAL', 100, total));
-
+      const container = document.getElementById('statsRow');
+      container.innerHTML = '';
+    
+      // Define o conjunto de processos a serem contados
+      let processesToCount = [];
+      if (currentChartType === 'cumprido') {
+        const now = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(now.getDate() - 30);
+        // Filtra para considerar apenas os processos cumpridos nos últimos 30 dias
+        processesToCount = allProcesses.filter(proc =>
+          proc.cumprido &&
+          proc.cumpridoDate &&
+          new Date(proc.cumpridoDate) >= thirtyDaysAgo
+        );
+      } else {
+        // Todos os processos
+        processesToCount = allProcesses;
+      }
+    
+      const total = processesToCount.length;
+      const labelTotal = currentChartType === 'cumprido' ? 'T.Cump.' : 'TOTAL';
+      container.appendChild(createChartCircle(labelTotal, 100, total));
+    
+      // Agrupa os processos por usuário (somente os filtrados)
       const userCounts = {};
-      allProcesses.forEach(proc => {
+      processesToCount.forEach(proc => {
         if (proc.User && proc.User.nome) {
           const name = proc.User.nome;
           userCounts[name] = (userCounts[name] || 0) + 1;
         }
       });
-
+    
       Object.entries(userCounts).forEach(([name, count]) => {
         const abbrev = name.substring(0, 8);
-        const percentage = (count / total) * 100;
+        const percentage = total > 0 ? (count / total) * 100 : 0;
         container.appendChild(createChartCircle(abbrev, percentage, count));
       });
-
-      let overdue = 0, urgent = 0, upcoming = 0, preso = 0, homicid = 0, furtos = 0, roubos = 0;
-      allProcesses.forEach(proc => {
-        const dias = proc.data_intimacao ? calcDias(proc) : 0;
-        if (dias <= 0) {
-          overdue++;
-        } else if (dias < 10) {
-          urgent++;
-        } else if (dias < 30) {
-          upcoming++;
-        }
-        if (proc.tarjas && proc.tarjas.trim().toLowerCase().includes('réu preso')) {
-          preso++;
-        }
-        if (proc.assunto_principal &&
-            ['homicídio qualificado', 'homicídio simples', 'homicídio culposo']
-            .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
-          homicid++;
-        }
-        if (proc.assunto_principal &&
-            ['roubo', 'roubo qualificado']
-            .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
-          roubos++;
-        }
-        if (proc.assunto_principal &&
-            ['furto', 'furto qualificado']
-            .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
-          furtos++;
-        }
-      });
-
-      container.appendChild(createChartCircle('Vencidos', (overdue / total) * 100, overdue));
-      container.appendChild(createChartCircle('P < 10d', (urgent / total) * 100, urgent));
-      container.appendChild(createChartCircle('P < 30d', (upcoming / total) * 100, upcoming));
-      container.appendChild(createChartCircle('R.Preso', (preso / total) * 100, preso));
-      container.appendChild(createChartCircle('Homic.', (homicid / total) * 100, homicid));
-      container.appendChild(createChartCircle('Roubos', (roubos / total) * 100, roubos));
-      container.appendChild(createChartCircle('Furtos', (furtos / total) * 100, furtos));
+    
+      // Caso o gráfico "todos" deva exibir informações adicionais,
+      // mantenha essas estatísticas apenas para esse modo.
+      if (currentChartType === 'todos') {
+        let overdue = 0, urgent = 0, upcoming = 0, preso = 0, homicid = 0, furtos = 0, roubos = 0;
+        allProcesses.forEach(proc => {
+          const dias = proc.data_intimacao ? calcDias(proc) : 0;
+          if (dias <= 0) {
+            overdue++;
+          } else if (dias < 10) {
+            urgent++;
+          } else if (dias < 30) {
+            upcoming++;
+          }
+          if (proc.tarjas && proc.tarjas.trim().toLowerCase().includes('réu preso')) {
+            preso++;
+          }
+          if (proc.assunto_principal &&
+              ['homicídio qualificado', 'homicídio simples', 'homicídio culposo']
+              .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
+            homicid++;
+          }
+          if (proc.assunto_principal &&
+              ['roubo', 'roubo qualificado']
+              .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
+            roubos++;
+          }
+          if (proc.assunto_principal &&
+              ['furto', 'furto qualificado']
+              .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
+            furtos++;
+          }
+        });
+    
+        container.appendChild(createChartCircle('Vencidos', (overdue / allProcesses.length) * 100, overdue));
+        container.appendChild(createChartCircle('P < 10d', (urgent / allProcesses.length) * 100, urgent));
+        container.appendChild(createChartCircle('P < 30d', (upcoming / allProcesses.length) * 100, upcoming));
+        container.appendChild(createChartCircle('R.Preso', (preso / allProcesses.length) * 100, preso));
+        container.appendChild(createChartCircle('Homic.', (homicid / allProcesses.length) * 100, homicid));
+        container.appendChild(createChartCircle('Roubos', (roubos / allProcesses.length) * 100, roubos));
+        container.appendChild(createChartCircle('Furtos', (furtos / allProcesses.length) * 100, furtos));
+      }
     }
+    
+    
 
     document.addEventListener('DOMContentLoaded', () => {
       fetchProcesses();
@@ -170,6 +196,13 @@
           updateCharts();
         }
       });
+
+      const chartToggle = document.getElementById('chartToggle');
+      chartToggle.addEventListener('change', function() {
+        currentChartType = this.checked ? 'cumprido' : 'todos';
+        updateCharts();
+      });
+        
     });
 
     function fetchProcesses() {

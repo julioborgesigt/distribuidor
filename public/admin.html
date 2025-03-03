@@ -36,7 +36,7 @@
     <div class="form-container">
       <!-- Pré-Cadastro de Usuário -->
       <div class="small-container">
-        <h3>Pré-Cadastro</h3>
+        <h4>Pré-Cadastro</h4>
         <form id="preCadastroForm">
           <div class="mb-2">
             <label for="matricula" class="form-label">Matrícula</label>
@@ -57,7 +57,7 @@
       <!-- Atualizar Lista e Reset de Senha -->
       <div class="vertical-container">
         <div class="small-container">
-          <h3>Atualizar Lista</h3>
+          <h4>Atualizar Lista</h4>
           <form id="csvUploadForm" enctype="multipart/form-data">
             <div class="mb-2">
               <label for="csvFile" class="form-label">Planilha CSV</label>
@@ -67,7 +67,7 @@
           </form>
         </div>
         <div class="small-container">
-          <h3>Reset de Senha</h3>
+          <h4>Reset de Senha</h4>
           <form id="resetPasswordForm">
             <div class="mb-2">
               <label for="matriculaReset" class="form-label">Matrícula</label>
@@ -79,14 +79,42 @@
       </div>
       
       <!-- Container para gráficos -->
+      
       <div class="chart-container" id="chartContainer">
-        <div class="chart-group">
-          <h4>Estatísticas</h4>
-          <div class="chart-row" id="statsRow">
-            <!-- Gráficos serão inseridos aqui -->
+
+        
+          <div class="chart-group">
+            
+
+            <div class="chart-header">
+              <h4>Estatísticas</h4>
+              <div class="chart-toggle-container">
+                <span>Todos</span>
+                <label class="switch">
+                  <input type="checkbox" id="chartToggle">
+                  <span class="slider"></span>
+                </label>
+                <span>Cumpridos</span>
+              </div>
+            </div>
+            
+
+
+          
+
+            <div class="chart-row" id="statsRow">
+              <!-- Gráficos serão inseridos aqui -->
+            </div>
+
           </div>
-        </div>
+
+
       </div>
+      
+
+
+
+
     </div>
 
     <!-- Container para filtros e ações -->

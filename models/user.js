@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
     matricula: {
       type: DataTypes.STRING(20),
       allowNull: false,
-      unique: true
+      
     },
     nome: {
       type: DataTypes.STRING(100),

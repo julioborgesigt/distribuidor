@@ -77,14 +77,17 @@
       align-items: flex-start;
       flex-wrap: wrap;
       max-width: 650px;
+  
       align-items: center;
     }
-   
+     
+    
 
 
     .chart-group {
       flex: 1;
-      min-width: 120px;
+      min-width: 650px;
+      min-height: 380px;
       padding-left:  4%;
       padding-top:  1%;
       padding-bottom:  1%;
@@ -95,8 +98,9 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      align-items: center;
+      align-items: left;
     }
+
     .chart-circle {
       display: inline-block;
       position: relative;
@@ -207,5 +211,65 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 1rem; /* ajuste conforme necessário */
+    }
+    
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%; /* Garante que ocupe toda a largura disponível */
+      padding: 0 15px; /* Ajuste o padding conforme necessário */
+    }
+    
+    .chart-toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* Código do toggle */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 35px;
+      height: 14px;
+    }
+    
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 1px;
+      bottom: -1px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(18px);
     }
     
