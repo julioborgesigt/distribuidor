@@ -445,26 +445,47 @@
 
     // Pré-cadastro de usuário
     const preCadastroForm = document.getElementById('preCadastroForm');
-    preCadastroForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const formData = new FormData(preCadastroForm);
-      const data = {
-        matricula: formData.get('matricula'),
-        nome: formData.get('nome'),
-        senha: formData.get('senha')
-      };
-      fetch('/admin/pre-cadastro', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        preCadastroForm.reset();
-      })
-      .catch(err => console.error(err));
-    });
+preCadastroForm.addEventListener('submit', e => {
+  e.preventDefault();
+  
+  // Coleta os dados do formulário
+  const formData = new FormData(preCadastroForm);
+  const data = {
+    matricula: formData.get('matricula'),
+    nome: formData.get('nome'),
+    senha: formData.get('senha')
+  };
+
+  // Verifica o valor do seletor para definir se é admin ou usuário normal
+  const tipoCadastro = formData.get('tipoCadastro');
+  console.log('Tipo de cadastro selecionado:', tipoCadastro);
+  
+  if (tipoCadastro === 'admin') {
+    data.admin_padrao = 1;
+  }
+  
+  console.log('Dados enviados para pré-cadastro:', data);
+  
+  // Envia os dados para o endpoint
+  fetch('/admin/pre-cadastro', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(res => {
+    console.log('Status da resposta:', res.status);
+    return res.text();
+  })
+  .then(msg => {
+    console.log('Resposta do servidor:', msg);
+    alert(msg);
+    preCadastroForm.reset();
+  })
+  .catch(err => {
+    console.error('Erro ao enviar pré-cadastro:', err);
+  });
+});
+
 
     // Reset de senha
     const resetPasswordForm = document.getElementById('resetPasswordForm');

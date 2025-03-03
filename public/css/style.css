@@ -259,7 +259,7 @@
     .toggle-btn {
       width: 50px;  /* aumente esse valor */
       height: 50px; /* aumente esse valor */
-      border-radius: 10%;
+      
       border: none;
       background: none;
       display: flex;
@@ -268,11 +268,36 @@
       transition: background-color 0.3s;
       font-size: 2.2rem; /* opcional: ajusta o tamanho dos ícones */
       align-items: center;
+      border-radius: 50%;
+      
       
     }
 
     .toggle-btn:hover {
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: rgba(63, 63, 63, 0.1);
+      border-radius: 50%;
+    }
+
+    @media (max-width: 768px) {
+      .toggle-btn {
+        width: 35px;  /* aumente esse valor */
+        height: 35px; /* aumente esse valor */
+        border-radius: 10%;
+        border: none;
+        background: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s;
+        font-size: 1.8rem; /* opcional: ajusta o tamanho dos ícones */
+        align-items: center;
+        
+      }
+  
+      .toggle-btn:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+  
     }
 
     .header-container {
@@ -388,8 +413,8 @@
       color: #fff;              /* Ícone em branco */
       border: none;             /* Remove a borda padrão */
       border-radius: 50%;       /* Deixa o botão circular */
-      width: 48px;              /* Ajuste conforme o tamanho que deseja */
-      height: 48px;
+      width: 40px;              /* Ajuste conforme o tamanho que deseja */
+      height: 40px;
       display: flex;            /* Para centralizar o ícone */
       align-items: center;
       justify-content: center;
@@ -403,6 +428,32 @@
     }
     
     .logout-btn i {
-      font-size: 24px; /* Tamanho do ícone */
+      font-size: 20px; /* Tamanho do ícone */
+    }
+
+    @media (max-width: 768px) {
+      .logout-btn {
+        background-color: #f44336; /* Vermelho (pode trocar se quiser) */
+        color: #fff;              /* Ícone em branco */
+        border: none;             /* Remove a borda padrão */
+        border-radius: 50%;       /* Deixa o botão circular */
+        width: 28px;              /* Ajuste conforme o tamanho que deseja */
+        height: 28px;
+        display: flex;            /* Para centralizar o ícone */
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;          /* Mostra a “mãozinha” no hover */
+        transition: background-color 0.3s;
+      }
+      
+      .logout-btn:hover {
+        background-color: #bd2a27; /* Muda o tom de vermelho no hover */
+        color: #ffffff;
+      }
+      
+      .logout-btn i {
+        font-size: 16px; /* Tamanho do ícone */
+      }
+      
     }
     

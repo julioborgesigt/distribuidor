@@ -5,12 +5,19 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'seuSegredoAqui'; // Substitua por um valor seguro
 
 exports.login = async (req, res) => {
-  const { matricula, senha } = req.body;
+  // Agora extraímos também o parâmetro adminLogin do corpo da requisição
+  const { matricula, senha, adminLogin } = req.body;
   try {
     const user = await User.findOne({ where: { matricula } });
     if (!user) {
       console.log(`Usuário não encontrado: ${matricula}`);
       return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+    
+    // Se o login solicitado for de administrador, verifica se o usuário é administrador
+    if (adminLogin && !user.admin_padrao) {
+      console.log(`Acesso de administrador negado para a matrícula: ${matricula}`);
+      return res.status(403).json({ error: 'Acesso de administrador negado.' });
     }
     
     // Logs para depuração
@@ -37,7 +44,8 @@ exports.login = async (req, res) => {
       return res.json({ firstLogin: true, userId: user.id });
     } else {
       console.log("Este não é seu primeiro login.");
-      const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '8h' });
+      // Incluímos também a flag 'admin' no token
+      const token = jwt.sign({ id: user.id, admin: user.admin_padrao }, JWT_SECRET, { expiresIn: '8h' });
       return res.json({ token });
     }
   } catch (error) {

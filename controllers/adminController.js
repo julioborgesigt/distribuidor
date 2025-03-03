@@ -180,7 +180,7 @@ exports.manualAssignProcess = async (req, res) => {
 
 // Pré-cadastro de usuário
 exports.preCadastro = async (req, res) => {
-  const { matricula, nome, senha } = req.body;
+  const { matricula, nome, senha, admin_padrao } = req.body;
 
   if (!matricula || !nome || !senha) {
     return res.status(400).send('Campos obrigatórios ausentes.');
@@ -188,7 +188,7 @@ exports.preCadastro = async (req, res) => {
 
   try {
     // Cria novo usuário
-    await User.create({ matricula, nome, senha });
+    await User.create({ matricula, nome, senha, admin_padrao });
     res.send('Pré-cadastro realizado com sucesso.');
   } catch (error) {
     console.error(error);

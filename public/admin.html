@@ -16,18 +16,20 @@
 </head>
 <body class="p-3">
   <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <!-- Botão à esquerda -->
-      <button id="darkModeToggle" class="btn toggle-btn" aria-label="Alternar modo escuro">
-        <i id="sunIcon" class="bi bi-sun-fill"></i>
-        <i id="moonIcon" class="bi bi-moon-fill" style="display: none;"></i>
-      </button>
-    
-      <!-- Botão à direita -->
-      <button id="logoutBtn" class="btn logout-btn" title="Logout">
-        <i class="bi bi-power"></i>
-      </button>
+
+
+    <div class="container-fluid">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <button id="darkModeToggle" class="btn toggle-btn" aria-label="Alternar modo escuro">
+          <i id="sunIcon" class="bi bi-sun-fill"></i>
+          <i id="moonIcon" class="bi bi-moon-fill" style="display: none;"></i>
+        </button>
+        <button id="logoutBtn" class="btn logout-btn" title="Logout">
+          <i class="bi bi-power"></i>
+        </button>
+      </div>
     </div>
+    
     
   
     
@@ -56,9 +58,18 @@
             <label for="senha" class="form-label">Senha</label>
             <input type="password" class="form-control" id="senha" name="senha" maxlength="8" required>
           </div>
+          <!-- Novo seletor para tipo de cadastro -->
+          <div class="mb-2">
+            <label for="tipoCadastro" class="form-label">Tipo de Cadastro</label>
+            <select class="form-select" id="tipoCadastro" name="tipoCadastro" required>
+              <option value="usuario">Usuário Normal</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
           <button type="submit" class="btn btn-success w-100 mt-4">Cadastrar</button>
         </form>
       </div>
+
 
       <!-- Atualizar Lista e Reset de Senha -->
       <div class="vertical-container">
