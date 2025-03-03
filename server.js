@@ -7,7 +7,9 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 
 const app = express();
+require('dotenv').config();
 const PORT = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Para poder interpretar JSON e dados de formulários
 app.use(express.json());
