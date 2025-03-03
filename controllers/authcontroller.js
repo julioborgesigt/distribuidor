@@ -45,7 +45,8 @@ exports.login = async (req, res) => {
     } else {
       console.log("Este não é seu primeiro login.");
       // Incluímos também a flag 'admin' no token
-      const token = jwt.sign({ id: user.id, admin: user.admin_padrao }, JWT_SECRET, { expiresIn: '8h' });
+      const payload = { id: user.id, admin: adminLogin ? true : false };
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
       return res.json({ token });
     }
   } catch (error) {
