@@ -3,9 +3,15 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController');
 
+// Importa o middleware de administrador
+const autenticarAdmin = require('../middlewares/autenticarAdmin');
+
 // Configuração para upload de CSV
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
+
+// Aplica o middleware a todas as rotas deste módulo:
+router.use(autenticarAdmin);
 
 // Rota para a página do administrador
 router.get('/', adminController.getAdminPage);
