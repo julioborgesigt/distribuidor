@@ -99,7 +99,7 @@
       }
     
       const total = processesToCount.length;
-      const labelTotal = currentChartType === 'cumprido' ? 'T.Cump.' : 'TOTAL';
+      const labelTotal = currentChartType === 'cumprido' ? 'T.Cumprido' : 'TOTAL';
       container.appendChild(createChartCircle(labelTotal, 100, total));
     
       // Agrupa os processos por usuário
@@ -159,6 +159,18 @@
     }
     
     
+    function updateChartContainerWidth() {
+      const chartContainer = document.getElementById('chartContainer');
+      if (window.innerWidth <= 768) {
+        chartContainer.style.width = '280px';
+      } else {
+        chartContainer.style.width = ''; // Volta ao padrão em telas maiores
+      }
+    }
+
+    // Chame a função ao carregar a página e ao redimensionar
+    window.addEventListener('DOMContentLoaded', updateChartContainerWidth);
+    window.addEventListener('resize', updateChartContainerWidth);
     
 
     document.addEventListener('DOMContentLoaded', () => {
