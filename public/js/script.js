@@ -70,7 +70,7 @@
         const toggleContainer = header.querySelector('.chart-toggle-container');
         toggleContainer.style.alignSelf = 'flex-end';
         toggleContainer.style.marginTop = '-25px';
-        toggleContainer.style.marginLeft = '25px';
+        
         
       } else {
         header.style.flexDirection = 'row';

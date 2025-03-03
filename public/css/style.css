@@ -265,7 +265,31 @@
       width: 100%; /* Garante que ocupe toda a largura disponível */
       padding: 0 15px; /* Ajuste o padding conforme necessário */
     }
+
     
+
+    .chart-row {
+      
+      justify-content: space-between;
+      align-items: center;
+      width: 100%; /* Garante que ocupe toda a largura disponível */
+      
+    }
+    
+
+    @media screen and (max-width: 768px) {
+      .chart-row {
+      
+        justify-content: space-between;
+        align-items: center;
+        width: 100%; /* Garante que ocupe toda a largura disponível */
+        margin-left: 10%;
+        margin-right: 10%;
+      }
+      
+    }
+
+
     .chart-toggle-container {
       display: flex;
       align-items: center;
