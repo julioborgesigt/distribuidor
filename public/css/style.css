@@ -44,10 +44,9 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       padding: 15px;
       margin-bottom: 20px;
-      min-height: 320px;
+      min-width: 320px;
     }
 
-   
 
     .auto-container h3 {
       font-size: 18px;
