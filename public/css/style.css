@@ -107,6 +107,17 @@
 
 
     @media (max-width: 768px) {
+      .chart-container {
+        display: flex;
+        
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        max-width: 320px;
+    
+        align-items: center;
+      }
+
       .chart-group {
         flex: 1;
         min-width: 320px;
@@ -120,7 +131,7 @@
         background: #fff;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+       
         align-items: left;
       }
     }
@@ -288,5 +299,12 @@
     
     input:checked + .slider:before {
       transform: translateX(20px);
+    }
+    
+    @media (max-width: 768px) {
+      .toggle-text {
+        display: none;
+      }
+      
     }
     
