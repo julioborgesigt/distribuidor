@@ -10,7 +10,6 @@
       margin-bottom: 20px;
       flex-wrap: wrap;
       justify-content: center;
-      
     }
 
    
@@ -34,7 +33,7 @@
       gap: 20px;
       flex: 1;
       min-width: 280px;
-     
+      
     }
 
     /* Container para filtros, gráficos e tabela */
@@ -46,7 +45,6 @@
       padding: 15px;
       margin-bottom: 20px;
       min-width: 320px;
-      
     }
 
 
@@ -121,7 +119,6 @@
         align-items: flex-start;
         flex-wrap: wrap;
         max-width: 320px;
-        text-align: center;
     
         
       }
