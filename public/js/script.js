@@ -62,6 +62,23 @@
     }
 
     function updateCharts() {
+      // Primeiro, atualize o layout do cabeçalho com base na largura da tela
+      const header = document.querySelector('.chart-header');
+      if (window.innerWidth < 768) {
+        header.style.flexDirection = 'column';
+        header.style.alignItems = 'flex-start';
+        const toggleContainer = header.querySelector('.chart-toggle-container');
+        toggleContainer.style.alignSelf = 'flex-end';
+        toggleContainer.style.marginTop = '10px';
+      } else {
+        header.style.flexDirection = 'row';
+        header.style.alignItems = 'center';
+        const toggleContainer = header.querySelector('.chart-toggle-container');
+        toggleContainer.style.alignSelf = '';
+        toggleContainer.style.marginTop = '';
+      }
+    
+      // A seguir, o código de atualização dos gráficos permanece o mesmo
       const container = document.getElementById('statsRow');
       container.innerHTML = '';
     
@@ -78,15 +95,14 @@
           new Date(proc.cumpridoDate) >= thirtyDaysAgo
         );
       } else {
-        // Todos os processos
         processesToCount = allProcesses;
       }
     
       const total = processesToCount.length;
-      const labelTotal = currentChartType === 'cumprido' ? 'T.Cump.' : 'TOTAL';
+      const labelTotal = currentChartType === 'cumprido' ? 'Cumprido Total' : 'TOTAL';
       container.appendChild(createChartCircle(labelTotal, 100, total));
     
-      // Agrupa os processos por usuário (somente os filtrados)
+      // Agrupa os processos por usuário
       const userCounts = {};
       processesToCount.forEach(proc => {
         if (proc.User && proc.User.nome) {
@@ -101,8 +117,6 @@
         container.appendChild(createChartCircle(abbrev, percentage, count));
       });
     
-      // Caso o gráfico "todos" deva exibir informações adicionais,
-      // mantenha essas estatísticas apenas para esse modo.
       if (currentChartType === 'todos') {
         let overdue = 0, urgent = 0, upcoming = 0, preso = 0, homicid = 0, furtos = 0, roubos = 0;
         allProcesses.forEach(proc => {
@@ -143,6 +157,7 @@
         container.appendChild(createChartCircle('Furtos', (furtos / allProcesses.length) * 100, furtos));
       }
     }
+    
     
     
 
