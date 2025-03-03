@@ -261,11 +261,13 @@
         return;
       }
       
-      document.getElementById('logoutBtn').addEventListener('click', () => {
+      
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
         localStorage.removeItem('token');
         window.location.href = '/';
       });
-    });
 
   </script>
 </body>
