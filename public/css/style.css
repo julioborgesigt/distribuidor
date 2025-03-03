@@ -314,7 +314,8 @@
         justify-content: space-between;
         align-items: center;
         width: 100%; /* Garante que ocupe toda a largura disponível */
-        
+        margin-left: 10%;
+        margin-right: 10%;
       }
       
       
