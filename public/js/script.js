@@ -159,20 +159,18 @@
     }
     
     function limitChartContainerWidth() {
-      const chartContainer = document.getElementById('chartContainer');
-      if (window.innerWidth < 768) {
-        chartContainer.style.setProperty('width', '320px', 'important');
-        chartContainer.style.setProperty('max-width', '320px', 'important');
-      } else {
-        chartContainer.style.removeProperty('width');
-        chartContainer.style.removeProperty('max-width');
-      }
-    }
-    
-    document.addEventListener('DOMContentLoaded', limitChartContainerWidth);
-    window.addEventListener('resize', limitChartContainerWidth);
-    
-    
+  const chartContainer = document.getElementById('chartContainer');
+  if (window.innerWidth < 768) {
+    chartContainer.style.width = '320px';
+  } else {
+    chartContainer.style.width = ''; // Remove a largura fixa para telas maiores
+  }
+}
+
+// Chama a função quando a página carrega e sempre que a tela for redimensionada
+document.addEventListener('DOMContentLoaded', limitChartContainerWidth);
+window.addEventListener('resize', limitChartContainerWidth);
+
     
 
     document.addEventListener('DOMContentLoaded', () => {

@@ -258,7 +258,6 @@
     }
     
     .chart-header {
-      display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%; /* Garante que ocupe toda a largura disponível */
