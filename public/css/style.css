@@ -302,7 +302,7 @@
     }
     
     @media (max-width: 768px) {
-      .toggle-text {
+      .chart-toggle-container {
         display: none;
       }
       
