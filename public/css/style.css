@@ -122,7 +122,7 @@
         flex-wrap: wrap;
         max-width: 320px;
         text-align: center;
-    
+        
         
       }
       .container {
@@ -141,6 +141,7 @@
         width: 320px !important;
         max-width: 320px !important;
         min-width: 320px !important;
+        
         
         min-height: 440px;
         padding-left: 2%;
@@ -275,6 +276,7 @@
         width: 100%;
         text-align: left !important;
         margin: 0;
+        margin-left: -7%;
       }
     }
 
