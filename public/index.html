@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Login do Usuário</title>
+  <title>Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
@@ -12,6 +12,13 @@
     <div class="card shadow-sm" style="width: 100%; max-width: 250px;">
       <div class="card-body">
         <h2 class="card-title text-center mb-4">Login</h2>
+        
+        <!-- Toggle para selecionar o tipo de login -->
+        <div class="form-check form-switch text-center mb-3">
+          <input class="form-check-input" type="checkbox" id="loginTypeToggle">
+          <label class="form-check-label" for="loginTypeToggle">Login Administrador</label>
+        </div>
+        
         <form id="loginForm">
           <div class="mb-3">
             <label for="matricula" class="form-label">Matrícula:</label>
@@ -22,9 +29,6 @@
             <input type="password" class="form-control" id="senha" required>
           </div>
           <button type="submit" class="btn btn-primary w-100">Entrar</button>
-          <div class="mt-3 text-center">
-            <a href="/admin" class="btn btn-secondary">Página do Administrador</a>
-          </div>
         </form>
       </div>
     </div>
@@ -55,6 +59,7 @@
     </div>
   </div>
 
+  <!-- Scripts -->
   <script>
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -67,14 +72,20 @@
       });
       const data = await res.json();
       if (data.firstLogin) {
-        // Armazena o id do usuário para troca de senha
         window.tempUserId = data.userId;
-        // Exibe o modal de troca de senha
         const modal = new bootstrap.Modal(document.getElementById('modalTrocaSenha'));
         modal.show();
       } else if (data.token) {
         localStorage.setItem('token', data.token);
-        window.location.href = 'usuario.html';
+        // Verifica o estado do toggle para redirecionar:
+        const loginTypeToggle = document.getElementById('loginTypeToggle');
+        if (loginTypeToggle.checked) {
+          // Se estiver marcado, é administrador:
+          window.location.href = 'admin.html';
+        } else {
+          // Caso contrário, é usuário:
+          window.location.href = 'usuario.html';
+        }
       } else {
         alert('Erro no login: ' + (data.error || 'credenciais inválidas'));
       }
@@ -95,6 +106,7 @@
       const data = await res.json();
       if (data.token) {
         localStorage.setItem('token', data.token);
+        // Aqui também você pode usar o toggle se desejar, ou sempre redirecionar para a mesma página após a troca de senha.
         window.location.href = 'usuario.html';
       } else {
         alert('Erro ao atualizar a senha.');
