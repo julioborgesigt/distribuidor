@@ -257,6 +257,7 @@
     }
     
     .chart-header {
+      display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%; /* Garante que ocupe toda a largura disponível */
@@ -273,8 +274,8 @@
     .switch {
       position: relative;
       display: inline-block;
-      width: 35px;
-      height: 14px;
+      width: 40px;
+      height: 18px;
     }
     
     .switch input { 
@@ -290,9 +291,9 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: #b8b8b8;
+      background-color: #ccc;
       transition: 0.4s;
-      border-radius: 34px;
+      border-radius: 20px;
     }
     
     .slider:before {
@@ -300,9 +301,9 @@
       content: "";
       height: 16px;
       width: 16px;
-      left: 0px;
-      bottom: -1px;
-      background-color: rgb(117, 117, 117);
+      left: -1px;
+      bottom: 1px;
+      background-color: rgb(92, 92, 92);
       transition: 0.4s;
       border-radius: 50%;
     }
@@ -312,8 +313,10 @@
     }
     
     input:checked + .slider:before {
-      transform: translateX(20px);
+      transform: translateX(26px);
+    
     }
+    
     
     @media (max-width: 768px) {
       .toggle-text {
