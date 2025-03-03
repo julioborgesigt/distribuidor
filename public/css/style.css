@@ -270,14 +270,6 @@
       padding: 0 15px; /* Ajuste o padding conforme necessário */
     }
 
-    @media (max-width: 768px) {
-      .chart-header h4 {
-        width: 100%;
-        text-align: left !important;
-        margin: 0;
-      }
-    }
-
     
 
     .chart-row {
@@ -295,7 +287,8 @@
         justify-content: space-between;
         align-items: center;
         width: 100%; /* Garante que ocupe toda a largura disponível */
-        
+        margin-left: 10%;
+        margin-right: 10%;
       }
       
       
