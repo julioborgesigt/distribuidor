@@ -1,12 +1,4 @@
-.container {
-  display: flex;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 
-  flex-wrap: wrap;
-  justify-content: center;
-}
     
 
     /* Container principal para os formulários */
@@ -126,6 +118,15 @@
         max-width: 320px;
     
         align-items: center;
+      }
+      .container {
+        display: flex;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      
+        flex-wrap: wrap;
+        justify-content: center;
       }
 
     }
