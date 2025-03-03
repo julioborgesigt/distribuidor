@@ -398,7 +398,8 @@
     }
     
     .logout-btn:hover {
-      background-color: #e53935; /* Muda o tom de vermelho no hover */
+      background-color: #bd2a27; /* Muda o tom de vermelho no hover */
+      color: #ffffff;
     }
     
     .logout-btn i {
