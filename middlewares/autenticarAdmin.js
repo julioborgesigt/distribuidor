@@ -1,15 +1,22 @@
 // /middlewares/autenticarAdmin.js
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'seuSegredoAqui'; // Use o mesmo segredo que no authController
+const JWT_SECRET = 'seuSegredoAqui';
 
 const autenticarAdmin = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  if (!authHeader) return res.sendStatus(401); // não autorizado
-  const token = authHeader.split(' ')[1]; // formato "Bearer TOKEN"
+  if (!authHeader) {
+    console.log('Autenticação: authHeader ausente');
+    return res.sendStatus(401);
+  }
+  const token = authHeader.split(' ')[1];
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) return res.sendStatus(403); // token inválido ou expirado
-    if (!decoded.admin) { 
-      // Se o token não tiver a propriedade admin true, acesso negado
+    if (err) {
+      console.log('Autenticação: erro na verificação do token:', err);
+      return res.sendStatus(403);
+    }
+    console.log('Token decodificado:', decoded);
+    if (!decoded.admin) {
+      console.log('Autenticação: acesso de administrador negado para o token:', decoded);
       return res.status(403).json({ error: 'Acesso de administrador negado.' });
     }
     req.userId = decoded.id;
