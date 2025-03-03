@@ -69,13 +69,15 @@
         header.style.alignItems = 'flex-start';
         const toggleContainer = header.querySelector('.chart-toggle-container');
         toggleContainer.style.alignSelf = 'flex-end';
-        toggleContainer.style.marginTop = '10px';
+        toggleContainer.style.marginTop = '-25px';
+        toggleContainer.style.marginLeft = '5px';
       } else {
         header.style.flexDirection = 'row';
         header.style.alignItems = 'center';
         const toggleContainer = header.querySelector('.chart-toggle-container');
         toggleContainer.style.alignSelf = '';
-        toggleContainer.style.marginTop = '';
+        toggleContainer.style.marginTop = '-25px';
+        toggleContainer.style.marginLeft = '5px';
       }
     
       // A seguir, o código de atualização dos gráficos permanece o mesmo
