@@ -66,18 +66,19 @@
       const header = document.querySelector('.chart-header');
       if (window.innerWidth < 768) {
         header.style.flexDirection = 'column';
-        header.style.alignItems = 'flex-start';
+        header.style.alignItems = 'center';
         const toggleContainer = header.querySelector('.chart-toggle-container');
         toggleContainer.style.alignSelf = 'flex-end';
         toggleContainer.style.marginTop = '-25px';
-        toggleContainer.style.marginLeft = '5px';
+        toggleContainer.style.marginLeft = '25px';
+        
       } else {
         header.style.flexDirection = 'row';
         header.style.alignItems = 'center';
         const toggleContainer = header.querySelector('.chart-toggle-container');
         toggleContainer.style.alignSelf = '';
-        toggleContainer.style.marginTop = '-25px';
-        toggleContainer.style.marginLeft = '5px';
+        toggleContainer.style.marginTop = '';
+        
       }
     
       // A seguir, o código de atualização dos gráficos permanece o mesmo
