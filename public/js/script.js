@@ -69,7 +69,7 @@
         header.style.alignItems = 'center';
         const toggleContainer = header.querySelector('.chart-toggle-container');
         toggleContainer.style.alignSelf = 'flex-end';
-        toggleContainer.style.marginTop = '-25px';
+        toggleContainer.style.marginTop = '-20px';
         
         
       } else {
