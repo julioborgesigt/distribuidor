@@ -120,10 +120,10 @@
 
       .chart-group {
         flex: 1;
-        min-width: 320px;
-        min-height: 440px;
-        max-width: 220px;
-        max-height: 240px;
+        min-width: 80%;
+        min-height: 80%;
+        max-width: 80%;
+        max-height: 80%;
         padding-left:  2%;
         padding-top:  1%;
         padding-bottom:  1%;
