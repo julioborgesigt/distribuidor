@@ -162,7 +162,7 @@
     function updateChartContainerWidth() {
       const chartContainer = document.getElementById('chartContainer');
       if (window.innerWidth <= 768) {
-        chartContainer.style.width = '320px';
+        chartContainer.style.width = '280px';
       } else {
         chartContainer.style.width = ''; // Volta ao padrão em telas maiores
       }
