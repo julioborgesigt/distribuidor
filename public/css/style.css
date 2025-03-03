@@ -116,7 +116,7 @@
     @media (max-width: 768px) {
       .chart-container {
         display: flex;
-        
+        padding: 10px;
         justify-content: flex-start;
         align-items: flex-start;
         flex-wrap: wrap;
@@ -141,7 +141,7 @@
         width: 320px !important;
         max-width: 320px !important;
         min-width: 320px !important;
-        
+        padding: 10px;
         min-height: 440px;
         padding-left: 2%;
         padding-top: 1%;
