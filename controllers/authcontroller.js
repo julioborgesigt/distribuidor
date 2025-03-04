@@ -2,10 +2,10 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'seuSegredoAqui'; // Substitua por um valor seguro
+const JWT_SECRET = 'b7f8a2d4e3f7c78e8e9a3d0b5f6d8a3e7c9f2b8e4d1a5c0e2d3f9b6a7d8e4c1f'; // Substitua por um valor seguro
 
 exports.login = async (req, res) => {
-  // Agora extraímos também o parâmetro adminLogin do corpo da requisição
+  // Extraímos também adminLogin do corpo da requisição
   const { matricula, senha, adminLogin } = req.body;
   try {
     const user = await User.findOne({ where: { matricula } });
@@ -14,7 +14,7 @@ exports.login = async (req, res) => {
       return res.status(404).json({ error: 'Usuário não encontrado' });
     }
     
-    // Se o login solicitado for de administrador, verifica se o usuário é administrador
+    // Se o login for solicitado como admin mas o usuário não é admin
     if (adminLogin && !user.admin_padrao) {
       console.log(`Acesso de administrador negado para a matrícula: ${matricula}`);
       return res.status(403).json({ error: 'Acesso de administrador negado.' });
@@ -27,10 +27,10 @@ exports.login = async (req, res) => {
 
     let senhaValida = false;
     if (user.senha_padrao) {
-      // Se for primeiro login, a senha está em texto plano
+      // Primeiro login: senha em texto plano
       senhaValida = (senha === user.senha);
     } else {
-      // Senha já foi trocada, logo, está hasheada
+      // Senha já foi trocada e está hasheada
       senhaValida = bcrypt.compareSync(senha, user.senha);
     }
     
@@ -44,9 +44,8 @@ exports.login = async (req, res) => {
       return res.json({ firstLogin: true, userId: user.id });
     } else {
       console.log("Este não é seu primeiro login.");
-      // Incluímos também a flag 'admin' no token
-      const payload = { id: user.id, admin: adminLogin ? true : false };
-      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
+      // Gera token com apenas o id (a flag admin será verificada na consulta ao BD)
+      const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '8h' });
       return res.json({ token });
     }
   } catch (error) {
@@ -55,8 +54,6 @@ exports.login = async (req, res) => {
   }
 };
 
-
-
 exports.firstLogin = async (req, res) => {
   const { userId, novaSenha } = req.body;
   try {
@@ -64,7 +61,7 @@ exports.firstLogin = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'Usuário não encontrado' });
     }
-    // Atualiza a senha com hash e marca que n\u00e3o \u00e9 mais a senha padr\u00e3o
+    // Atualiza a senha com hash e marca que não é mais a senha padrão
     user.senha = bcrypt.hashSync(novaSenha, 10);
     user.senha_padrao = false;
     await user.save();
