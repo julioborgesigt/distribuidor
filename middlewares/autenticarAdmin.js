@@ -17,13 +17,11 @@ const autenticarAdmin = async (req, res, next) => {
     }
     console.log('Token decodificado:', decoded);
     try {
-      // Consulta o banco para obter o usuário
       const user = await User.findByPk(decoded.id);
       if (!user) {
         console.log('Autenticação: usuário não encontrado');
         return res.sendStatus(404);
       }
-      // Verifica se o usuário é administrador
       if (!user.admin_padrao) {
         console.log('Autenticação: acesso de administrador negado para o usuário:', decoded.id);
         return res.status(403).json({ error: 'Acesso de administrador negado.' });

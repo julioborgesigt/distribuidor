@@ -63,40 +63,38 @@
   <!-- Scripts -->
   <script>
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const matricula = document.getElementById('matricula').value;
-  const senha = document.getElementById('senha').value;
-  
-  // Captura o toggle para login de administrador, se existir
-  const loginTypeToggle = document.getElementById('loginTypeToggle');
-  const adminLogin = loginTypeToggle ? loginTypeToggle.checked : false;
-  console.log('Login de administrador:', adminLogin);
-  
-  const res = await fetch('/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ matricula, senha, adminLogin })
-  });
-  
-  const data = await res.json();
-  console.log('Resposta do login:', data);
-  
-  if (data.firstLogin) {
-    window.tempUserId = data.userId;
-    const modal = new bootstrap.Modal(document.getElementById('modalTrocaSenha'));
-    modal.show();
-  } else if (data.token) {
-    localStorage.setItem('token', data.token);
-    // Redireciona conforme o tipo de login selecionado
-    if (adminLogin) {
-      window.location.href = 'admin.html';
+    e.preventDefault();
+    const matricula = document.getElementById('matricula').value;
+    const senha = document.getElementById('senha').value;
+    const loginTypeToggle = document.getElementById('loginTypeToggle');
+    const adminLogin = loginTypeToggle ? loginTypeToggle.checked : false;
+    console.log('Login de administrador:', adminLogin);
+    
+    const res = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ matricula, senha, adminLogin })
+    });
+    
+    const data = await res.json();
+    console.log('Resposta do login:', data);
+    
+    if (data.firstLogin) {
+      window.tempUserId = data.userId;
+      const modal = new bootstrap.Modal(document.getElementById('modalTrocaSenha'));
+      modal.show();
+    } else if (data.token) {
+      localStorage.setItem('token', data.token);
+      if (adminLogin) {
+        window.location.href = 'admin.html';
+      } else {
+        window.location.href = 'usuario.html';
+      }
     } else {
-      window.location.href = 'usuario.html';
+      alert('Erro no login: ' + (data.error || 'credenciais inválidas'));
     }
-  } else {
-    alert('Erro no login: ' + (data.error || 'credenciais inválidas'));
-  }
-});
+  });
+
 
     document.getElementById('salvarSenhaBtn').addEventListener('click', async () => {
       const novaSenha = document.getElementById('novaSenha').value;

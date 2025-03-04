@@ -238,7 +238,8 @@
     });
 
     function fetchProcesses() {
-      fetch('/admin/processes')
+      const token = localStorage.getItem('token');
+      fetch('/admin/processes', { headers: { 'Authorization': 'Bearer ' + token } })
         .then(res => res.json())
         .then(data => {
           allProcesses = data;
@@ -406,9 +407,10 @@
             numeroProcesso: formData.get('numeroProcesso'),
             matricula: formData.get('matricula')
           };
+          const token = localStorage.getItem('token');
           fetch('/admin/manual-assign', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
             body: JSON.stringify(data)
           })
           .then(res => res.text())
@@ -429,6 +431,9 @@
       const formData = new FormData(this);
       fetch('/admin/upload', {
         method: 'POST',
+        headers: { 
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         body: formData
       })
       .then(res => res.text())
@@ -445,46 +450,57 @@
 
     // Pré-cadastro de usuário
     const preCadastroForm = document.getElementById('preCadastroForm');
-preCadastroForm.addEventListener('submit', e => {
-  e.preventDefault();
-  
-  // Coleta os dados do formulário
-  const formData = new FormData(preCadastroForm);
-  const data = {
-    matricula: formData.get('matricula'),
-    nome: formData.get('nome'),
-    senha: formData.get('senha')
-  };
+    preCadastroForm.addEventListener('submit', e => {
+    e.preventDefault();
+    
+    // Coleta os dados do formulário
+    const formData = new FormData(preCadastroForm);
+    const data = {
+      matricula: formData.get('matricula'),
+      nome: formData.get('nome'),
+      senha: formData.get('senha')
+    };
 
-  // Verifica o valor do seletor para definir se é admin ou usuário normal
-  const tipoCadastro = formData.get('tipoCadastro');
-  console.log('Tipo de cadastro selecionado:', tipoCadastro);
-  
-  if (tipoCadastro === 'admin') {
-    data.admin_padrao = 1;
-  }
-  
-  console.log('Dados enviados para pré-cadastro:', data);
-  
-  // Envia os dados para o endpoint
-  fetch('/admin/pre-cadastro', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  })
-  .then(res => {
-    console.log('Status da resposta:', res.status);
-    return res.text();
-  })
-  .then(msg => {
-    console.log('Resposta do servidor:', msg);
-    alert(msg);
-    preCadastroForm.reset();
-  })
-  .catch(err => {
-    console.error('Erro ao enviar pré-cadastro:', err);
+    const tipoCadastro = formData.get('tipoCadastro');
+    console.log('Tipo de cadastro selecionado:', tipoCadastro);
+    if (tipoCadastro === 'admin') {
+      data.admin_padrao = true;
+    }
+    console.log('Dados enviados para pré-cadastro:', data);
+
+    const token = localStorage.getItem('token');
+    fetch('/admin/pre-cadastro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+      body: JSON.stringify(data)
+    })
+    .then(async res => {
+      if (res.status === 409) {
+        const responseData = await res.json();
+        if (confirm(responseData.updatePrompt)) {
+          // Se o usuário confirmar a atualização, reenvia com updateIfExists true
+          data.updateIfExists = true;
+          return fetch('/admin/pre-cadastro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+            body: JSON.stringify(data)
+          });
+        } else {
+          throw new Error('Usuário optou por não atualizar.');
+        }
+      } else {
+        return res.text();
+      }
+    })
+    .then(msg => {
+      alert(msg);
+      preCadastroForm.reset();
+    })
+    .catch(err => console.error(err));
+    
+    
   });
-});
+
 
 
     // Reset de senha
@@ -498,7 +514,7 @@ preCadastroForm.addEventListener('submit', e => {
       };
       fetch('/admin/reset-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
         body: JSON.stringify(data)
       })
       .then(res => res.text())
@@ -529,7 +545,7 @@ preCadastroForm.addEventListener('submit', e => {
       
       fetch('/admin/bulk-assign', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
         body: JSON.stringify({ processIds: selectedIds, matricula: matriculaDestino })
       })
       .then(res => res.text())
@@ -555,7 +571,7 @@ preCadastroForm.addEventListener('submit', e => {
       
       fetch('/admin/bulk-delete', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
         body: JSON.stringify({ processIds: selectedIds })
       })
       .then(res => res.text())
@@ -581,7 +597,7 @@ preCadastroForm.addEventListener('submit', e => {
       
       fetch('/admin/bulk-cumprido', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
         body: JSON.stringify({ processIds: selectedIds })
       })
       .then(res => res.text())

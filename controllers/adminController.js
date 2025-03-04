@@ -180,21 +180,41 @@ exports.manualAssignProcess = async (req, res) => {
 
 // Pré-cadastro de usuário
 exports.preCadastro = async (req, res) => {
-  const { matricula, nome, senha, admin_padrao } = req.body;
+  const { matricula, nome, senha, admin_padrao, updateIfExists } = req.body;
 
   if (!matricula || !nome || !senha) {
     return res.status(400).send('Campos obrigatórios ausentes.');
   }
 
   try {
-    // Cria novo usuário
-    await User.create({ matricula, nome, senha, admin_padrao });
+    // Verifica se já existe um usuário com a mesma matrícula
+    const existingUser = await User.findOne({ where: { matricula } });
+    if (existingUser) {
+      // Se o parâmetro updateIfExists estiver presente e for true, atualiza o usuário
+      if (updateIfExists) {
+        existingUser.nome = nome;
+        existingUser.senha = senha; // Atenção: se a senha deve ser hasheada, aplique o hash aqui
+        existingUser.admin_padrao = admin_padrao ? true : false;
+        await existingUser.save();
+        return res.send('Usuário atualizado com sucesso.');
+      } else {
+        // Retorna um status de conflito com uma mensagem sugerindo a atualização
+        return res.status(409).json({
+          error: 'Usuário já cadastrado.',
+          updatePrompt: 'Deseja atualizar o usuário existente?'
+        });
+      }
+    }
+
+    // Se não existe, cria o novo usuário
+    await User.create({ matricula, nome, senha, admin_padrao: admin_padrao ? true : false });
     res.send('Pré-cadastro realizado com sucesso.');
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao realizar pré-cadastro.');
   }
 };
+
 
 
 // Reset de senha

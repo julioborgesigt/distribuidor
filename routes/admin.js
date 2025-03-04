@@ -5,7 +5,7 @@ const autenticarAdmin = require('../middlewares/autenticarAdmin');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
-// Aplica o middleware a todas as rotas deste módulo
+// Aplica o middleware a todas as rotas deste módulo:
 router.use(autenticarAdmin);
 
 router.get('/', adminController.getAdminPage);
