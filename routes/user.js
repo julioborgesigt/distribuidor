@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const userPageController = require('../controllers/userPageController');
-const userController = require('../controllers/UserController');
+const userController = require('../controllers/userController');
 const autenticarJWT = require('../middlewares/autenticarJWT');
 
 
