@@ -190,15 +190,17 @@ exports.preCadastro = async (req, res) => {
     // Verifica se já existe um usuário com a mesma matrícula
     const existingUser = await User.findOne({ where: { matricula } });
     if (existingUser) {
-      // Se o parâmetro updateIfExists estiver presente e for true, atualiza o usuário
       if (updateIfExists) {
+        // Atualiza o usuário existente
         existingUser.nome = nome;
-        existingUser.senha = senha; // Atenção: se a senha deve ser hasheada, aplique o hash aqui
+        // Para que o usuário realize o primeiro login, definimos a senha para "12345678"
+        // e marcamos senha_padrao como verdadeiro (como na função reset)
+        existingUser.senha = '12345678';
+        existingUser.senha_padrao = true;
         existingUser.admin_padrao = admin_padrao ? true : false;
         await existingUser.save();
-        return res.send('Usuário atualizado com sucesso.');
+        return res.send('Usuário atualizado com sucesso. Senha: 12345678');
       } else {
-        // Retorna um status de conflito com uma mensagem sugerindo a atualização
         return res.status(409).json({
           error: 'Usuário já cadastrado.',
           updatePrompt: 'Deseja atualizar o usuário existente?'
@@ -206,7 +208,7 @@ exports.preCadastro = async (req, res) => {
       }
     }
 
-    // Se não existe, cria o novo usuário
+    // Se não existir, cria o usuário normalmente
     await User.create({ matricula, nome, senha, admin_padrao: admin_padrao ? true : false });
     res.send('Pré-cadastro realizado com sucesso.');
   } catch (error) {
@@ -214,6 +216,7 @@ exports.preCadastro = async (req, res) => {
     res.status(500).send('Erro ao realizar pré-cadastro.');
   }
 };
+
 
 
 
