@@ -42,6 +42,11 @@ module.exports = (sequelize) => {
     cumpridoDate: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+    observacoes: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      defaultValue: ''
     }
     
   }, {

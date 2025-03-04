@@ -386,7 +386,7 @@
           <td class="hide-mobile dintim">${proc.data_intimacao || ''}</td>
           <td>${userName}</td>
           <td>${diasRestantes}</td>
-          <td>${reiteracoes}</td>
+          <td class="intim-cell" data-process-id="${proc.id}">${reiteracoes}</td>
           <td class="hide-mobile">${statusCumprido}</td>
           <td class="hide-mobile">
             <form class="manual-assign-form">
@@ -637,3 +637,58 @@
   });
 
 
+  document.addEventListener('DOMContentLoaded', () => { 
+    // Adiciona delegação de eventos no tbody para células com a classe 'intim-cell'
+document.querySelector('#processTable tbody').addEventListener('dblclick', function(e) {
+  // Procura o elemento clicado ou seu ancestral que possua a classe 'intim-cell'
+  const cell = e.target.closest('.intim-cell');
+  if (!cell) return; // Se não for uma célula de intim, ignora
+
+  console.log('Duplo clique na célula de intim:', cell);
+  
+  // Se já houver um input na célula, não faz nada (evita duplicação)
+  if (cell.querySelector('input')) return;
+
+  const originalValue = cell.innerText;
+  const processId = cell.getAttribute('data-process-id');
+
+  // Cria um input para edição
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.value = originalValue;
+  input.style.width = '60px';
+
+  // Substitui o conteúdo da célula pelo input
+  cell.innerText = '';
+  cell.appendChild(input);
+  input.focus();
+
+  // Ao perder o foco, salva o novo valor
+  input.addEventListener('blur', () => {
+    const newValue = input.value;
+    // Validação básica: se for inválido, reverte para o valor original
+    if (newValue === '' || isNaN(newValue) || newValue < 0) {
+      cell.innerText = originalValue;
+      return;
+    }
+    cell.innerText = newValue;
+    // Envia a atualização para o servidor
+    const token = localStorage.getItem('token');
+    fetch('/admin/update-intim', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ processId, reiteracoes: newValue })
+    })
+    .then(res => res.text())
+    .then(msg => console.log('Atualização:', msg))
+    .catch(err => {
+      console.error('Erro ao atualizar o número de intim:', err);
+      cell.innerText = originalValue;
+    });
+  });
+});
+
+  });

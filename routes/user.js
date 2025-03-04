@@ -13,6 +13,7 @@ router.get('/usuario', userPageController.getUserPage);
 router.get('/processos', autenticarJWT, userController.listUserProcesses);
 
 router.post('/cumprir', autenticarJWT, userController.marcarCumprido);
+router.post('/update-observacoes', autenticarJWT, userController.updateObservacoes);
 
 
 

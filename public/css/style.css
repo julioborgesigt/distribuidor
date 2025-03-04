@@ -40,7 +40,7 @@
       padding: 10px;
       flex: 1;
       min-width: 280px;
-      
+      max-width: 20%;
       
     }
 
@@ -51,7 +51,7 @@
       gap: 20px;
       flex: 1;
       min-width: 280px;
-     
+      max-width: 20%;
     }
 
     /* Container para filtros, gráficos e tabela */
@@ -107,9 +107,10 @@
 
     .chart-group {
       flex: 1;
-      min-width: 650px;
+      
+      min-width: 40%;
       min-height: 380px;
-      padding-left:  4%;
+      padding-left:  2%;
       padding-top:  1%;
       padding-bottom:  1%;
       border: 1px solid #ddd;
