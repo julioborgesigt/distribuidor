@@ -73,6 +73,8 @@
         flex-wrap: wrap;
         justify-content: center;
         border: none;
+        border-radius: none;
+        box-shadow: none;
         }
       
     }
