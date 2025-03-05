@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const userPageController = require('../controllers/userPageController');
-const userController = require('../controllers/userController');
+const userController = require('../controllers/UserController');
 const autenticarJWT = require('../middlewares/autenticarJWT');
 
 
@@ -13,7 +13,6 @@ router.get('/usuario', userPageController.getUserPage);
 router.get('/processos', autenticarJWT, userController.listUserProcesses);
 
 router.post('/cumprir', autenticarJWT, userController.marcarCumprido);
-router.post('/update-observacoes', autenticarJWT, userController.updateObservacoes);
 
 
 
