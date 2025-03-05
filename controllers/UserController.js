@@ -2,33 +2,19 @@
 const { Process, User } = require('../models');
 const moment = require('moment-timezone');
 
-exports.listUserProcesses2 = async (req, res) => {
-  console.log("listUserProcesses: Iniciando listagem de processos para o usuário com ID:", req.userId);
+exports.listUserProcesses = async (req, res) => {
   try {
     const userId = req.userId;
     const processos = await Process.findAll({
       where: { userId },
       include: User
     });
-    console.log("listUserProcesses: Processos encontrados:", processos.length);
     return res.json(processos);
   } catch (error) {
-    console.error("listUserProcesses: Erro ao buscar processos:", error);
+    console.error(error);
     return res.status(500).json({ error: 'Erro ao buscar processos' });
   }
 };
-
-exports.listUserProcesses = async (req, res) => {
-  try {
-    // Inclui o usuário (se tiver) no retorno
-    const processes = await Process.findAll({ include: User });
-    res.json(processes);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Erro ao buscar processos.');
-  }
-};
-
 
 exports.marcarCumprido = async (req, res) => {
   try {
@@ -57,21 +43,5 @@ exports.marcarCumprido = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Erro ao atualizar o processo' });
-  }
-};
-
-exports.updateObservacoes = async (req, res) => {
-  const { processId, observacoes } = req.body;
-  try {
-    const process = await Process.findByPk(processId);
-    if (!process) {
-      return res.status(404).send('Processo não encontrado.');
-    }
-    process.observacoes = observacoes;
-    await process.save();
-    res.send('Observações atualizadas com sucesso.');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Erro ao atualizar observações.');
   }
 };

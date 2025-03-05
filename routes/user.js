@@ -6,9 +6,6 @@ const userController = require('../controllers/UserController');
 const autenticarJWT = require('../middlewares/autenticarJWT');
 
 
-// Aplica o middleware a todas as rotas deste módulo:
-router.use(autenticarJWT);
-
 // Rota para a página do usuário
 router.get('/usuario', userPageController.getUserPage);
 
@@ -16,7 +13,6 @@ router.get('/usuario', userPageController.getUserPage);
 router.get('/processos', autenticarJWT, userController.listUserProcesses);
 
 router.post('/cumprir', autenticarJWT, userController.marcarCumprido);
-router.post('/update-observacoes', autenticarJWT, userController.updateObservacoes);
 
 
 
