@@ -10,7 +10,7 @@ const autenticarJWT = require('../middlewares/autenticarJWT');
 router.get('/usuario', userPageController.getUserPage);
 
 // Rota protegida para obter os processos do usuário (ex: /processos)
-router.get('/processos', autenticarJWT, userController.listUserProcesses);
+router.get('/processos', userController.listUserProcesses);
 
 router.post('/cumprir', autenticarJWT, userController.marcarCumprido);
 router.post('/update-observacoes', autenticarJWT, userController.updateObservacoes);
