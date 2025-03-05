@@ -23,6 +23,8 @@ exports.login = async (req, res) => {
     let senhaValida = false;
     if (user.senha_padrao) {
       console.log("login: Verificando senha padrão (primeiro login)...");
+      console.log("login: Senha digitada:", senha);
+      console.log("login: Senha armazenada (em texto plano):", user.senha);
       senhaValida = (senha === user.senha);
     } else {
       console.log("login: Comparando senha com bcryptjs...");

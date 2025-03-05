@@ -177,7 +177,6 @@ exports.manualAssignProcess = async (req, res) => {
   }
 };
 
-
 // Pré-cadastro de usuário
 exports.preCadastro = async (req, res) => {
   const { matricula, nome, senha, admin_padrao, updateIfExists } = req.body;
@@ -192,23 +191,12 @@ exports.preCadastro = async (req, res) => {
     if (existingUser) {
       if (updateIfExists) {
         // Atualiza o usuário existente
-        console.log(`Usuário com matrícula ${matricula} já existe. Atualizando...`);
         existingUser.nome = nome;
-        // Define a senha para "12345678" para que o usuário realize o primeiro login
+        // Para que o usuário realize o primeiro login, definimos a senha para "12345678"
+        // e marcamos senha_padrao como verdadeiro (como na função reset)
         existingUser.senha = '12345678';
-        // Aplica a lógica para definir as flags:
-        // Se o parâmetro admin_padrao for true, o usuário será administrador
-        // e não deverá usar a senha padrão (senha_padrao = false).
-        // Caso contrário, senha_padrao será true e admin_padrao false.
-        if (admin_padrao) {
-          existingUser.senha_padrao = false;
-          existingUser.admin_padrao = true;
-          console.log(`Atualizando: admin_padrao=true, senha_padrao=false`);
-        } else {
-          existingUser.senha_padrao = true;
-          existingUser.admin_padrao = false;
-          console.log(`Atualizando: admin_padrao=false, senha_padrao=true`);
-        }
+        existingUser.senha_padrao = true;
+        existingUser.admin_padrao = admin_padrao ? true : false;
         await existingUser.save();
         return res.send('Usuário atualizado com sucesso. Senha: 12345678');
       } else {
@@ -219,20 +207,8 @@ exports.preCadastro = async (req, res) => {
       }
     }
 
-    // Se não existir, cria o usuário normalmente,
-    // aplicando a mesma lógica para as flags.
-    let novaUserData = { matricula, nome, senha };
-    if (admin_padrao) {
-      novaUserData.senha_padrao = false;
-      novaUserData.admin_padrao = true;
-      console.log(`Criando novo usuário: admin_padrao=true, senha_padrao=false`);
-    } else {
-      novaUserData.senha_padrao = true;
-      novaUserData.admin_padrao = false;
-      console.log(`Criando novo usuário: admin_padrao=false, senha_padrao=true`);
-    }
-
-    await User.create(novaUserData);
+    // Se não existir, cria o usuário normalmente
+    await User.create({ matricula, nome, senha, admin_padrao: admin_padrao ? true : false });
     res.send('Pré-cadastro realizado com sucesso.');
   } catch (error) {
     console.error(error);
