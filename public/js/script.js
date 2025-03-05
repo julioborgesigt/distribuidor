@@ -239,16 +239,31 @@
 
     function fetchProcesses() {
       const token = localStorage.getItem('token');
-      fetch('/admin/processes', { headers: { 'Authorization': 'Bearer ' + token } })
+      if (!token) {
+        window.location.href = '/';
+        return;
+      }
+      
+      // Verifica se o parâmetro "normalUser" está presente na URL.
+      // Se sim, trata como usuário normal; caso contrário, como administrador.
+      const urlParams = new URLSearchParams(window.location.search);
+      const isNormalUser = urlParams.get('normalUser') === 'true';
+      
+      // Define o endpoint apropriado
+      const endpoint = isNormalUser ? '/processos' : '/admin/processes';
+      
+      fetch(endpoint, { headers: { 'Authorization': 'Bearer ' + token } })
         .then(res => res.json())
         .then(data => {
+          // Armazena os processos e atualiza a interface
           allProcesses = data;
           updateFilters();
           filterAndRenderTable();
-          updateCharts();
+          // Se houver elementos exclusivos para admin (como gráficos), eles podem ser atualizados somente para administradores.
         })
         .catch(err => console.error(err));
     }
+    
 
     function updateFilters() {
       const filtroClasse = document.getElementById('filtroClasse');
@@ -692,3 +707,23 @@ document.querySelector('#processTable tbody').addEventListener('dblclick', funct
 });
 
   });
+
+
+
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.get('normalUser') === 'true'){
+      // Esconde a área com formulários e gráficos (exclusiva do admin)
+      const formContainer = document.querySelector('.form-container');
+      if(formContainer) {
+        formContainer.style.display = 'none';
+      }
+      // Atualiza o cabeçalho para refletir que é um usuário comum
+      const headerTitle = document.querySelector('.container-fluid h4');
+      if(headerTitle) {
+        headerTitle.textContent = "Página do Usuário";
+      }
+    }
+  });
+
