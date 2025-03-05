@@ -2,7 +2,7 @@
 const { Process, User } = require('../models');
 const moment = require('moment-timezone');
 
-exports.listUserProcesses = async (req, res) => {
+exports.listUserProcesses2 = async (req, res) => {
   console.log("listUserProcesses: Iniciando listagem de processos para o usuário com ID:", req.userId);
   try {
     const userId = req.userId;
@@ -18,7 +18,7 @@ exports.listUserProcesses = async (req, res) => {
   }
 };
 
-exports.listUserProcesses2 = async (req, res) => {
+exports.listUserProcesses = async (req, res) => {
   try {
     // Inclui o usuário (se tiver) no retorno
     const processes = await Process.findAll({ include: User });
