@@ -14,6 +14,7 @@
       console.log("fetchProcesses: Iniciando fetch para '/processos' com token:", token);
       fetch('/processos', { 
         headers: { 'Authorization': 'Bearer ' + token }
+        
       })
         .then(res => {
           console.log("fetchProcesses: Resposta recebida com status:", res.status);

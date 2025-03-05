@@ -11,14 +11,23 @@ exports.listUserProcesses = async (req, res) => {
       include: User
     });
     console.log("listUserProcesses: Processos encontrados:", processos.length);
-    return res.json(processos);
+    res.json(processos);
   } catch (error) {
     console.error("listUserProcesses: Erro ao buscar processos:", error);
     return res.status(500).json({ error: 'Erro ao buscar processos' });
   }
 };
 
-
+exports.listProcesses = async (req, res) => {
+  try {
+    // Inclui o usuário (se tiver) no retorno
+    const processes = await Process.findAll({ include: User });
+    res.json(processes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao buscar processos.');
+  }
+};
 
 
 exports.marcarCumprido = async (req, res) => {
