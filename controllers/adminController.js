@@ -246,6 +246,24 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
+// No seu controller (adminController.js)
+exports.deleteMatricula = async (req, res) => {
+  const { matricula } = req.body;
+  if (!matricula) {
+    return res.status(400).send('Matrícula obrigatória.');
+  }
+  try {
+    const user = await User.findOne({ where: { matricula } });
+    if (!user) {
+      return res.status(404).send('Usuário não encontrado.');
+    }
+    await user.destroy();
+    res.send('Usuário deletado com sucesso.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao deletar usuário.');
+  }
+};
 
 
 // Atribuição em Massa: atualiza o campo userId para os processos selecionados

@@ -89,15 +89,20 @@
           </form>
         </div>
         <div class="small-container">
-          <h4>Reset de Senha</h4>
-          <form id="resetPasswordForm">
+          <h4>Reset / Apagar Usuário</h4>
+          <form id="userActionForm">
             <div class="mb-2">
-              <label for="matriculaReset" class="form-label">Matrícula</label>
-              <input type="text" class="form-control" id="matriculaReset" name="matriculaReset" maxlength="8" minlength="8" required>
+              <label for="matriculaAction" class="form-label">Matrícula</label>
+              <input type="text" class="form-control" id="matriculaAction" name="matriculaAction" maxlength="8" minlength="8" required>
             </div>
-            <button type="submit" class="btn btn-warning w-100">Resetar</button>
+            <div class="d-flex flex-column gap-2">
+              <button type="button" id="resetPasswordBtn" class="btn btn-warning">Resetar Senha</button>
+              <button type="button" id="deleteUserBtn" class="btn btn-danger">Apagar Usuário</button>
+            </div>
           </form>
         </div>
+        
+        
       </div>
       
       <!-- Container para gráficos -->

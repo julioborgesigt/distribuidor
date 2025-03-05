@@ -496,26 +496,58 @@ preCadastroForm.addEventListener('submit', e => {
 
 
     // Reset de senha
-    const resetPasswordForm = document.getElementById('resetPasswordForm');
-    resetPasswordForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const formData = new FormData(resetPasswordForm);
-      const data = {
-        matricula: formData.get('matriculaReset'),
-        newPassword: formData.get('newPassword')
-      };
-      fetch('/admin/reset-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
-        body: JSON.stringify(data)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        resetPasswordForm.reset();
-      })
-      .catch(err => console.error(err));
-    });
+document.getElementById('resetPasswordBtn').addEventListener('click', () => {
+  const matricula = document.getElementById('matriculaAction').value.trim();
+  if (!matricula) {
+    alert('Por favor, informe a matrícula.');
+    return;
+  }
+  const data = { matricula };
+  fetch('/admin/reset-password', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    },
+    body: JSON.stringify(data)
+  })
+    .then(res => res.text())
+    .then(msg => {
+      alert(msg);
+      document.getElementById('userActionForm').reset();
+    })
+    .catch(err => console.error(err));
+});
+
+// Deletar usuário
+document.getElementById('deleteUserBtn').addEventListener('click', () => {
+  const matricula = document.getElementById('matriculaAction').value.trim();
+  if (!matricula) {
+    alert('Por favor, informe a matrícula.');
+    return;
+  }
+  // Opcional: pedir confirmação
+  if (!confirm(`Tem certeza que deseja apagar o usuário com matrícula ${matricula}?`)) return;
+  
+  const data = { matricula };
+  fetch('/admin/delete-matricula', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    },
+    body: JSON.stringify(data)
+  })
+    .then(res => res.text())
+    .then(msg => {
+      alert(msg);
+      document.getElementById('userActionForm').reset();
+    })
+    .catch(err => console.error(err));
+});
+
+
+
 
     // Atribuição em massa
     document.getElementById('bulkAtribuirBtn').addEventListener('click', () => {

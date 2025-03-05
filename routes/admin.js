@@ -19,5 +19,7 @@ router.post('/bulk-assign', adminController.bulkAssign);
 router.post('/bulk-delete', adminController.bulkDelete);
 router.post('/bulk-cumprido', adminController.bulkCumprido);
 router.post('/update-intim', adminController.updateIntim);
+router.post('/delete-matricula', adminController.deleteMatricula);
+
 
 module.exports = router;
