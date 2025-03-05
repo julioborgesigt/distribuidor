@@ -5,36 +5,36 @@ const { sequelize, User, Process } = require('./models');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
+require('dotenv').config();
 
 const app = express();
-require('dotenv').config();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET; // Esse valor é usado no seu middleware
 
-// Para poder interpretar JSON e dados de formulários
+// Middlewares para interpretar JSON e dados de formulários
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve arquivos estáticos (favicon, CSS, imagens, etc.)
+// Isso permite que o navegador acesse arquivos como /favicon.ico sem precisar de autenticação.
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Rota para a página inicial (página de login, por exemplo)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Servir arquivos estáticos da pasta "public"
-app.use(express.static(path.join(__dirname, 'public')));
+// Rotas públicas: login e primeiro acesso
+app.use('/', authRoutes);
 
-// Rotas de administrador
+// Rotas protegidas: usuário e administrador
 app.use('/admin', adminRoutes);
-app.use('/', authRoutes);   // para login e primeiro acesso
-app.use('/', userRoutes);   // para rotas de usu\u00e1rio (ex: /processos)
+app.use('/', userRoutes); // Essa rota protege, por exemplo, '/processos'
 
-
-// Sincroniza com o banco e realiza seed inicial
+// Sincroniza com o banco de dados e inicia o servidor
 sequelize.sync({ alter: true })
   .then(async () => {
     console.log('Banco de dados sincronizado.');
-
-    
-    // Inicia o servidor
     app.listen(PORT, () => {
       console.log(`Servidor rodando na porta ${PORT}`);
     });
