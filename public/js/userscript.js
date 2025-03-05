@@ -7,18 +7,29 @@
     function fetchProcesses() {
       const token = localStorage.getItem('token');
       if (!token) {
+        console.log("fetchProcesses: Token não encontrado, redirecionando para login.");
         window.location.href = '/';
         return;
       }
-      fetch('/processos', { headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token } })
-        .then(res => res.json())
+      console.log("fetchProcesses: Iniciando fetch para '/processos' com token:", token);
+      fetch('/processos', { 
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+        .then(res => {
+          console.log("fetchProcesses: Resposta recebida com status:", res.status);
+          return res.json();
+        })
         .then(data => {
+          console.log("fetchProcesses: Dados recebidos:", data);
           allProcesses = data;
           updateFilters();
           filterAndRenderTable();
+          console.log("fetchProcesses: Finalizado com sucesso.");
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error("fetchProcesses: Erro durante fetch:", err));
     }
+    
+    
 
     function updateFilters() {
      

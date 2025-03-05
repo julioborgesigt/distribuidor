@@ -3,18 +3,22 @@ const { Process, User } = require('../models');
 const moment = require('moment-timezone');
 
 exports.listUserProcesses = async (req, res) => {
+  console.log("listUserProcesses: Iniciando listagem de processos para o usuário com ID:", req.userId);
   try {
     const userId = req.userId;
     const processos = await Process.findAll({
       where: { userId },
       include: User
     });
+    console.log("listUserProcesses: Processos encontrados:", processos.length);
     return res.json(processos);
   } catch (error) {
-    console.error(error);
+    console.error("listUserProcesses: Erro ao buscar processos:", error);
     return res.status(500).json({ error: 'Erro ao buscar processos' });
   }
 };
+
+
 
 exports.marcarCumprido = async (req, res) => {
   try {
