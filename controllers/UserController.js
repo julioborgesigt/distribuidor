@@ -46,18 +46,3 @@ exports.marcarCumprido = async (req, res) => {
   }
 };
 
-exports.updateObservacoes = async (req, res) => {
-  const { processId, observacoes } = req.body;
-  try {
-    const process = await Process.findByPk(processId);
-    if (!process) {
-      return res.status(404).send('Processo não encontrado.');
-    }
-    process.observacoes = observacoes;
-    await process.save();
-    res.send('Observações atualizadas com sucesso.');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Erro ao atualizar observações.');
-  }
-};
