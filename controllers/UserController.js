@@ -11,7 +11,7 @@ exports.listUserProcesses = async (req, res) => {
       include: User
     });
     console.log("listUserProcesses: Processos encontrados:", processos.length);
-    res.json(processos);
+    return res.json(processos);
   } catch (error) {
     console.error("listUserProcesses: Erro ao buscar processos:", error);
     return res.status(500).json({ error: 'Erro ao buscar processos' });
