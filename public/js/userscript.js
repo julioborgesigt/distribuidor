@@ -10,7 +10,7 @@
         window.location.href = '/';
         return;
       }
-      fetch('/processos', { headers: { 'Authorization': 'Bearer ' + token } })
+      fetch('/processos', { headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token } })
         .then(res => res.json())
         .then(data => {
           allProcesses = data;
