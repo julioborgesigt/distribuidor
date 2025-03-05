@@ -12,21 +12,14 @@
         return;
       }
       console.log("fetchProcesses: Iniciando fetch para '/processos' com token:", token);
-      fetch('/processos', { 
-        headers: { 'Authorization': 'Bearer ' + token }
-        
-      })
-        .then(res => {
-          console.log("fetchProcesses: Resposta recebida com status:", res.status);
-          return res.json();
-        })
+      fetch('/processos', { headers: {'Authorization': 'Bearer ' + token } })
+        .then(res => res.json())
         .then(data => {
-          console.log("fetchProcesses: Dados recebidos:", data);
           allProcesses = data;
-         
-          console.log("fetchProcesses: Finalizado com sucesso.");
+          updateFilters();
+          filterAndRenderTable();
         })
-        .catch(err => console.error("fetchProcesses: Erro durante fetch:", err));
+        .catch(err => console.error(err));
     }
     
     
