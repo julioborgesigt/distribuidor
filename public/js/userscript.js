@@ -23,8 +23,7 @@
         .then(data => {
           console.log("fetchProcesses: Dados recebidos:", data);
           allProcesses = data;
-          updateFilters();
-          filterAndRenderTable();
+         
           console.log("fetchProcesses: Finalizado com sucesso.");
         })
         .catch(err => console.error("fetchProcesses: Erro durante fetch:", err));
