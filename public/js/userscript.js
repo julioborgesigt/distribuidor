@@ -12,7 +12,7 @@
         return;
       }
       console.log("fetchProcesses: Iniciando fetch para '/processos' com token:", token);
-      fetch('/processos', { headers: {'Authorization': 'Bearer ' + token } })
+      fetch('/processos', { })
         .then(res => res.json())
         .then(data => {
           allProcesses = data;
