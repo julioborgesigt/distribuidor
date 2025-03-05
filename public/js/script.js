@@ -226,7 +226,7 @@
 
     function fetchProcesses() {
       const token = localStorage.getItem('token');
-      fetch('/admin/processes', { headers: { 'Authorization': 'Bearer ' + token } })
+      fetch('/processes', { headers: { 'Authorization': 'Bearer ' + token } })
         .then(res => res.json())
         .then(data => {
           allProcesses = data;
