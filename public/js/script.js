@@ -692,6 +692,3 @@ document.querySelector('#processTable tbody').addEventListener('dblclick', funct
 });
 
   });
-
-
-  
