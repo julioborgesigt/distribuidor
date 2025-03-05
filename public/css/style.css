@@ -17,6 +17,17 @@
       transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
       
     }
+
+    @media screen and (max-width: 768px) {
+      .container-fluid {
+        
+        gap: 20px;
+        margin-bottom: 10px;
+        
+        }
+      
+    }
+
     .dark-mode .container-fluid {
               
       padding: 10px;
@@ -97,7 +108,6 @@
         gap: 20px;
         flex: 1;
         align-items: center;
-        
         transition: background-color 0.3s ease-in-out;
       }
     }
