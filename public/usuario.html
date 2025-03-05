@@ -37,12 +37,13 @@
       </div>
     </div>
  
+    
     <!-- Seção de Filtros (dentro de um card) -->
     <div class="auto-container">
       <h4>Filtros</h4>  
       <div class="card-body">
         <div class="row g-3">
-          <div class="col-md-2">
+          <div class="col-md-3">
             <label for="filtroAssunto" class="form-label">Assunto Principal</label>
             <select id="filtroAssunto" class="form-select">
               <option value="">Todos</option>
@@ -54,24 +55,9 @@
               <option value="">Todos</option>
             </select>
           </div>
+          <!-- Removido o filtro "Cumprido?" -->
           <div class="col-md-2">
-            <label for="filtroCumprido" class="form-label">Cumprido?</label>
-            <select id="filtroCumprido" class="form-select">
-              <option value="nao" selected>Não cumprido</option>
-              <option value="sim">Cumprido</option>
-              <option value="">Todos</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label for="ordenarPrazo" class="form-label">Ordenar Prazo Proc.</label>
-            <select id="ordenarPrazo" class="form-select">
-              <option value="">Selecione</option>
-              <option value="asc">Crescente</option>
-              <option value="desc">Decrescente</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label for="ordenarData" class="form-label">Ordenar por Dt da Int.</label>
+            <label for="ordenarData" class="form-label">Data da Int.</label>
             <select id="ordenarData" class="form-select">
               <option value="">Selecione</option>
               <option value="asc">Crescente</option>
@@ -79,8 +65,16 @@
             </select>
           </div>
           <div class="col-md-2">
-            <label for="ordenarDias" class="form-label">Ordenar por Dias Res.</label>
+            <label for="ordenarDias" class="form-label">Dias Res.</label>
             <select id="ordenarDias" class="form-select">
+              <option value="">Selecione</option>
+              <option value="asc">Crescente</option>
+              <option value="desc">Decrescente</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="ordenarReiteracoes" class="form-label">N° Intim.</label>
+            <select id="ordenarReiteracoes" class="form-select">
               <option value="">Selecione</option>
               <option value="asc">Crescente</option>
               <option value="desc">Decrescente</option>
@@ -89,6 +83,7 @@
         </div>
       </div>
     </div>
+
 
     <!-- Tabela de Processos -->
     <div class="auto-container">
@@ -123,7 +118,13 @@
   
     <!-- Script para dark mode e outras funções -->
     <script>
-      
+    
+  
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+          localStorage.removeItem('token');
+          window.location.href = '/';
+        });
+  
     </script>
     <script src="js/userscript.js"></script>
   

@@ -13,10 +13,7 @@
       document.getElementById('ordenarData').addEventListener('change', filterAndRenderTable);
       document.getElementById('ordenarDias').addEventListener('change', filterAndRenderTable);
 
-      document.getElementById('logoutBtn').addEventListener('click', () => {
-        localStorage.removeItem('token');
-        window.location.href = '/';
-      });
+      
     });
 
     function fetchProcesses() {
@@ -70,33 +67,21 @@
     }
 
     function filterAndRenderTable() {
-     
       const filtroAssunto = document.getElementById('filtroAssunto').value;
       const filtroTarjas = document.getElementById('filtroTarjas').value;
-      const filtroCumprido = document.getElementById('filtroCumprido').value;
-      const ordenarPrazo = document.getElementById('ordenarPrazo').value;
+      // Não há mais filtro de "cumprido"
+      // Não há mais "ordenarPrazo"
       const ordenarData = document.getElementById('ordenarData').value;
       const ordenarDias = document.getElementById('ordenarDias').value;
-
+      const ordenarReiteracoes = document.getElementById('ordenarReiteracoes').value;
+    
       filteredProcesses = allProcesses.filter(proc => {
         let match = true;
-     
         if (filtroAssunto && proc.assunto_principal !== filtroAssunto) match = false;
         if (filtroTarjas && proc.tarjas !== filtroTarjas) match = false;
-        if (filtroCumprido === 'sim' && proc.cumprido !== true) match = false;
-        if (filtroCumprido === 'nao' && proc.cumprido !== false) match = false;
         return match;
       });
-
-      // Ordena por Prazo Processual
-      if (ordenarPrazo) {
-        filteredProcesses.sort((a, b) => {
-          const aPrazo = parseInt(a.prazo_processual) || 0;
-          const bPrazo = parseInt(b.prazo_processual) || 0;
-          return ordenarPrazo === 'asc' ? aPrazo - bPrazo : bPrazo - aPrazo;
-        });
-      }
-
+    
       // Ordena por Data da Intimação
       if (ordenarData) {
         filteredProcesses.sort((a, b) => {
@@ -105,7 +90,7 @@
           return ordenarData === 'asc' ? aDate - bDate : bDate - aDate;
         });
       }
-
+    
       // Ordena por Dias Restantes
       if (ordenarDias) {
         filteredProcesses.sort((a, b) => {
@@ -119,15 +104,24 @@
             const diff = prazoDate - new Date();
             return Math.ceil(diff / (1000 * 60 * 60 * 24));
           };
-
           const aDias = calcDias(a);
           const bDias = calcDias(b);
           return ordenarDias === 'asc' ? aDias - bDias : bDias - aDias;
         });
       }
-
+    
+      // Ordena por Reiterações
+      if (ordenarReiteracoes) {
+        filteredProcesses.sort((a, b) => {
+          const aReiteracoes = a.reiteracoes || 0;
+          const bReiteracoes = b.reiteracoes || 0;
+          return ordenarReiteracoes === 'asc' ? aReiteracoes - bReiteracoes : bReiteracoes - aReiteracoes;
+        });
+      }
+    
       renderTable(filteredProcesses);
     }
+    
 
     function renderTable(data) {
       const tbody = document.querySelector('#processTable tbody');
