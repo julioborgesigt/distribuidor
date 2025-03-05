@@ -1,6 +1,4 @@
-app.use(express.static(path.join(__dirname, 'public'))); // Serve favicon e outros estáticos
-// Depois, as rotas protegidas...
-app.use('/processos', autenticarJWT, processRoutes);
+
 
 
 const jwt = require('jsonwebtoken');
