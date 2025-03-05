@@ -449,57 +449,62 @@
     });
 
     // Pré-cadastro de usuário
-    const preCadastroForm = document.getElementById('preCadastroForm');
-    preCadastroForm.addEventListener('submit', e => {
-    e.preventDefault();
-    
-    // Coleta os dados do formulário
-    const formData = new FormData(preCadastroForm);
-    const data = {
-      matricula: formData.get('matricula'),
-      nome: formData.get('nome'),
-      senha: formData.get('senha')
-    };
+const preCadastroForm = document.getElementById('preCadastroForm');
+preCadastroForm.addEventListener('submit', e => {
+  e.preventDefault();
+  
+  // Coleta os dados do formulário
+  const formData = new FormData(preCadastroForm);
+  const data = {
+    matricula: formData.get('matricula'),
+    nome: formData.get('nome'),
+    senha: formData.get('senha')
+  };
 
-    const tipoCadastro = formData.get('tipoCadastro');
-    console.log('Tipo de cadastro selecionado:', tipoCadastro);
-    if (tipoCadastro === 'admin') {
-      data.admin_padrao = true;
-    }
-    console.log('Dados enviados para pré-cadastro:', data);
+  const tipoCadastro = formData.get('tipoCadastro');
+  console.log('Tipo de cadastro selecionado:', tipoCadastro);
+  if (tipoCadastro === 'admin') {
+    data.admin_padrao = true;
+  }
+  console.log('Dados enviados para pré-cadastro:', data);
 
-    const token = localStorage.getItem('token');
-    fetch('/admin/pre-cadastro', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
-      body: JSON.stringify(data)
-    })
-    .then(async res => {
-      if (res.status === 409) {
-        const responseData = await res.json();
-        if (confirm(responseData.updatePrompt)) {
-          // Se o usuário confirmar a atualização, reenvia com updateIfExists true
-          data.updateIfExists = true;
-          return fetch('/admin/pre-cadastro', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
-            body: JSON.stringify(data)
-          });
-        } else {
-          throw new Error('Usuário optou por não atualizar.');
-        }
+  const token = localStorage.getItem('token');
+  fetch('/admin/pre-cadastro', {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json', 
+      'Authorization': 'Bearer ' + token 
+    },
+    body: JSON.stringify(data)
+  })
+  .then(async res => {
+    if (res.status === 409) {
+      const responseData = await res.json();
+      if (confirm(responseData.updatePrompt)) {
+        // Se o usuário confirmar a atualização, reenvia com updateIfExists true
+        data.updateIfExists = true;
+        return fetch('/admin/pre-cadastro', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + token 
+          },
+          body: JSON.stringify(data)
+        }).then(res => res.text());
       } else {
-        return res.text();
+        throw new Error('Usuário optou por não atualizar.');
       }
-    })
-    .then(msg => {
-      alert(msg);
-      preCadastroForm.reset();
-    })
-    .catch(err => console.error(err));
-    
-    
-  });
+    } else {
+      return res.text();
+    }
+  })
+  .then(msg => {
+    alert(msg);
+    preCadastroForm.reset();
+  })
+  .catch(err => console.error(err));
+});
+
 
 
 

@@ -10,72 +10,36 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/style.css">
+  
   <style>
-    /* Modo claro padrão */
-    body {
-      background-color: #f8f9fa;
-      color: #212529;
-    }
-    .navbar
-     {
-      background-color:  #e9e9e9;
-      border-color: #333;
-      
-     
-    }
-    /* Regras para o modo escuro */
-    .dark-mode {
-      background-color: #121212;
-      color: #e0e0e0;
-    }
-    .dark-mode .navbar,
-    .dark-mode .card {
-      background-color: #1e1e1e;
-      border-color: #333;
-     
-    }
-    .dark-mode .navbar .navbar-brand,
-    .dark-mode .navbar .nav-link,
-    .dark-mode .navbar .navbar-text {
-      color: #f8f9fa; /* texto em tom claro */
-    }
-    .dark-mode .table {
-      background-color: #1e1e1e;
-      color: #fff;
-    }
-    .dark-mode .table thead {
-      background-color: #333;
-    }
-    /* Botão de modo escuro (opcional, para melhorar o visual) */
-    .toggle-dark-mode {
-      background: none;
-      border: none;
-      color: inherit;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
+    
   </style>
+
 </head>
 <body class="p-3">
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg  mb-3">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Página do Usuário</a>
-      <div class="d-flex">
-        <button id="darkModeToggle" class="toggle-dark-mode me-3" aria-label="Alternar modo escuro">
-          <i id="sunIcon" class="bi bi-sun-fill"></i>
-          <i id="moonIcon" class="bi bi-moon-fill" style="display: none;"></i>
-        </button>
-        <button id="logoutBtn" class="btn btn-danger">Logout</button>
-      </div>
-    </div>
-  </nav>
+  
 
   <!-- Conteúdo da página -->
   <div class="container">
+
+    <!-- Navbar -->
+  
+    <div class="container-fluid">
+      <div class="d-flex justify-content-between align-items-center">
+        <button id="darkModeToggle" class="btn toggle-btn" aria-label="Alternar modo escuro">
+          <i id="sunIcon" class="bi bi-sun-fill"></i>
+          <i id="moonIcon" class="bi bi-moon-fill" style="display: none;"></i>
+        </button>
+        <h4>Página do Administrador</h4>
+        <button id="logoutBtn" class="btn logout-btn" title="Logout">
+          <i class="bi bi-power"></i>
+        </button>
+      </div>
+    </div>
+ 
     <!-- Seção de Filtros (dentro de um card) -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">Filtros</div>
+    <div class="auto-container">
+      <h4>Filtros</h4>  
       <div class="card-body">
         <div class="row g-3">
           <div class="col-md-2">
@@ -127,8 +91,8 @@
     </div>
 
     <!-- Tabela de Processos -->
-    <div class="card shadow-sm">
-      <div class="card-header">Meus Processos</div>
+    <div class="auto-container">
+      <h4>Meus Processos</h4>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered table-hover" id="processTable">
