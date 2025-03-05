@@ -104,6 +104,14 @@
       const total = processesToCount.length;
       const labelTotal = currentChartType === 'cumprido' ? 'T.Cump.' : 'TOTAL';
       container.appendChild(createChartCircle(labelTotal, 100, total));
+
+      // Novos círculos: Cumpridos e Não cumpridos
+      if (total > 0) {
+        const totalCumpridos = processesToCount.filter(proc => proc.cumprido === true).length;
+        const totalNaoCumpridos = processesToCount.filter(proc => proc.cumprido === false).length;
+        container.appendChild(createChartCircle('Cump.', (totalCumpridos / total) * 100, totalCumpridos));
+        container.appendChild(createChartCircle('Pend.', (totalNaoCumpridos / total) * 100, totalNaoCumpridos));
+  }
     
       // Agrupa os processos por usuário
       const userCounts = {};
@@ -174,7 +182,7 @@
       document.getElementById('ordenarPrazo').addEventListener('change', filterAndRenderTable);
       document.getElementById('ordenarData').addEventListener('change', filterAndRenderTable);
       document.getElementById('ordenarDias').addEventListener('change', filterAndRenderTable);
-
+      document.getElementById('filtroCumprido').addEventListener('change', filterAndRenderTable);
       document.getElementById('select-all').addEventListener('change', (e) => {
         const checked = e.target.checked;
         document.querySelectorAll('.bulk-checkbox').forEach(cb => {
@@ -291,10 +299,12 @@
       const filtroAssunto = document.getElementById('filtroAssunto').value;
       const filtroTarjas = document.getElementById('filtroTarjas').value;
       const filtroUsuario = document.getElementById('filtroUsuario').value;
+      const filtroCumprido = document.getElementById('filtroCumprido').value; // novo filtro
       const ordenarPrazo = document.getElementById('ordenarPrazo').value;
       const ordenarData = document.getElementById('ordenarData').value;
       const ordenarDias = document.getElementById('ordenarDias').value;
-
+      const ordenarIntim = document.getElementById('ordenarIntim') ? document.getElementById('ordenarIntim').value : '';
+    
       filteredProcesses = allProcesses.filter(proc => {
         let match = true;
         if (filtroClasse && proc.classe_principal !== filtroClasse) match = false;
@@ -304,9 +314,14 @@
           const userName = proc.User ? proc.User.nome : 'nenhum';
           if (userName !== filtroUsuario) match = false;
         }
+        // Filtra por "Cumprido?"
+        if (filtroCumprido === 'sim' && proc.cumprido !== true) match = false;
+        if (filtroCumprido === 'nao' && proc.cumprido !== false) match = false;
+    
         return match;
       });
-
+    
+      // Ordenação por Prazo Processual
       if (ordenarPrazo) {
         filteredProcesses.sort((a, b) => {
           const aPrazo = parseInt(a.prazo_processual) || 0;
@@ -314,7 +329,8 @@
           return ordenarPrazo === 'asc' ? aPrazo - bPrazo : bPrazo - aPrazo;
         });
       }
-
+    
+      // Ordenação por Data da Intimação
       if (ordenarData) {
         filteredProcesses.sort((a, b) => {
           const aDate = new Date(a.data_intimacao);
@@ -322,7 +338,8 @@
           return ordenarData === 'asc' ? aDate - bDate : bDate - aDate;
         });
       }
-
+    
+      // Ordenação por Dias Restantes
       if (ordenarDias) {
         filteredProcesses.sort((a, b) => {
           const calcDias = proc => {
@@ -335,15 +352,24 @@
             const diff = prazoDate - new Date();
             return Math.ceil(diff / (1000 * 60 * 60 * 24));
           };
-
           const aDias = calcDias(a);
           const bDias = calcDias(b);
           return ordenarDias === 'asc' ? aDias - bDias : bDias - aDias;
         });
       }
-
+    
+      // Ordenação por Quantidade de Intimações (se existir o filtro)
+      if (ordenarIntim) {
+        filteredProcesses.sort((a, b) => {
+          const aIntim = a.reiteracoes || 0;
+          const bIntim = b.reiteracoes || 0;
+          return ordenarIntim === 'asc' ? aIntim - bIntim : bIntim - aIntim;
+        });
+      }
+    
       renderTable(filteredProcesses);
     }
+    
 
     function renderTable(data) {
       const tbody = document.querySelector('#processTable tbody');

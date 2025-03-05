@@ -152,7 +152,7 @@
 
     <!-- Container para filtros e ações -->
     <div class="auto-container">
-      <h2>Filtros e ações</h2>
+      <h2>Filtros</h2>
       <div class="row g-2">
         <div class="col-md-2">
           <label for="filtroClasse" class="form-label">Classe</label>
@@ -166,19 +166,19 @@
             <option value="">Todos</option>
           </select>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
           <label for="filtroTarjas" class="form-label">Tarjas</label>
           <select id="filtroTarjas" class="form-select">
             <option value="">Todos</option>
           </select>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
           <label for="filtroUsuario" class="form-label">Usuário</label>
           <select id="filtroUsuario" class="form-select">
             <option value="">Todos</option>
           </select>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
           <label for="ordenarPrazo" class="form-label">P. P.</label>
           <select id="ordenarPrazo" class="form-select">
             <option value="">Selecione</option>
@@ -186,7 +186,7 @@
             <option value="desc">Decrescente</option>
           </select>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
           <label for="ordenarData" class="form-label">Dt. Int.</label>
           <select id="ordenarData" class="form-select">
             <option value="">Selecione</option>
@@ -194,7 +194,7 @@
             <option value="desc">Decrescente</option>
           </select>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
           <label for="ordenarDias" class="form-label">Dias R.</label>
           <select id="ordenarDias" class="form-select">
             <option value="">Selecione</option>
@@ -202,28 +202,48 @@
             <option value="desc">Decrescente</option>
           </select>
         </div>
+        <div class="col-md-2">
+          <label for="ordenarIntim" class="form-label">Nº Intim.</label>
+          <select id="ordenarIntim" class="form-select">
+            <option value="">Selecione</option>
+            <option value="asc">Crescente</option>
+            <option value="desc">Decrescente</option>
+          </select>
+        </div>     
+        <div class="col-md-2">
+          <label for="filtroCumprido" class="form-label">Cumprido?</label>
+          <select id="filtroCumprido" class="form-select">
+            <option value="nao" selected>Não cumprido</option>
+            <option value="sim">Cumprido</option>
+            <option value="">Todos</option>
+          </select>
+        </div>
         <div class="col-md-3">
           <label for="buscaProcesso" class="form-label">Busca por Nº P.</label>
           <input type="text" id="buscaProcesso" class="form-control" placeholder="xxxxxxx-xx.xxxx.x.xx.xxxx">
         </div>
       </div>
+      
+    </div>
+
+
+    <div class="auto-container">
+      <h2>Ações em massa</h2>
       <div class="row g-2 align-items-center mt-3">
-        <div class="col-md-2">
-          <label for="bulkMatricula" class="form-label">Para atribuir selecione 1 ou mais processos:</label>
+        <div class="col-md-3">
+          <input type="text" id="bulkMatricula" class="form-control" placeholder="Mat. dest. (atribuir sel.)" maxlength="8" minlength="8">
         </div>
-        <div class="col-md-2">
-          <input type="text" id="bulkMatricula" class="form-control" placeholder="Matrícula destino" maxlength="8" minlength="8">
+        <div class="col-md-3">
+          <button id="bulkAtribuirBtn" class="btn btn-primary me-2 w-100">Atribuir sel. à Mat.</button>
         </div>
-        <div class="col-md-2">
-          <button id="bulkAtribuirBtn" class="btn btn-primary me-2 w-100">Atribuir</button>
+        <div class="col-md-3">
+          <button id="bulkExcluirBtn" class="btn btn-danger me-2 w-100">Excluir p. selec.</button>
         </div>
-        <div class="col-md-2">
-          <button id="bulkExcluirBtn" class="btn btn-danger me-2 w-100">Excluir sel.</button>
-        </div>
-        <div class="col-md-2">
-          <button id="bulkCumpridoBtn" class="btn btn-success me-2 w-100">Cumprir sel.</button>
+        <div class="col-md-3">
+          <button id="bulkCumpridoBtn" class="btn btn-success me-2 w-100">Cumprir p. selec.</button>
         </div>
       </div>
+
     </div>
 
     <!-- Container para a tabela -->
