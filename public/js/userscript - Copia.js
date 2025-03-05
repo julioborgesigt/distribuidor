@@ -1,8 +1,22 @@
-
-    let allProcesses = [];
+let allProcesses = [];
     let filteredProcesses = [];
 
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchProcesses();
+      // Listeners para filtros e ordenação
     
+      document.getElementById('filtroAssunto').addEventListener('change', filterAndRenderTable);
+      document.getElementById('filtroTarjas').addEventListener('change', filterAndRenderTable);
+      document.getElementById('filtroCumprido').addEventListener('change', filterAndRenderTable);
+      document.getElementById('ordenarPrazo').addEventListener('change', filterAndRenderTable);
+      document.getElementById('ordenarData').addEventListener('change', filterAndRenderTable);
+      document.getElementById('ordenarDias').addEventListener('change', filterAndRenderTable);
+
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+      });
+    });
 
     function fetchProcesses() {
       const token = localStorage.getItem('token');
@@ -139,7 +153,6 @@
           <td>${proc.data_intimacao || ''}</td>
           <td>${diasRestantes}</td>
           <td>${reiteracoes}</td>
-          <td class="observacoes-cell" data-process-id="${proc.id}">${proc.observacoes || ''}</td>
           <td>
             <input type="checkbox" class="cumprido-checkbox" data-id="${proc.id}" ${proc.cumprido ? 'checked' : ''}>
           </td>
@@ -176,104 +189,29 @@
     }
 
 
-
-  document.addEventListener('DOMContentLoaded', () => {
-    // Delegação de eventos para editar as células de observações
-    document.querySelector('#processTable tbody').addEventListener('dblclick', function(e) {
-      // Procura o elemento clicado (ou seu ancestral) que possua a classe "observacoes-cell"
-      const cell = e.target.closest('.observacoes-cell');
-      if (!cell) return; // Se não for célula de observações, sai
-
-      // Evita que se adicione outro input se já houver um
-      if (cell.querySelector('input')) return;
-
-      const originalText = cell.innerText;
-      const processId = cell.getAttribute('data-process-id');
-
-      // Cria um input de texto limitado a 50 caracteres
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.value = originalText;
-      input.maxLength = 20;
-      input.style.width = '100%'; // Ocupa toda a largura da célula
-
-      // Substitui o conteúdo da célula pelo input e foca nele
-      cell.innerText = '';
-      cell.appendChild(input);
-      input.focus();
-
-      // Quando o input perder o foco, tenta salvar o novo valor
-      input.addEventListener('blur', () => {
-        const newText = input.value;
-        // Se desejar, aqui você pode adicionar validação (por exemplo, não permitir string vazia)
-        cell.innerText = newText;
-        const token = localStorage.getItem('token');
-        fetch('/update-observacoes', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          },
-          body: JSON.stringify({ processId, observacoes: newText })
-        })
-        .then(res => res.text())
-        .then(msg => console.log('Observações atualizadas:', msg))
-        .catch(err => {
-          console.error('Erro ao atualizar observações:', err);
-          // Em caso de erro, reverte para o valor original
-          cell.innerText = originalText;
-        });
-      });
-    });
-
-  });
-
-
-    // Código dark mode aqui
- 
-// Função para alternar o modo escuro
-function applyDarkMode(isDark) {
-  if (isDark) {
-    document.body.classList.add('dark-mode');
-    document.getElementById('sunIcon').style.display = 'none';
-    document.getElementById('moonIcon').style.display = 'inline';
-  } else {
-    document.body.classList.remove('dark-mode');
-    document.getElementById('sunIcon').style.display = 'inline';
-    document.getElementById('moonIcon').style.display = 'none';
+    // Função para aplicar o modo (dark ou light)
+  function applyDarkMode(isDark) {
+    if (isDark) {
+      document.body.classList.add('dark-mode');
+      document.getElementById('sunIcon').style.display = 'none';
+      document.getElementById('moonIcon').style.display = 'block';
+    } else {
+      document.body.classList.remove('dark-mode');
+      document.getElementById('sunIcon').style.display = 'block';
+      document.getElementById('moonIcon').style.display = 'none';
+    }
+    // Salva a preferência no localStorage
+    localStorage.setItem('darkMode', isDark);
   }
-  localStorage.setItem('darkMode', isDark);
-}
 
-
-
-
-
-document.getElementById('darkModeToggle').addEventListener('click', function() {
-  const isDark = !document.body.classList.contains('dark-mode');
-  applyDarkMode(isDark);
-});
-
-// Ao carregar a página, define o modo com base na preferência do usuário
-document.addEventListener('DOMContentLoaded', () => {
-  const darkModeEnabled = localStorage.getItem('darkMode') === 'true';
-  applyDarkMode(darkModeEnabled);
-  // Outras funções (fetchProcesses, etc.) aqui...
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  fetchProcesses();
-  // Listeners para filtros e ordenação
-
-  document.getElementById('filtroAssunto').addEventListener('change', filterAndRenderTable);
-  document.getElementById('filtroTarjas').addEventListener('change', filterAndRenderTable);
-  document.getElementById('filtroCumprido').addEventListener('change', filterAndRenderTable);
-  document.getElementById('ordenarPrazo').addEventListener('change', filterAndRenderTable);
-  document.getElementById('ordenarData').addEventListener('change', filterAndRenderTable);
-  document.getElementById('ordenarDias').addEventListener('change', filterAndRenderTable);
-
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem('token');
-    window.location.href = '/';
+  // Verifica a preferência ao carregar a página
+  document.addEventListener('DOMContentLoaded', function() {
+    const darkModeEnabled = localStorage.getItem('darkMode') === 'true';
+    applyDarkMode(darkModeEnabled);
   });
-});
+
+  // Alterna o modo escuro ao clicar no botão
+  document.getElementById('darkModeToggle').addEventListener('click', function() {
+    const isDark = !document.body.classList.contains('dark-mode');
+    applyDarkMode(isDark);
+  });
