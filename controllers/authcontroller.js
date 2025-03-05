@@ -1,6 +1,6 @@
 // /controllers/authController.js
 const { User } = require('../models');
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'b7f8a2d4e3f7c78e8e9a3d0b5f6d8a3e7c9f2b8e4d1a5c0e2d3f9b6a7d8e4c1f'; // Substitua por um valor seguro
 
@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
     if (user.senha_padrao) {
       senhaValida = (senha === user.senha);
     } else {
-      senhaValida = bcrypt.compareSync(senha, user.senha);
+      senhaValida = bcryptjs.compareSync(senha, user.senha);
     }
     
     if (!senhaValida) {
@@ -54,7 +54,7 @@ exports.firstLogin = async (req, res) => {
       return res.status(404).json({ error: 'Usuário não encontrado' });
     }
     // Atualiza a senha com hash e marca que não é mais a senha padrão
-    user.senha = bcrypt.hashSync(novaSenha, 10);
+    user.senha = bcryptjs.hashSync(novaSenha, 10);
     user.senha_padrao = false;
     await user.save();
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '8h' });

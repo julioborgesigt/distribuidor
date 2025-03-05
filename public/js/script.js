@@ -695,19 +695,3 @@ document.querySelector('#processTable tbody').addEventListener('dblclick', funct
 
 
 
-  document.addEventListener('DOMContentLoaded', function(){
-    const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.get('normalUser') === 'true'){
-      // Esconde a área com formulários e gráficos (exclusiva do admin)
-      const formContainer = document.querySelector('.form-container');
-      if(formContainer) {
-        formContainer.style.display = 'none';
-      }
-      // Atualiza o cabeçalho para refletir que é um usuário comum
-      const headerTitle = document.querySelector('.container-fluid h4');
-      if(headerTitle) {
-        headerTitle.textContent = "Página do Usuário";
-      }
-    }
-  });
-
