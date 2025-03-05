@@ -79,6 +79,29 @@
       transition: background-color 0.3s ease-in-out;
     }
 
+    @media screen and (max-width: 768px) {
+      .small-container {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        padding: 10px;
+        flex: 1;
+        min-width: 280px;
+        
+        transition: background-color 0.3s ease-in-out;
+      }
+      .vertical-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        flex: 1;
+        min-width: 280px;
+        
+        transition: background-color 0.3s ease-in-out;
+      }
+    }
+
     /* Container vertical para agrupar itens */
     .vertical-container {
       display: flex;
