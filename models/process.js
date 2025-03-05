@@ -48,7 +48,6 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: ''
     }
-    
   }, {
     tableName: 'processos',
     timestamps: false
