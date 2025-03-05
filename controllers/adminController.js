@@ -301,21 +301,3 @@ exports.bulkCumprido = async (req, res) => {
     res.status(500).send("Erro ao atualizar status em massa.");
   }
 };
-
-
-// Atualiza o número de reiterações de uma intimação
-exports.updateIntim = async (req, res) => {
-  const { processId, reiteracoes } = req.body;
-  try {
-    const process = await Process.findByPk(processId);
-    if (!process) {
-      return res.status(404).send('Processo não encontrado.');
-    }
-    process.reiteracoes = reiteracoes;
-    await process.save();
-    res.send('Número de intim atualizado com sucesso.');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Erro ao atualizar número de intim.');
-  }
-};
