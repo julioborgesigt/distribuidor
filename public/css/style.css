@@ -611,3 +611,28 @@
       
     }
     
+    /* Estilização opcional para o botão de disparo */
+@media screen and (max-width: 768px) {
+  .btn-secondary {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    min-width: 320px;
+    background-color: #ffffff;
+    color: #212529;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .dark-mode .btn-secondary {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: #fff;               /* Texto branco */
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  }
+  
+  .dark-mode .btn-secondary:hover {
+    background-color: #2e2e2e; /* Fundo escuro */
+    border: 1px solid #555;    /* Borda mais escura */
+    color: #fff;
+  }
+}

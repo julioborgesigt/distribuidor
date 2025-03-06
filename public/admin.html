@@ -48,6 +48,17 @@
     <!-- Formulários agrupados em container flex -->
     <div class="form-container">
       <!-- Pré-Cadastro de Usuário -->
+      <!-- Disparador (apenas visível em dispositivos móveis) -->
+    <div class="d-block d-md-none mb-2">
+      <a class="btn btn-secondary w-100 d-flex align-items-center justify-content-between" data-bs-toggle="collapse" href="#preCadastroCollapse" role="button" aria-expanded="false" aria-controls="preCadastroCollapse">
+        <span>Pré-Cadastro</span>
+        <i class="bi bi-chevron-down"></i>
+      </a>
+      
+    </div>
+
+    <!-- Área do pré-cadastro, envolvida pelo componente collapse -->
+    <div class="collapse d-md-block" id="preCadastroCollapse">
       <div class="small-container">
         <h4>Pré-Cadastro</h4>
         <form id="preCadastroForm">
@@ -74,6 +85,8 @@
           <button type="submit" class="btn btn-success w-100 mt-1">Cadastrar</button>
         </form>
       </div>
+    </div>
+
 
 
       <!-- Atualizar Lista e Reset de Senha -->
@@ -176,6 +189,7 @@
           <label for="filtroUsuario" class="form-label">Usuário</label>
           <select id="filtroUsuario" class="form-select">
             <option value="">Todos</option>
+            <option value="">Nenhum</option>
           </select>
         </div>
         <div class="col-md-2">
@@ -222,6 +236,9 @@
           <label for="buscaProcesso" class="form-label">Busca por Nº P.</label>
           <input type="text" id="buscaProcesso" class="form-control" placeholder="xxxxxxx-xx.xxxx.x.xx.xxxx">
         </div>
+        
+        
+
       </div>
       
     </div>
@@ -249,6 +266,10 @@
     <!-- Container para a tabela -->
     <div class="auto-container">
       <h2>Lista Geral Atualizada</h2>
+      <div class="print-buttons mt-3 mb-3">
+        <button id="printAllBtn" class="btn btn-secondary">Imprimir Tabela Completa</button>
+        <button id="printSelectedBtn" class="btn btn-secondary">Imprimir Selecionados</button>
+      </div>
       <div class="table-responsive">
         <table class="table table-bordered" id="processTable">
           <thead class="table-light">
@@ -279,6 +300,10 @@
 
   <!-- Bootstrap JS (Popper incluso) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+
 
   <script src="/js/script.js"></script>
 

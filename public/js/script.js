@@ -1,4 +1,4 @@
-
+   
     // Variáveis globais para armazenar processos
     let allProcesses = [];
     let filteredProcesses = [];
@@ -253,8 +253,8 @@
 
       filtroClasse.innerHTML = '<option value="">Todos</option>';
       filtroAssunto.innerHTML = '<option value="">Todos</option>';
-      filtroTarjas.innerHTML = '<option value="">Todos</option>';
-      filtroUsuario.innerHTML = '<option value="">Todos</option>';
+      filtroUsuario.innerHTML = '<option value="">Todos</option><option value="nenhum">Nenhum</option>';
+      
 
       const classes = new Set();
       const assuntos = new Set();
@@ -743,5 +743,180 @@ document.querySelector('#processTable tbody').addEventListener('dblclick', funct
 
   });
 
-
-
+  function getSelectedFilters() {
+    const filters = {
+      "Classe": document.getElementById('filtroClasse').value || 'Todos',
+      "Assunto": document.getElementById('filtroAssunto').value || 'Todos',
+      "Tarjas": document.getElementById('filtroTarjas').value || 'Todos',
+      "Usuário": document.getElementById('filtroUsuario').value || 'Todos',
+      "Prazo P.": document.getElementById('ordenarPrazo').value || 'Selecione',
+      "Dt. Int.": document.getElementById('ordenarData').value || 'Selecione',
+      "Dias R.": document.getElementById('ordenarDias').value || 'Selecione',
+      "Nº Intim.": document.getElementById('ordenarIntim') ? document.getElementById('ordenarIntim').value : 'Selecione',
+      "Cumprido": document.getElementById('filtroCumprido').value || 'Todos',
+      "Busca por Nº P.": document.getElementById('buscaProcesso').value || ''
+    };
+  
+    // Junta cada filtro em uma única linha, separados por " | "
+    const filtersArray = Object.entries(filters).map(
+      ([key, value]) => `${key}: ${value}`
+    );
+    return "Filtros Selecionados: " + filtersArray.join(" | ");
+  }
+  
+  
+  function printTableAutoTable(onlySelected) {
+    // Extrai os cabeçalhos da tabela
+    const table = document.getElementById('processTable');
+    const headers = [];
+    table.querySelectorAll('thead th').forEach(th => {
+      // Ignora a coluna de checkbox
+      if (!th.querySelector('input')) {
+        headers.push(th.innerText.trim());
+      }
+    });
+  
+    // Extrai os dados das linhas
+    const data = [];
+    table.querySelectorAll('tbody tr').forEach(tr => {
+      // Se onlySelected for true, verifica se o checkbox está marcado
+      const checkbox = tr.querySelector('.bulk-checkbox');
+      if (onlySelected && (!checkbox || !checkbox.checked)) return;
+  
+      const row = [];
+      tr.querySelectorAll('td').forEach((td, index) => {
+        if (index === 0) return; // ignora a coluna do checkbox
+        row.push(td.innerText.trim());
+      });
+      data.push(row);
+    });
+  
+    // Cria o PDF em formato A4, paisagem
+    const pdf = new jspdf.jsPDF('landscape', 'mm', 'a4');
+  
+    // Configurações de margem
+    const marginLeft = 10;
+    const marginTop = 10;
+    // Largura da página disponível (considerando as margens)
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const availableWidth = pageWidth - marginLeft * 2;
+  
+    // Obtém o texto dos filtros e gera uma string com os filtros em linha única
+    const filterText = getSelectedFilters();
+    pdf.setFontSize(10);
+    // Quebra o texto automaticamente de acordo com a largura disponível
+    const filterLines = pdf.splitTextToSize(filterText, availableWidth);
+    // Adiciona os filtros no PDF
+    pdf.text(filterLines, marginLeft, marginTop);
+  
+    // Define a posição de início da tabela logo abaixo dos filtros
+    // Calcula o Y inicial com base no número de linhas geradas (assumindo 5mm de altura por linha)
+    const startY = marginTop + (filterLines.length * 5) + 5;
+  
+    // Gera a tabela utilizando o AutoTable
+    pdf.autoTable({
+      startY: startY,
+      head: [headers],
+      body: data,
+      styles: { fontSize: 8 }
+    });
+  
+    // Salva o PDF
+    pdf.save(onlySelected ? 'tabela_selecionada.pdf' : 'tabela_completa.pdf');
+  }
+  
+  function printTableAutoTable(onlySelected) {
+    const table = document.getElementById('processTable');
+  
+    // Extraindo os cabeçalhos e definindo quais índices serão excluídos
+    const headerCells = Array.from(table.querySelectorAll('thead th'));
+    const headers = [];
+    const excludedIndexes = [];
+    
+    headerCells.forEach((th, index) => {
+      const text = th.innerText.trim();
+      // Ignora a coluna de checkbox ou a coluna "Atribuir Matricula."
+      if (th.querySelector('input') || text === "Atribuir Matricula.") {
+        excludedIndexes.push(index);
+      } else {
+        headers.push(text);
+      }
+    });
+  
+    // Extraindo os dados das linhas, ignorando as colunas excluídas
+    const data = [];
+    table.querySelectorAll('tbody tr').forEach(tr => {
+      const rowCells = Array.from(tr.querySelectorAll('td'));
+      
+      // Se onlySelected for true, verifica se o checkbox (primeira coluna) está marcado
+      const checkbox = rowCells[0].querySelector('.bulk-checkbox');
+      if (onlySelected && (!checkbox || !checkbox.checked)) return;
+      
+      const rowData = [];
+      rowCells.forEach((td, index) => {
+        if (!excludedIndexes.includes(index)) {
+          rowData.push(td.innerText.trim());
+        }
+      });
+      data.push(rowData);
+    });
+  
+    // Cria o PDF em formato A4, paisagem
+    const pdf = new jspdf.jsPDF('landscape', 'mm', 'a4');
+  
+    // Configura as margens e largura disponível para o texto dos filtros
+    const marginLeft = 10;
+    const marginTop = 10;
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const availableWidth = pageWidth - marginLeft * 2;
+  
+    // Obtém os filtros e os quebra automaticamente conforme a largura disponível
+    const filterText = getSelectedFilters();
+    pdf.setFontSize(10);
+    const filterLines = pdf.splitTextToSize(filterText, availableWidth);
+    pdf.text(filterLines, marginLeft, marginTop);
+  
+    // Calcula o startY para a tabela com base na quantidade de linhas dos filtros
+    const startY = marginTop + (filterLines.length * 5) + 5;
+  
+    // Gera a tabela utilizando o AutoTable
+    pdf.autoTable({
+      startY: startY,
+      head: [headers],
+      body: data,
+      styles: { fontSize: 8 }
+    });
+  
+    pdf.save(onlySelected ? 'tabela_selecionada.pdf' : 'tabela_completa.pdf');
+  }
+  
+  function getSelectedFilters() {
+    const filters = {
+      "Classe": document.getElementById('filtroClasse').value || 'Todos',
+      "Assunto": document.getElementById('filtroAssunto').value || 'Todos',
+      "Tarjas": document.getElementById('filtroTarjas').value || 'Todos',
+      "Usuário": document.getElementById('filtroUsuario').value || 'Todos',
+      "Prazo P.": document.getElementById('ordenarPrazo').value || 'Selecione',
+      "Dt. Int.": document.getElementById('ordenarData').value || 'Selecione',
+      "Dias R.": document.getElementById('ordenarDias').value || 'Selecione',
+      "Nº Intim.": document.getElementById('ordenarIntim') ? document.getElementById('ordenarIntim').value : 'Selecione',
+      "Cumprido": document.getElementById('filtroCumprido').value || 'Todos',
+      "Busca por Nº P.": document.getElementById('buscaProcesso').value || ''
+    };
+  
+    // Junta os filtros em uma única linha, separados por " | "
+    const filtersArray = Object.entries(filters).map(
+      ([key, value]) => `${key}: ${value}`
+    );
+    return "Filtros Selecionados: " + filtersArray.join(" | ");
+  }
+  
+  // Eventos para os botões de impressão
+  document.getElementById('printAllBtn').addEventListener('click', () => {
+    printTableAutoTable(false);
+  });
+  
+  document.getElementById('printSelectedBtn').addEventListener('click', () => {
+    printTableAutoTable(true);
+  });
+  
