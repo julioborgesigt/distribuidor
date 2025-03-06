@@ -9,7 +9,7 @@
       document.getElementById('filtroAssunto').addEventListener('change', filterAndRenderTable);
       document.getElementById('filtroTarjas').addEventListener('change', filterAndRenderTable);
       document.getElementById('filtroCumprido').addEventListener('change', filterAndRenderTable);
-      document.getElementById('ordenarPrazo').addEventListener('change', filterAndRenderTable);
+      document.getElementById('ordenarReiteracoes').addEventListener('change', filterAndRenderTable);
       document.getElementById('ordenarData').addEventListener('change', filterAndRenderTable);
       document.getElementById('ordenarDias').addEventListener('change', filterAndRenderTable);
 
@@ -69,7 +69,7 @@
     function filterAndRenderTable() {
       const filtroAssunto = document.getElementById('filtroAssunto').value;
       const filtroTarjas = document.getElementById('filtroTarjas').value;
-      // Não há mais filtro de "cumprido"
+      const filtroCumprido = document.getElementById('filtroCumprido').value;
       // Não há mais "ordenarPrazo"
       const ordenarData = document.getElementById('ordenarData').value;
       const ordenarDias = document.getElementById('ordenarDias').value;
@@ -79,6 +79,8 @@
         let match = true;
         if (filtroAssunto && proc.assunto_principal !== filtroAssunto) match = false;
         if (filtroTarjas && proc.tarjas !== filtroTarjas) match = false;
+        if (filtroCumprido === 'sim' && proc.cumprido !== true) match = false;
+        if (filtroCumprido === 'nao' && proc.cumprido !== false) match = false;
         return match;
       });
     
