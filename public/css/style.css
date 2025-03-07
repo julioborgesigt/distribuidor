@@ -169,7 +169,7 @@
     }
     /* Limitar a largura da coluna "Assunto" */
     .table th.assunto, .table td.assunto {
-      max-width: 200px;
+      max-width: 150px;
     }
     .table th.tarjas, .table td.tarjas {
       max-width: 100px;
@@ -569,6 +569,7 @@
       border-radius: 50%;       /* Deixa o botão circular */
       width: 40px;              /* Ajuste conforme o tamanho que deseja */
       height: 40px;
+      
       display: flex;            /* Para centralizar o ícone */
       align-items: center;
       justify-content: center;
@@ -583,6 +584,8 @@
     
     .logout-btn i {
       font-size: 20px; /* Tamanho do ícone */
+      justify-content: center;
+      padding-right: 1px;
     }
 
     @media (max-width: 768px) {

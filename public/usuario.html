@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="css/style.css">
   
   <style>
-    
+   
   </style>
 
 </head>
@@ -43,8 +43,8 @@
       <h4>Filtros</h4>  
       <div class="card-body">
         <div class="row g-3">
-          <div class="col-md-3">
-            <label for="filtroAssunto" class="form-label">Assunto Principal</label>
+          <div class="col-md-2">
+            <label for="filtroAssunto" class="form-label">Assunto</label>
             <select id="filtroAssunto" class="form-select">
               <option value="">Todos</option>
             </select>
@@ -88,6 +88,10 @@
               <option value="">Todos</option>
             </select>
           </div>
+          <div class="col-md-2">
+            <label for="buscaProcesso" class="form-label">Buscar Nº P.</label>
+            <input type="text" id="buscaProcesso" class="form-control" placeholder="xxxxxxx-xx.xxxx.x.xx.xxxx">
+          </div>
         </div>
       </div>
     </div>
@@ -96,19 +100,19 @@
     <!-- Tabela de Processos -->
     <div class="auto-container">
       <h4>Meus Processos</h4>
-      <div class="card-body">
+      
         <div class="table-responsive">
-          <table class="table table-bordered table-hover" id="processTable">
+          <table class="table table-bordered" id="processTable">
             <thead class="table-light">
               <tr>
                 <th>Número do Processo</th>
                 <th>Prazo Processual</th>
                 <th>Classe Principal</th>
-                <th>Assunto Principal</th>
+                <th class="assunto">Assunto Principal</th>
                 <th>Tarjas</th>
                 <th>Data da Intimação</th>
                 <th>Dias Restantes</th>
-                <th>Reiterações</th>
+                <th>N° Intim.</th>
                 <th>Observações (Clique Duplo)</th>
                 <th>Cumprido?</th>
               </tr>
@@ -118,9 +122,15 @@
             </tbody>
           </table>
         </div>
-      </div>
+      
     </div>
+
+
+
   </div>
+
+
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   
@@ -135,6 +145,7 @@
   
     </script>
     <script src="js/userscript.js"></script>
+    <script src="js/script.js"></script>
   
   
   

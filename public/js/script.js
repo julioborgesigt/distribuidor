@@ -62,7 +62,7 @@
     }
 
     function updateCharts() {
-      // Primeiro, atualize o layout do cabeçalho com base na largura da tela
+      // Atualiza o layout do cabeçalho com base na largura da tela
       const header = document.querySelector('.chart-header');
       if (window.innerWidth < 768) {
         header.style.flexDirection = 'column';
@@ -70,50 +70,44 @@
         const toggleContainer = header.querySelector('.chart-toggle-container');
         toggleContainer.style.alignSelf = 'flex-end';
         toggleContainer.style.marginTop = '-20px';
-        
-        
       } else {
         header.style.flexDirection = 'row';
         header.style.alignItems = 'center';
         const toggleContainer = header.querySelector('.chart-toggle-container');
         toggleContainer.style.alignSelf = '';
         toggleContainer.style.marginTop = '';
-        
       }
     
-      // A seguir, o código de atualização dos gráficos permanece o mesmo
+      // Limpa o container dos gráficos
       const container = document.getElementById('statsRow');
       container.innerHTML = '';
     
-      // Define o conjunto de processos a serem contados
+      // Define os processos a serem considerados:
+      // - Se o usuário escolheu "cumprido", filtra os processos cumpridos dos últimos 30 dias;
+      // - Caso contrário, considera apenas os processos não cumpridos.
       let processesToCount = [];
       if (currentChartType === 'cumprido') {
         const now = new Date();
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(now.getDate() - 30);
-        // Filtra para considerar apenas os processos cumpridos nos últimos 30 dias
         processesToCount = allProcesses.filter(proc =>
           proc.cumprido &&
           proc.cumpridoDate &&
           new Date(proc.cumpridoDate) >= thirtyDaysAgo
         );
       } else {
-        processesToCount = allProcesses;
+        processesToCount = allProcesses.filter(proc => !proc.cumprido);
       }
     
       const total = processesToCount.length;
-      const labelTotal = currentChartType === 'cumprido' ? 'T.Cump.' : 'TOTAL';
-      container.appendChild(createChartCircle(labelTotal, 100, total));
-
-      // Novos círculos: Cumpridos e Não cumpridos
-      if (total > 0) {
-        const totalCumpridos = processesToCount.filter(proc => proc.cumprido === true).length;
-        const totalNaoCumpridos = processesToCount.filter(proc => proc.cumprido === false).length;
-        container.appendChild(createChartCircle('Cump.', (totalCumpridos / total) * 100, totalCumpridos));
-        container.appendChild(createChartCircle('Pend.', (totalNaoCumpridos / total) * 100, totalNaoCumpridos));
-  }
     
-      // Agrupa os processos por usuário
+      // Em casos que NÃO sejam "cumprido", adiciona o círculo de "Pend." (pendentes)
+      if (currentChartType !== 'cumprido' && total > 0) {
+        const totalNaoCumpridos = processesToCount.filter(proc => proc.cumprido === false).length;
+        container.appendChild(createChartCircle('Pend.', (totalNaoCumpridos / total) * 100, totalNaoCumpridos));
+      }
+    
+      // Agrupa os processos por usuário (com os dados filtrados)
       const userCounts = {};
       processesToCount.forEach(proc => {
         if (proc.User && proc.User.nome) {
@@ -121,16 +115,16 @@
           userCounts[name] = (userCounts[name] || 0) + 1;
         }
       });
-    
       Object.entries(userCounts).forEach(([name, count]) => {
         const abbrev = name.substring(0, 8);
         const percentage = total > 0 ? (count / total) * 100 : 0;
         container.appendChild(createChartCircle(abbrev, percentage, count));
       });
     
+      // Se o modo selecionado for "todos", adiciona também os gráficos das categorias
       if (currentChartType === 'todos') {
         let overdue = 0, urgent = 0, upcoming = 0, preso = 0, homicid = 0, furtos = 0, roubos = 0;
-        allProcesses.forEach(proc => {
+        processesToCount.forEach(proc => {
           const dias = proc.data_intimacao ? calcDias(proc) : 0;
           if (dias <= 0) {
             overdue++;
@@ -159,16 +153,16 @@
           }
         });
     
-        container.appendChild(createChartCircle('Vencidos', (overdue / allProcesses.length) * 100, overdue));
-        container.appendChild(createChartCircle('P < 10d', (urgent / allProcesses.length) * 100, urgent));
-        container.appendChild(createChartCircle('P < 30d', (upcoming / allProcesses.length) * 100, upcoming));
-        container.appendChild(createChartCircle('R.Preso', (preso / allProcesses.length) * 100, preso));
-        container.appendChild(createChartCircle('Homic.', (homicid / allProcesses.length) * 100, homicid));
-        container.appendChild(createChartCircle('Roubos', (roubos / allProcesses.length) * 100, roubos));
-        container.appendChild(createChartCircle('Furtos', (furtos / allProcesses.length) * 100, furtos));
+        container.appendChild(createChartCircle('Vencidos', (overdue / total) * 100, overdue));
+        container.appendChild(createChartCircle('P < 10d', (urgent / total) * 100, urgent));
+        container.appendChild(createChartCircle('P < 30d', (upcoming / total) * 100, upcoming));
+        container.appendChild(createChartCircle('R.Preso', (preso / total) * 100, preso));
+        container.appendChild(createChartCircle('Homic.', (homicid / total) * 100, homicid));
+        container.appendChild(createChartCircle('Roubos', (roubos / total) * 100, roubos));
+        container.appendChild(createChartCircle('Furtos', (furtos / total) * 100, furtos));
       }
     }
-    
+  
        
 
     
@@ -743,26 +737,7 @@ document.querySelector('#processTable tbody').addEventListener('dblclick', funct
 
   });
 
-  function getSelectedFilters() {
-    const filters = {
-      "Classe": document.getElementById('filtroClasse').value || 'Todos',
-      "Assunto": document.getElementById('filtroAssunto').value || 'Todos',
-      "Tarjas": document.getElementById('filtroTarjas').value || 'Todos',
-      "Usuário": document.getElementById('filtroUsuario').value || 'Todos',
-      "Prazo P.": document.getElementById('ordenarPrazo').value || 'Selecione',
-      "Dt. Int.": document.getElementById('ordenarData').value || 'Selecione',
-      "Dias R.": document.getElementById('ordenarDias').value || 'Selecione',
-      "Nº Intim.": document.getElementById('ordenarIntim') ? document.getElementById('ordenarIntim').value : 'Selecione',
-      "Cumprido": document.getElementById('filtroCumprido').value || 'Todos',
-      "Busca por Nº P.": document.getElementById('buscaProcesso').value || ''
-    };
-  
-    // Junta cada filtro em uma única linha, separados por " | "
-    const filtersArray = Object.entries(filters).map(
-      ([key, value]) => `${key}: ${value}`
-    );
-    return "Filtros Selecionados: " + filtersArray.join(" | ");
-  }
+ 
   
   
   function printTableAutoTable(onlySelected) {
@@ -910,6 +885,7 @@ document.querySelector('#processTable tbody').addEventListener('dblclick', funct
     );
     return "Filtros Selecionados: " + filtersArray.join(" | ");
   }
+
   
   // Eventos para os botões de impressão
   document.getElementById('printAllBtn').addEventListener('click', () => {

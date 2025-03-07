@@ -120,7 +120,41 @@
           return ordenarReiteracoes === 'asc' ? aReiteracoes - bReiteracoes : bReiteracoes - aReiteracoes;
         });
       }
-    
+      
+      document.getElementById('buscaProcesso').addEventListener('input', function(e) {
+        let digits = this.value.replace(/\D/g, '').substring(0,20);
+        let formatted = '';
+        if (digits.length > 0) {
+          formatted = digits.substring(0,7);
+        }
+        if (digits.length > 7) {
+          formatted += '-' + digits.substring(7,9);
+        }
+        if (digits.length > 9) {
+          formatted += '.' + digits.substring(9,13);
+        }
+        if (digits.length > 13) {
+          formatted += '.' + digits.substring(13,14);
+        }
+        if (digits.length > 14) {
+          formatted += '.' + digits.substring(14,16);
+        }
+        if (digits.length > 16) {
+          formatted += '.' + digits.substring(16,20);
+        }
+        this.value = formatted;
+        
+        const searchValue = formatted;
+        if (searchValue) {
+          const searchFiltered = allProcesses.filter(proc => proc.numero_processo.includes(searchValue));
+          renderTable(searchFiltered);
+          updateCharts();
+        } else {
+          filterAndRenderTable();
+          updateCharts();
+        }
+      });
+
       renderTable(filteredProcesses);
     }
     
@@ -145,7 +179,7 @@
           <td>${proc.numero_processo}</td>
           <td>${proc.prazo_processual || ''}</td>
           <td>${proc.classe_principal || ''}</td>
-          <td>${proc.assunto_principal || ''}</td>
+          <td class="assunto">${proc.assunto_principal || ''}</td>
           <td>${proc.tarjas || ''}</td>
           <td>${proc.data_intimacao || ''}</td>
           <td>${diasRestantes}</td>
