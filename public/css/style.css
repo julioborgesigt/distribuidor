@@ -639,3 +639,47 @@
     color: #fff;
   }
 }
+.offcanvas-backdrop.show {
+  background-color: rgb(0, 0, 0); /* ajuste a opacidade conforme necessário */
+}
+
+.offcanvas.offcanvas-end {
+  width: 300px; /* ajuste conforme a necessidade */
+  /* Se desejar adicionar uma margem interna nas laterais, pode usar padding */
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* Quando o modo escuro estiver ativo, estilize o offcanvas */
+.dark-mode .offcanvas {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border-color: #333;
+}
+
+/* Garanta que o header e o corpo do offcanvas herdem as cores */
+.dark-mode .offcanvas .offcanvas-header,
+.dark-mode .offcanvas .offcanvas-body {
+  background-color: inherit;
+  color: inherit;
+}
+
+/* Se desejar também adaptar os links e botões internos */
+.dark-mode .offcanvas a,
+.dark-mode .offcanvas button {
+  color: #e0e0e0;
+  background-color: transparent;
+  border-color: #555;
+}
+/* Estilos específicos para dispositivos móveis */
+@media (max-width: 768px) {
+  /* Reduz a largura do offcanvas em dispositivos móveis */
+  .offcanvas {
+    width: 250px !important;
+  }
+  /* Reduz o tamanho da fonte dos textos no offcanvas */
+  .offcanvas .offcanvas-header,
+  .offcanvas .offcanvas-body {
+    font-size: 0.9rem;
+  }
+}

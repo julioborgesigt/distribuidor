@@ -7,6 +7,8 @@ const upload = multer({ dest: 'uploads/' });
 
 // Aplica o middleware a todas as rotas deste módulo:
 router.use(autenticarAdmin);
+// Rota para listar usuários (protege-a com o middleware de admin)
+router.get('/users', adminController.listUsers);
 
 router.get('/', adminController.getAdminPage);
 router.post('/upload', upload.single('csvFile'), adminController.uploadCSV);

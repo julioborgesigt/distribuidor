@@ -337,3 +337,14 @@ exports.updateIntim = async (req, res) => {
     res.status(500).send('Erro ao atualizar número de intim.');
   }
 };
+
+// Lista usuários (apenas matrícula e nome)
+exports.listUsers = async (req, res) => {
+  try {
+    const users = await User.findAll({ attributes: ['matricula', 'nome'] });
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao buscar usuários.');
+  }
+};

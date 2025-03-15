@@ -244,11 +244,14 @@
     </div>
 
 
+    <!-- Área de Ações em Massa -->
     <div class="auto-container">
       <h2>Ações em massa</h2>
       <div class="row g-2 align-items-center mt-3">
+        <!-- Campo de matrícula (clicável) -->
         <div class="col-md-3">
-          <input type="text" id="bulkMatricula" class="form-control" placeholder="Mat. dest. (atribuir sel.)" maxlength="8" minlength="8">
+          <!-- Você pode substituir o input por um botão ou manter o input com um evento onfocus/click -->
+          <input type="text" id="bulkMatricula" class="form-control" placeholder="Selecione Mat. dest. (clique aqui)" maxlength="8" minlength="8" readonly>
         </div>
         <div class="col-md-3">
           <button id="bulkAtribuirBtn" class="btn btn-primary me-2 w-100">Atribuir sel. à Mat.</button>
@@ -260,7 +263,25 @@
           <button id="bulkCumpridoBtn" class="btn btn-success me-2 w-100">Cumprir p. selec.</button>
         </div>
       </div>
+    </div>
 
+    <!-- Offcanvas para seleção de usuário -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="userListOffcanvas" aria-labelledby="userListOffcanvasLabel">
+      <div class="offcanvas-header">
+        <h5 id="userListOffcanvasLabel">Selecione um Usuário</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+      </div>
+      <div class="offcanvas-body">
+        <!-- Container para a lista de usuários -->
+        <div class="list-group" id="userListContainer">
+          <!-- Os itens serão adicionados via JavaScript -->
+          <!-- Exemplo de item:
+          <button type="button" class="list-group-item list-group-item-action" data-matricula="12345678">
+            12345678 - João Silva
+          </button>
+          -->
+        </div>
+      </div>
     </div>
 
     <!-- Container para a tabela -->

@@ -176,6 +176,7 @@
       document.getElementById('ordenarPrazo').addEventListener('change', filterAndRenderTable);
       document.getElementById('ordenarData').addEventListener('change', filterAndRenderTable);
       document.getElementById('ordenarDias').addEventListener('change', filterAndRenderTable);
+      document.getElementById('ordenarIntim').addEventListener('change', filterAndRenderTable);
       document.getElementById('filtroCumprido').addEventListener('change', filterAndRenderTable);
       document.getElementById('select-all').addEventListener('change', (e) => {
         const checked = e.target.checked;
@@ -896,3 +897,51 @@ document.querySelector('#processTable tbody').addEventListener('dblclick', funct
     printTableAutoTable(true);
   });
   
+
+  // Função para buscar os usuários (certifique-se de ter uma rota '/admin/users' que retorne { matricula, nome } para cada usuário)
+function fetchUsers() {
+  const token = localStorage.getItem('token');
+  return fetch('/admin/users', { headers: { 'Authorization': 'Bearer ' + token } })
+    .then(res => res.json())
+    .catch(err => {
+      console.error('Erro ao buscar usuários:', err);
+      return [];
+    });
+}
+
+// Função para preencher o offcanvas com a lista de usuários
+function populateUserList() {
+  fetchUsers().then(users => {
+    const container = document.getElementById('userListContainer');
+    container.innerHTML = ''; // Limpa a lista atual
+    users.forEach(user => {
+      // Cria um botão para cada usuário
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'list-group-item list-group-item-action';
+      btn.dataset.matricula = user.matricula;
+      btn.innerText = `${user.matricula} - ${user.nome}`;
+      // Ao clicar, preenche o campo e fecha o offcanvas
+      btn.addEventListener('click', () => {
+        document.getElementById('bulkMatricula').value = user.matricula;
+        // Fecha o offcanvas
+        const offcanvasEl = document.getElementById('userListOffcanvas');
+        const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl) || new bootstrap.Offcanvas(offcanvasEl);
+        bsOffcanvas.hide();
+      });
+      container.appendChild(btn);
+    });
+  });
+}
+
+// Ao clicar no input de bulkMatricula, abre o offcanvas e preenche a lista
+document.getElementById('bulkMatricula').addEventListener('click', () => {
+  // Preenche a lista antes de abrir
+  populateUserList();
+  // Abre o offcanvas
+  const offcanvasEl = document.getElementById('userListOffcanvas');
+  const bsOffcanvas = new bootstrap.Offcanvas(offcanvasEl);
+  bsOffcanvas.show();
+});
+
+// (Os demais códigos de eventos já existentes permanecem inalterados)
