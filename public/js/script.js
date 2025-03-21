@@ -123,7 +123,7 @@
     
       // Se o modo selecionado for "todos", adiciona também os gráficos das categorias
       if (currentChartType === 'todos') {
-        let overdue = 0, urgent = 0, upcoming = 0, preso = 0, homicid = 0, furtos = 0, roubos = 0;
+        let overdue = 0, urgent = 0, upcoming = 0, preso = 0, homicid = 0, furtos = 0, roubos = 0, estelionatos = 0, traficos = 0;
         processesToCount.forEach(proc => {
           const dias = proc.data_intimacao ? calcDias(proc) : 0;
           if (dias <= 0) {
@@ -151,6 +151,17 @@
               .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
             furtos++;
           }
+          if (proc.assunto_principal &&
+            ['estelionato', 'estelionato majorado', 'estelionato contra o idoso']
+            .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
+          estelionatos++;
+          }
+          if (proc.assunto_principal &&
+            ['tráfico de drogas e condutas afins']
+            .some(h => proc.assunto_principal.trim().toLowerCase().includes(h))) {
+          traficos++;
+          
+        }
         });
     
         container.appendChild(createChartCircle('Vencidos', (overdue / total) * 100, overdue));
@@ -160,6 +171,8 @@
         container.appendChild(createChartCircle('Homic.', (homicid / total) * 100, homicid));
         container.appendChild(createChartCircle('Roubos', (roubos / total) * 100, roubos));
         container.appendChild(createChartCircle('Furtos', (furtos / total) * 100, furtos));
+        container.appendChild(createChartCircle('Estelio.', (estelionatos / total) * 100, estelionatos));
+        container.appendChild(createChartCircle('Tráfico', (traficos / total) * 100, traficos));
       }
     }
   
