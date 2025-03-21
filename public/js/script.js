@@ -874,7 +874,7 @@ document.querySelector('#processTable tbody').addEventListener('dblclick', funct
       "Usuário": document.getElementById('filtroUsuario').value || 'Todos',
       "Prazo P.": document.getElementById('ordenarPrazo').value || 'Selecione',
       "Dt. Int.": document.getElementById('ordenarData').value || 'Selecione',
-      "Dias R.": document.getElementById('ordenarDias').value || 'Selecione',
+      "Dias Rest.": document.getElementById('ordenarDias').value || 'Selecione',
       "Nº Intim.": document.getElementById('ordenarIntim') ? document.getElementById('ordenarIntim').value : 'Selecione',
       "Cumprido": document.getElementById('filtroCumprido').value || 'Todos',
       "Busca por Nº P.": document.getElementById('buscaProcesso').value || ''

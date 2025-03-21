@@ -167,64 +167,71 @@
     <div class="auto-container">
       <h2>Filtros</h2>
       <div class="row g-2">
-        <div class="col-md-2">
+        <!-- Linha 1 -->
+        <div class="col-6 col-md-3">
           <label for="filtroClasse" class="form-label">Classe</label>
           <select id="filtroClasse" class="form-select">
             <option value="">Todos</option>
           </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-6 col-md-3">
           <label for="filtroAssunto" class="form-label">Assunto</label>
           <select id="filtroAssunto" class="form-select">
             <option value="">Todos</option>
           </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-6 col-md-3">
           <label for="filtroTarjas" class="form-label">Tarjas</label>
           <select id="filtroTarjas" class="form-select">
             <option value="">Todos</option>
           </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-6 col-md-3">
           <label for="filtroUsuario" class="form-label">Usuário</label>
           <select id="filtroUsuario" class="form-select">
             <option value="">Todos</option>
-            <option value="">Nenhum</option>
           </select>
         </div>
-        <div class="col-md-2">
-          <label for="ordenarPrazo" class="form-label">P. P.</label>
+        <!-- Força quebra de linha em md (>=768px) e oculta em lg (≥992px) -->
+        <div class="w-100 d-none d-md-block d-lg-none"></div>
+        <!-- Linha 2 -->
+        <div class="col-6 col-md-3">
+          <label for="ordenarPrazo" class="form-label">Prazo concedido</label>
           <select id="ordenarPrazo" class="form-select">
             <option value="">Selecione</option>
             <option value="asc">Crescente</option>
             <option value="desc">Decrescente</option>
           </select>
         </div>
-        <div class="col-md-2">
-          <label for="ordenarData" class="form-label">Dt. Int.</label>
+        <div class="col-6 col-md-3">
+          <label for="ordenarData" class="form-label">Data da Intm.</label>
           <select id="ordenarData" class="form-select">
             <option value="">Selecione</option>
             <option value="asc">Crescente</option>
             <option value="desc">Decrescente</option>
           </select>
         </div>
-        <div class="col-md-2">
-          <label for="ordenarDias" class="form-label">Dias R.</label>
+        <div class="col-6 col-md-3">
+          <label for="ordenarDias" class="form-label">Prazo Restante</label>
           <select id="ordenarDias" class="form-select">
             <option value="">Selecione</option>
             <option value="asc">Crescente</option>
             <option value="desc">Decrescente</option>
           </select>
         </div>
-        <div class="col-md-2">
-          <label for="ordenarIntim" class="form-label">Nº Intim.</label>
+        <!-- Força nova quebra após o 6º filtro -->
+        <div class="w-100 d-none d-md-block d-lg-none"></div>
+        <!-- Linha 3 -->
+        
+        <div class="col-6 col-md-3">
+          <label for="ordenarIntim" class="form-label">Nº Intimações</label>
           <select id="ordenarIntim" class="form-select">
             <option value="">Selecione</option>
             <option value="asc">Crescente</option>
             <option value="desc">Decrescente</option>
           </select>
-        </div>     
-        <div class="col-md-2">
+        </div>
+        <div class="col-6 col-md-3">
           <label for="filtroCumprido" class="form-label">Cumprido?</label>
           <select id="filtroCumprido" class="form-select">
             <option value="nao" selected>Não cumprido</option>
@@ -232,14 +239,12 @@
             <option value="">Todos</option>
           </select>
         </div>
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
           <label for="buscaProcesso" class="form-label">Busca por Nº P.</label>
           <input type="text" id="buscaProcesso" class="form-control" placeholder="xxxxxxx-xx.xxxx.x.xx.xxxx">
         </div>
-        
-        
-
       </div>
+      
       
     </div>
 
