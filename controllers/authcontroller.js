@@ -68,25 +68,30 @@ exports.login = async (req, res) => {
 };
 
 
-
-
-
-
 exports.firstLogin = async (req, res) => {
-  const { userId, novaSenha } = req.body;
+  const { userId, novaSenha, loginType } = req.body;
   try {
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ error: 'Usuário não encontrado' });
     }
-    // Atualiza a senha com hash e marca que não é mais a senha padrão
     user.senha = bcryptjs.hashSync(novaSenha, 10);
     user.senha_padrao = false;
     await user.save();
     const token = jwt.sign({ id: user.id, loginType }, JWT_SECRET, { expiresIn: '8h' });
-    return res.json({ token });
+    return res.json({ 
+      token, 
+      user: { 
+        id: user.id, 
+        matricula: user.matricula, 
+        admin_padrao: user.admin_padrao, 
+        admin_super: user.admin_super 
+      } 
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Erro interno' });
   }
 };
+
+

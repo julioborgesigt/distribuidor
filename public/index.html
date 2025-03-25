@@ -101,20 +101,14 @@
       e.preventDefault();
       const matricula = document.getElementById('matricula').value;
       const senha = document.getElementById('senha').value;
-      // Pega o valor do seletor de login
-      const loginTypeSelect = document.getElementById('loginTypeSelect');
+      // Usando o toggle: se estiver marcado, é admin_super; se não, admin_padrao
       const loginType = document.getElementById('loginTypeToggle').checked ? 'admin_super' : 'admin_padrao';
-
-
-
-
-      
-      console.log('Tipo de login selecionado:', loginType);
+      // Armazena temporariamente o tipo de login
+      window.tempLoginType = loginType;
       
       const res = await fetch('/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Envia também o loginType
         body: JSON.stringify({ matricula, senha, loginType })
       });
       
@@ -138,6 +132,7 @@
 
 
 
+
     document.getElementById('salvarSenhaBtn').addEventListener('click', async () => {
       const novaSenha = document.getElementById('novaSenha').value;
       const confirmarSenha = document.getElementById('confirmarSenha').value;
@@ -145,19 +140,25 @@
         alert('As senhas não conferem.');
         return;
       }
+      // Recupera o loginType armazenado anteriormente
+      const loginType = window.tempLoginType || 'admin_padrao';
       const res = await fetch('/primeiro-login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: window.tempUserId, novaSenha })
+        body: JSON.stringify({ userId: window.tempUserId, novaSenha, loginType })
       });
       const data = await res.json();
       if (data.token) {
         localStorage.setItem('token', data.token);
-        window.location.href = 'usuario.html';
+        if (data.user) {
+          localStorage.setItem('userInfo', JSON.stringify(data.user));
+        }
+        window.location.href = 'admin.html';
       } else {
         alert('Erro ao atualizar a senha.');
       }
     });
+
 
     // Listener para alternar o background do card no login de adm
     document.getElementById('loginTypeToggle').addEventListener('change', function() {
