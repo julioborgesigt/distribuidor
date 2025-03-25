@@ -258,49 +258,70 @@
       const filtroAssunto = document.getElementById('filtroAssunto');
       const filtroTarjas = document.getElementById('filtroTarjas');
       const filtroUsuario = document.getElementById('filtroUsuario');
-
-      filtroClasse.innerHTML = '<option value="">Todos</option>';
+    
+      // Salva os valores atualmente selecionados
+      const selectedClasse = filtroClasse ? filtroClasse.value : "";
+      const selectedAssunto = filtroAssunto.value;
+      const selectedTarjas = filtroTarjas.value;
+      const selectedUsuario = filtroUsuario.value;
+    
+      // Reinicia os selects com a opção padrão
+      if (filtroClasse) filtroClasse.innerHTML = '<option value="">Todos</option>';
       filtroAssunto.innerHTML = '<option value="">Todos</option>';
+      filtroTarjas.innerHTML = '<option value="">Todos</option>';
       filtroUsuario.innerHTML = '<option value="">Todos</option><option value="nenhum">Nenhum</option>';
-      
-
+    
+      // Cria conjuntos para as novas opções
       const classes = new Set();
       const assuntos = new Set();
       const tarjasSet = new Set();
       const usuarios = new Set();
-
+    
       allProcesses.forEach(proc => {
         if (proc.classe_principal) classes.add(proc.classe_principal);
         if (proc.assunto_principal) assuntos.add(proc.assunto_principal);
         if (proc.tarjas) tarjasSet.add(proc.tarjas);
         if (proc.User && proc.User.nome) usuarios.add(proc.User.nome);
       });
-
-      classes.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item;
-        option.textContent = item;
-        filtroClasse.appendChild(option);
-      });
+    
+      // Popula o select de Classe (se existir)
+      if (filtroClasse) {
+        classes.forEach(item => {
+          const option = document.createElement('option');
+          option.value = item;
+          option.textContent = item;
+          filtroClasse.appendChild(option);
+        });
+      }
+      // Popula o select de Assunto
       assuntos.forEach(item => {
         const option = document.createElement('option');
         option.value = item;
         option.textContent = item;
         filtroAssunto.appendChild(option);
       });
+      // Popula o select de Tarjas
       tarjasSet.forEach(item => {
         const option = document.createElement('option');
         option.value = item;
         option.textContent = item;
         filtroTarjas.appendChild(option);
       });
+      // Popula o select de Usuário
       usuarios.forEach(item => {
         const option = document.createElement('option');
         option.value = item;
         option.textContent = item;
         filtroUsuario.appendChild(option);
       });
+    
+      // Restaura as seleções anteriores
+      if (filtroClasse) filtroClasse.value = selectedClasse;
+      filtroAssunto.value = selectedAssunto;
+      filtroTarjas.value = selectedTarjas;
+      filtroUsuario.value = selectedUsuario;
     }
+    
 
     function filterAndRenderTable() {
       const filtroClasse = document.getElementById('filtroClasse').value;
@@ -472,24 +493,22 @@
       });
     });
 
-    // Pré-cadastro de usuário
+
+// Pré-cadastro de usuário
 const preCadastroForm = document.getElementById('preCadastroForm');
 preCadastroForm.addEventListener('submit', e => {
   e.preventDefault();
-  
+  document.getElementById('loading-overlay').style.display = 'flex';
   // Coleta os dados do formulário
   const formData = new FormData(preCadastroForm);
   const data = {
     matricula: formData.get('matricula'),
     nome: formData.get('nome'),
-    senha: formData.get('senha')
+    senha: formData.get('senha'),
+    tipoCadastro: formData.get('tipoCadastro') // "admin_padrao" ou "admin_super"
   };
 
-  const tipoCadastro = formData.get('tipoCadastro');
-  console.log('Tipo de cadastro selecionado:', tipoCadastro);
-  if (tipoCadastro === 'admin') {
-    data.admin_padrao = true;
-  }
+  console.log('Tipo de cadastro selecionado:', data.tipoCadastro);
   console.log('Dados enviados para pré-cadastro:', data);
 
   const token = localStorage.getItem('token');
@@ -516,6 +535,7 @@ preCadastroForm.addEventListener('submit', e => {
           body: JSON.stringify(data)
         }).then(res => res.text());
       } else {
+        
         throw new Error('Usuário optou por não atualizar.');
       }
     } else {
@@ -523,10 +543,13 @@ preCadastroForm.addEventListener('submit', e => {
     }
   })
   .then(msg => {
+    document.getElementById('loading-overlay').style.display = 'none';
     alert(msg);
     preCadastroForm.reset();
   })
-  .catch(err => console.error(err));
+  .catch(err => {
+    document.getElementById('loading-overlay').style.display = 'none';
+    console.error(err)});
 });
 
 
@@ -536,10 +559,12 @@ preCadastroForm.addEventListener('submit', e => {
 document.getElementById('resetPasswordBtn').addEventListener('click', () => {
   const matricula = document.getElementById('matriculaAction').value.trim();
   if (!matricula) {
+    document.getElementById('loading-overlay').style.display = 'none';
     alert('Por favor, informe a matrícula.');
     return;
   }
   const data = { matricula };
+  document.getElementById('loading-overlay').style.display = 'flex';
   fetch('/admin/reset-password', {
     method: 'POST',
     headers: {
@@ -550,20 +575,27 @@ document.getElementById('resetPasswordBtn').addEventListener('click', () => {
   })
     .then(res => res.text())
     .then(msg => {
+      document.getElementById('loading-overlay').style.display = 'none';
       alert(msg);
       document.getElementById('userActionForm').reset();
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      document.getElementById('loading-overlay').style.display = 'none';
+      console.error(err)
+    });
 });
 
 // Deletar usuário
 document.getElementById('deleteUserBtn').addEventListener('click', () => {
   const matricula = document.getElementById('matriculaAction').value.trim();
+  document.getElementById('loading-overlay').style.display = 'flex';
   if (!matricula) {
+    document.getElementById('loading-overlay').style.display = 'none';
     alert('Por favor, informe a matrícula.');
     return;
   }
   // Opcional: pedir confirmação
+  
   if (!confirm(`Tem certeza que deseja apagar o usuário com matrícula ${matricula}?`)) return;
   
   const data = { matricula };
@@ -577,10 +609,14 @@ document.getElementById('deleteUserBtn').addEventListener('click', () => {
   })
     .then(res => res.text())
     .then(msg => {
+      document.getElementById('loading-overlay').style.display = 'none';
       alert(msg);
       document.getElementById('userActionForm').reset();
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      document.getElementById('loading-overlay').style.display = 'none';
+      console.error(err)
+    });
 });
 
 

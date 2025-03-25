@@ -57,7 +57,7 @@
             <i id="sunIcon" class="bi bi-sun-fill"></i>
             <i id="moonIcon" class="bi bi-moon-fill" style="display: none;"></i>
           </button>
-          <h4>Pág. do Adm.</h4>
+          <h4>Gerenciador</h4>
           <button id="logoutBtn" class="btn logout-btn" title="Logout">
             <i class="bi bi-power"></i>
           </button>
@@ -90,8 +90,8 @@
           <div class="mb-2">
             <label for="tipoCadastro" class="form-label">Tipo de Cadastro</label>
             <select class="form-select" id="tipoCadastro" name="tipoCadastro" required>
-              <option value="usuario">Usuário Normal</option>
-              <option value="admin">Administrador</option>
+              <option value="admin_padrao">Administrador Padrão</option>
+              <option value="admin_super">Administrador Super</option>
             </select>
           </div>
           <button type="submit" class="btn btn-success w-100 mt-1">Cadastrar</button>
@@ -301,7 +301,7 @@
     <div class="auto-container">
       <h2>Lista Geral Atualizada</h2>
       <div class="print-buttons d-flex align-items-center justify-content-start col-md-6 mt-3 mb-3">
-        <button id="printAllBtn" class="btn btn-primary me-2 w-50">Imprimir Tabela Completa</button>
+        <button id="printAllBtn" class="btn btn-primary me-2 w-50">Imprimir Todos</button>
         <button id="printSelectedBtn" class="btn btn-primary w-50">Imprimir Selecionados</button>
       </div>
       

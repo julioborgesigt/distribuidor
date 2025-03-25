@@ -192,10 +192,20 @@ exports.manualAssignProcess = async (req, res) => {
 
 // Pré-cadastro de usuário
 exports.preCadastro = async (req, res) => {
-  const { matricula, nome, senha, admin_padrao, updateIfExists } = req.body;
+  const { matricula, nome, senha, tipoCadastro, updateIfExists } = req.body;
 
-  if (!matricula || !nome || !senha) {
+  if (!matricula || !nome || !senha || !tipoCadastro) {
     return res.status(400).send('Campos obrigatórios ausentes.');
+  }
+
+  // Define as flags conforme o valor de tipoCadastro
+  let admin_padrao = false;
+  let admin_super = false;
+  if (tipoCadastro === 'admin_padrao') {
+    admin_padrao = true;
+  } else if (tipoCadastro === 'admin_super') {
+    admin_padrao = true;
+    admin_super = true;
   }
 
   try {
@@ -203,31 +213,35 @@ exports.preCadastro = async (req, res) => {
     const existingUser = await User.findOne({ where: { matricula } });
     if (existingUser) {
       if (updateIfExists) {
+        console.log("admin padrao", admin_padrao);
+        console.log("admin super", admin_super);
         // Atualiza o usuário existente
         existingUser.nome = nome;
         // Para que o usuário realize o primeiro login, definimos a senha para "12345678"
         // e marcamos senha_padrao como verdadeiro (como na função reset)
         existingUser.senha = '12345678';
         existingUser.senha_padrao = true;
-        existingUser.admin_padrao = admin_padrao ? true : false;
+        existingUser.admin_padrao = admin_padrao;
+        existingUser.admin_super = admin_super;
         await existingUser.save();
         return res.send('Usuário atualizado com sucesso. Senha: 12345678');
       } else {
         return res.status(409).json({
           error: 'Usuário já cadastrado.',
-          updatePrompt: 'Deseja atualizar o usuário existente?'
+          updatePrompt: 'Deseja atualizar o usuário existente? A senha será: 12345678'
         });
       }
     }
 
     // Se não existir, cria o usuário normalmente
-    await User.create({ matricula, nome, senha, admin_padrao: admin_padrao ? true : false });
+    await User.create({ matricula, nome, senha, admin_padrao, admin_super });
     res.send('Pré-cadastro realizado com sucesso.');
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao realizar pré-cadastro.');
   }
 };
+
 
 
 
