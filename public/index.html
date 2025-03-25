@@ -110,16 +110,19 @@
         const modal = new bootstrap.Modal(document.getElementById('modalTrocaSenha'));
         modal.show();
       } else if (data.token) {
+        // Armazena o token
         localStorage.setItem('token', data.token);
-        if (adminLogin) {
-          window.location.href = 'admin.html';
-        } else {
-          window.location.href = 'usuario.html';
+        // Armazena as informações do usuário para controle de interface
+        if (data.user) {
+          localStorage.setItem('userInfo', JSON.stringify(data.user));
         }
+        // Redireciona para o dashboard unificado (admin.html)
+        window.location.href = 'admin.html';
       } else {
         alert('Erro no login: ' + (data.error || 'credenciais inválidas'));
       }
     });
+
 
     document.getElementById('salvarSenhaBtn').addEventListener('click', async () => {
       const novaSenha = document.getElementById('novaSenha').value;

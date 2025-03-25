@@ -1,9 +1,9 @@
-// /middlewares/autenticarAdmin.js
+// /middlewares/autenticarUsuario.js
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const JWT_SECRET = 'b7f8a2d4e3f7c78e8e9a3d0b5f6d8a3e7c9f2b8e4d1a5c0e2d3f9b6a7d8e4c1f';
 
-const autenticarAdmin = async (req, res, next) => {
+const autenticarUsuario = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) {
     console.log('Autenticação: authHeader ausente');
@@ -22,17 +22,15 @@ const autenticarAdmin = async (req, res, next) => {
         console.log('Autenticação: usuário não encontrado');
         return res.sendStatus(404);
       }
-      if (!user.admin_padrao) {
-        console.log('Autenticação: acesso de administrador negado para o usuário:', decoded.id);
-        return res.status(403).json({ error: 'Acesso de administrador negado.' });
-      }
+      // Anexa o objeto completo do usuário e seu id na requisição
+      req.user = user;
       req.userId = user.id;
       next();
     } catch (error) {
-      console.error('Erro no middleware de admin:', error);
+      console.error('Erro no middleware de autenticação:', error);
       return res.sendStatus(500);
     }
   });
 };
 
-module.exports = autenticarAdmin;
+module.exports = autenticarUsuario;

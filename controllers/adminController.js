@@ -127,14 +127,24 @@ exports.uploadCSV = (req, res) => {
 // Lista todos os processos em formato JSON
 exports.listProcesses = async (req, res) => {
   try {
-    // Inclui o usuário (se tiver) no retorno
-    const processes = await Process.findAll({ include: User });
+    let processes;
+    if (req.user && req.user.admin_super) {
+      // Se for admin_super, mostra todos os processos
+      processes = await Process.findAll({ include: User });
+    } else {
+      // Caso contrário, mostra somente os processos atribuídos ao usuário logado
+      processes = await Process.findAll({
+        where: { userId: req.userId },
+        include: User 
+      });
+    }
     res.json(processes);
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao buscar processos.');
   }
 };
+
 
 // Atribuição automática de processos
 exports.assignProcesses = async (req, res) => {

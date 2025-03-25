@@ -22,18 +22,7 @@
 
     
     
-    <div class="container-fluid">
-      <div class="d-flex justify-content-between align-items-center">
-        <button id="darkModeToggle" class="btn toggle-btn" aria-label="Alternar modo escuro">
-          <i id="sunIcon" class="bi bi-sun-fill"></i>
-          <i id="moonIcon" class="bi bi-moon-fill" style="display: none;"></i>
-        </button>
-        <h4>Pág. do Adm.</h4>
-        <button id="logoutBtn" class="btn logout-btn" title="Logout">
-          <i class="bi bi-power"></i>
-        </button>
-      </div>
-    </div>
+    
     
     
   
@@ -48,18 +37,41 @@
     <!-- Formulários agrupados em container flex -->
     <div class="form-container">
       <!-- Pré-Cadastro de Usuário -->
-      <!-- Disparador (apenas visível em dispositivos móveis) -->
-    <div class="d-block d-md-none mb-2">
-      <a class="btn btn-secondary w-100 d-flex align-items-center justify-content-between" data-bs-toggle="collapse" href="#preCadastroCollapse" role="button" aria-expanded="false" aria-controls="preCadastroCollapse">
-        <span>Pré-Cadastro</span>
-        <i class="bi bi-chevron-down"></i>
-      </a>
+      <!-- Disparador (apenas visível em dispositivos móveis) 
+      <div class="d-block d-md-none mb-2" id="preCadastroContainerMobile">
+        <a class="btn btn-secondary w-100 d-flex align-items-center justify-content-between" data-bs-toggle="collapse" href="#preCadastroCollapse" role="button" aria-expanded="false" aria-controls="preCadastroCollapse">
+          <span>Pré-Cadastro</span>
+          <i class="bi bi-chevron-down"></i>
+        </a>
+        
+      </div>
       
-    </div>
+      
+      
 
-    <!-- Área do pré-cadastro, envolvida pelo componente collapse -->
-    <div class="collapse d-md-block" id="preCadastroCollapse">
-      <div class="small-container">
+      <!-- Área do pré-cadastro -->
+      
+      <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center">
+          <button id="darkModeToggle" class="btn toggle-btn" aria-label="Alternar modo escuro">
+            <i id="sunIcon" class="bi bi-sun-fill"></i>
+            <i id="moonIcon" class="bi bi-moon-fill" style="display: none;"></i>
+          </button>
+          <h4>Pág. do Adm.</h4>
+          <button id="logoutBtn" class="btn logout-btn" title="Logout">
+            <i class="bi bi-power"></i>
+          </button>
+        </div>
+      </div>
+
+
+
+
+
+      <div class="chart-container">
+
+
+      <div class="small-container" id="preCadastroContainer">
         <h4>Pré-Cadastro</h4>
         <form id="preCadastroForm">
           <div class="mb-2">
@@ -85,12 +97,13 @@
           <button type="submit" class="btn btn-success w-100 mt-1">Cadastrar</button>
         </form>
       </div>
-    </div>
+   
 
 
 
       <!-- Atualizar Lista e Reset de Senha -->
-      <div class="vertical-container">
+      <div class="vertical-container" id="atualizarListaContainer">
+      
         <div class="small-container">
           <h4>Atualizar Lista</h4>
           <form id="csvUploadForm" enctype="multipart/form-data">
@@ -101,7 +114,9 @@
             <button type="submit" class="btn btn-primary w-100">Upload</button>
           </form>
         </div>
-        <div class="small-container">
+
+
+        <div class="small-container" id="resetApagarUsuarioContainer">
           <h4>Reset / Apagar Usuário</h4>
           <form id="userActionForm">
             <div class="mb-2">
@@ -113,55 +128,48 @@
               <button type="button" id="deleteUserBtn" class="btn btn-danger">Apagar Usuário</button>
             </div>
           </form>
-        </div>
+        </div>      
         
-        
-      </div>
+    </div>
       
-      <!-- Container para gráficos -->
+    <!-- Container para gráficos -->
       
      
 
         
-          <div class="chart-group">
+    <div class="chart-group">
             
 
-            <div class="chart-header">
+      <div class="chart-header">
               
-              <h4>Estatísticas / Cumpridos(30dias)</h4>
-            
-
-              <div class="chart-toggle-container">
-                <span class="toggle-text">Todos</span>
-                <label class="switch">
-                  <input type="checkbox" id="chartToggle">
-                  <span class="slider"></span>
-                </label>
-                <span class="toggle-text">Cumprido</span>
-              </div>
-              
-
-
-
-            </div>
-            
-
-
-          
-
-            <div class="chart-row" id="statsRow">
-              <!-- Gráficos serão inseridos aqui -->
-            </div>
-
-          </div>
-
-
+        <h4>Estatísticas / Cumpridos(30dias)</h4>
+           
       
+        <div class="chart-toggle-container">
+          <span class="toggle-text">Todos</span>
+            <label class="switch">
+              <input type="checkbox" id="chartToggle">
+                <span class="slider"></span>
+            </label>
+              <span class="toggle-text">Cumprido</span>
+        </div>
+              
+      </div> 
+            
 
-
-
+      <div class="chart-row" id="statsRow">
+          <!-- Gráficos serão inseridos aqui -->
+      </div>
 
     </div>
+
+
+  </div> 
+
+
+
+
+  
 
     <!-- Container para filtros e ações -->
     <div class="auto-container">
@@ -250,7 +258,7 @@
 
 
     <!-- Área de Ações em Massa -->
-    <div class="auto-container">
+    <div class="auto-container" id="acoesEmMassa">
       <h2>Ações em massa</h2>
       <div class="row g-2 align-items-center mt-3">
         <!-- Campo de matrícula (clicável) -->
@@ -303,17 +311,18 @@
             <tr>
               <th><input type="checkbox" id="select-all"></th>
               <th>Número do Processo</th>
-              <th class="hide-mobile">Prazo P.</th>
+              <th class="hide-mobile">Prazo Conc.</th>
               <th class="hide-mobile">Classe Principal</th>
               <!-- Aqui, adicione a classe 'assunto' tanto para o th quanto para os tds -->
               <th class="hide-mobile assunto">Assunto</th>
               <th>Tarjas</th>
               <th class="hide-mobile">Data Int.</th>
               <th>Usuário</th>
-              <th>Dias praz.</th>
-              <th>Nº Intim.</th>
-              <th class="hide-mobile">Cump.</th>
-              <th class="hide-mobile">Atribuir Matricula.</th>
+              <th>Prazo Rest.</th>
+              <th class="nDEintimacoes">Nº de Intim.</th>
+              <th class="hide-mobile statuscumprido">Cumprido?</th>
+              <th>Observações (Clique Duplo)</th>
+              <th class="cumprido-checkbox">Dar. Cump.</th>
             </tr>
           </thead>
           <tbody>
@@ -322,8 +331,11 @@
         </table>
       </div>
     </div>
-  </div> <!-- Fim do container principal -->
 
+
+    
+  
+  </div>
 
   <!-- Bootstrap JS (Popper incluso) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -343,6 +355,8 @@
         return;
       }
       
+     
+
       
     });
 
@@ -350,6 +364,126 @@
         localStorage.removeItem('token');
         window.location.href = '/';
       });
+
+
+      document.addEventListener('DOMContentLoaded', () => {
+      // Recupera os dados do usuário armazenados após o login
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+     
+      const chartGroup = document.querySelector('.chart-group');
+      if (userInfo) {
+        if (userInfo.admin_super) {
+          chartGroup.classList.add('admin-super');
+        } else if (userInfo.admin_padrao) {
+          chartGroup.classList.add('admin-padrao');
+        }
+      }
+
+
+      // Se o usuário existe e for admin_padrao (mas NÃO admin_super)
+      if (userInfo && userInfo.admin_padrao && !userInfo.admin_super) {
+        // Desabilitar os filtros de "Usuário" e "Cumprido"
+        const filtroUsuario = document.getElementById('filtroUsuario');
+        const filtroCumprido = document.getElementById('filtroCumprido');
+        if (filtroUsuario) filtroUsuario.disabled = true;
+        if (filtroCumprido) filtroCumprido.disabled = true;
+
+        // Desabilitar os botões de Ações em massa 
+        const bulkMatricula = document.getElementById('bulkMatricula');
+        const bulkAtribuirBtn = document.getElementById('bulkAtribuirBtn');
+        const bulkExcluirBtn = document.getElementById('bulkExcluirBtn');
+        const bulkCumpridoBtn = document.getElementById('bulkCumpridoBtn');
+        if (bulkMatricula) bulkMatricula.disabled = true;
+        if (bulkAtribuirBtn) bulkAtribuirBtn.disabled = true;
+        if (bulkExcluirBtn) bulkExcluirBtn.disabled = true;
+        if (bulkCumpridoBtn) bulkCumpridoBtn.disabled = true;
+
+        // Desabilitar funcionalidades de Pré-Cadastro, Atualizar Lista e Reset/Apagar Usuário
+
+        // Pré-Cadastro
+        const preCadastroInputs = document.querySelectorAll('#preCadastroForm input, #preCadastroForm button, #preCadastroForm select');
+        preCadastroInputs.forEach(el => el.disabled = true);
+
+        // Atualizar Lista (Upload CSV)
+        const csvInputs = document.querySelectorAll('#csvUploadForm input, #csvUploadForm button, #csvUploadForm select');
+        csvInputs.forEach(el => el.disabled = true);
+
+        // Reset / Apagar Usuário
+        const userActionInputs = document.querySelectorAll('#userActionForm input, #userActionForm button, #userActionForm select');
+        userActionInputs.forEach(el => el.disabled = true);
+
+        const acoesContainer = document.getElementById('acoesEmMassa');
+        if (acoesContainer) {
+          acoesContainer.style.display = 'none'; // Oculta completamente
+        }
+          
+        
+        const preCadastroContainer = document.getElementById('preCadastroContainer');
+        const atualizarListaContainer = document.getElementById('atualizarListaContainer');
+        const resetApagarContainer = document.getElementById('resetApagarUsuarioContainer');
+        
+        
+        if (preCadastroContainer) preCadastroContainer.style.display = 'none';
+        if (atualizarListaContainer) atualizarListaContainer.style.display = 'none';
+        if (resetApagarContainer) resetApagarContainer.style.display = 'none';
+
+        
+        
+
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Delegação de eventos para editar as células de observações
+      document.querySelector('#processTable tbody').addEventListener('dblclick', function(e) {
+        // Procura o elemento clicado (ou seu ancestral) que possua a classe "observacoes-cell"
+        const cell = e.target.closest('.observacoes-cell');
+        if (!cell) return; // Se não for célula de observações, sai
+
+        // Evita que se adicione outro input se já houver um
+        if (cell.querySelector('input')) return;
+
+        const originalText = cell.innerText;
+        const processId = cell.getAttribute('data-process-id');
+
+        // Cria um input de texto limitado a 50 caracteres
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = originalText;
+        input.maxLength = 20;
+        input.style.width = '100%'; // Ocupa toda a largura da célula
+
+        // Substitui o conteúdo da célula pelo input e foca nele
+        cell.innerText = '';
+        cell.appendChild(input);
+        input.focus();
+
+        // Quando o input perder o foco, tenta salvar o novo valor
+        input.addEventListener('blur', () => {
+          const newText = input.value;
+          // Se desejar, aqui você pode adicionar validação (por exemplo, não permitir string vazia)
+          cell.innerText = newText;
+          const token = localStorage.getItem('token');
+          fetch('/update-observacoes', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ processId, observacoes: newText })
+          })
+          .then(res => res.text())
+          .then(msg => console.log('Observações atualizadas:', msg))
+          .catch(err => {
+            console.error('Erro ao atualizar observações:', err);
+            // Em caso de erro, reverte para o valor original
+            cell.innerText = originalText;
+          });
+        });
+      });
+
+    });
+
 
   </script>
 </body>

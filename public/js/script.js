@@ -408,40 +408,43 @@
           <td>${userName}</td>
           <td>${diasRestantes}</td>
           <td class="intim-cell" data-process-id="${proc.id}">${reiteracoes}</td>
-          <td class="hide-mobile">${statusCumprido}</td>
-          <td class="hide-mobile">
-            <form class="manual-assign-form">
-              <input type="hidden" name="numeroProcesso" value="${proc.numero_processo}">
-              <input type="text" class="form-control form-control-sm mb-2" name="matricula" placeholder="Matrícula" required maxlength="8" required>
-              <button type="submit" class="btn btn-sm btn-primary">Atribuir</button>
-            </form>
+          <td class="hide-mobile statuscumprido">${statusCumprido}</td>
+          <td class="observacoes-cell" data-process-id="${proc.id}">${proc.observacoes || ''}</td>
+          <td>
+            <input type="checkbox" class="cumprido-checkbox" data-id="${proc.id}" ${proc.cumprido ? 'checked' : ''}>
           </td>
         `;
         tbody.appendChild(tr);
       });
+      
 
-      document.querySelectorAll('.manual-assign-form').forEach(form => {
-        form.addEventListener('submit', e => {
-          e.preventDefault();
-          const formData = new FormData(form);
-          const data = {
-            numeroProcesso: formData.get('numeroProcesso'),
-            matricula: formData.get('matricula')
-          };
-          const token = localStorage.getItem('token');
-          fetch('/admin/manual-assign', {
+      // Listener para atualizar status de "Cumprido?" e, se marcado, zerar o contador de reiteracoes
+      document.querySelectorAll('.cumprido-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+          const processId = e.target.getAttribute('data-id');
+          const cumprido = e.target.checked;
+          // Se marcado como cumprido, envia resetReiteracoes como true para zerar o contador
+          const payload = { processId, cumprido };
+          if (cumprido) {
+            payload.resetReiteracoes = true;
+          }
+          fetch('/cumprir', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
-            body: JSON.stringify(data)
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify(payload)
           })
-          .then(res => res.text())
-          .then(msg => {
-            alert(msg);
-            fetchProcesses();
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            fetchProcesses(); // Atualiza a tabela
           })
           .catch(err => console.error(err));
         });
       });
+    
     }
 
     // Upload de CSV

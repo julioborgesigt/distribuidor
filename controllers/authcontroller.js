@@ -44,7 +44,8 @@ exports.login = async (req, res) => {
       console.log("login: Este não é seu primeiro login. Gerando token...");
       const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '8h' });
       console.log("login: Token gerado:", token);
-      return res.json({ token });
+      return res.json({ token, user: { id: user.id, matricula: user.matricula, admin_padrao: user.admin_padrao, admin_super: user.admin_super } });
+      
     }
   } catch (error) {
     console.error("login: Erro interno:", error);
