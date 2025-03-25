@@ -43,6 +43,15 @@
             <input class="form-check-input" type="checkbox" id="loginTypeToggle">
             <label class="form-check-label" for="loginTypeToggle">Adm</label>
           </div>
+          
+          
+
+          
+          
+          
+          
+
+          
         </div>
         
         <form id="loginForm">
@@ -92,14 +101,21 @@
       e.preventDefault();
       const matricula = document.getElementById('matricula').value;
       const senha = document.getElementById('senha').value;
-      const loginTypeToggle = document.getElementById('loginTypeToggle');
-      const adminLogin = loginTypeToggle ? loginTypeToggle.checked : false;
-      console.log('Login de administrador:', adminLogin);
+      // Pega o valor do seletor de login
+      const loginTypeSelect = document.getElementById('loginTypeSelect');
+      const loginType = document.getElementById('loginTypeToggle').checked ? 'admin_super' : 'admin_padrao';
+
+
+
+
+      
+      console.log('Tipo de login selecionado:', loginType);
       
       const res = await fetch('/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ matricula, senha, adminLogin })
+        // Envia também o loginType
+        body: JSON.stringify({ matricula, senha, loginType })
       });
       
       const data = await res.json();
@@ -110,18 +126,16 @@
         const modal = new bootstrap.Modal(document.getElementById('modalTrocaSenha'));
         modal.show();
       } else if (data.token) {
-        // Armazena o token
         localStorage.setItem('token', data.token);
-        // Armazena as informações do usuário para controle de interface
         if (data.user) {
           localStorage.setItem('userInfo', JSON.stringify(data.user));
         }
-        // Redireciona para o dashboard unificado (admin.html)
         window.location.href = 'admin.html';
       } else {
         alert('Erro no login: ' + (data.error || 'credenciais inválidas'));
       }
     });
+
 
 
     document.getElementById('salvarSenhaBtn').addEventListener('click', async () => {
