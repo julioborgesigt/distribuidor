@@ -1,10 +1,22 @@
-   
+    
     // Variáveis globais para armazenar processos
     let allProcesses = [];
     let filteredProcesses = [];
     let currentChartType = 'todos';
-
-
+    
+    async function fetchWithAuth(url, options = {}) {
+      const response = await fetch(url, options);
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userInfo');
+        window.location.href = '/';
+        // Opcional: interrompe a execução lançando um erro
+        throw new Error('Token expirado ou acesso não autorizado.');
+      }
+      return response;
+    }
+    
+    
     // Função para criar um progress ring usando ProgressBar.js
     function createChartCircle(label, percentage, count) {
     // Calcula o tamanho conforme a largura da tela
@@ -242,7 +254,7 @@
 
     function fetchProcesses() {
       const token = localStorage.getItem('token');
-      fetch('/admin/processes', { headers: { 'Authorization': 'Bearer ' + token } })
+      fetchWithAuth('/admin/processes', { headers: { 'Authorization': 'Bearer ' + token } })
         .then(res => res.json())
         .then(data => {
           allProcesses = data;
@@ -997,3 +1009,44 @@ document.getElementById('bulkMatricula').addEventListener('click', () => {
 });
 
 // (Os demais códigos de eventos já existentes permanecem inalterados)
+
+
+
+function scheduleTokenExpirationRedirect() {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+
+  try {
+    // O JWT tem o formato: header.payload.signature
+    const payloadBase64 = token.split('.')[1];
+    // Corrige a codificação base64, se necessário
+    const payloadJson = atob(payloadBase64);
+    const payload = JSON.parse(payloadJson);
+    
+    // "exp" é o tempo de expiração em segundos (Unix time)
+    const exp = payload.exp;
+    const currentTime = Date.now() / 1000; // em segundos
+    const timeRemaining = exp - currentTime;
+
+    console.log(`Token expira em ${timeRemaining} segundos.`);
+
+    if (timeRemaining <= 0) {
+      // Se o token já expirou, redirecione imediatamente.
+      localStorage.removeItem('token');
+      localStorage.removeItem('userInfo');
+      window.location.href = '/login';
+    } else {
+      // Agenda o redirecionamento para quando o token expirar.
+      setTimeout(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userInfo');
+        window.location.href = '/';
+      }, timeRemaining * 1000); // setTimeout trabalha com milissegundos
+    }
+  } catch (error) {
+    console.error("Erro ao decodificar o token:", error);
+  }
+}
+
+// Chame essa função logo após carregar o token, por exemplo, no início do seu script principal:
+scheduleTokenExpirationRedirect();

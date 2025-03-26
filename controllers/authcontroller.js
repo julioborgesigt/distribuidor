@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
       return res.json({ firstLogin: true, userId: user.id });
     } else {
       console.log("login: Este não é seu primeiro login. Gerando token...");
-      const token = jwt.sign({ id: user.id, loginType }, JWT_SECRET, { expiresIn: '8h' });
+      const token = jwt.sign({ id: user.id, loginType }, JWT_SECRET, { expiresIn: '2h' });
       console.log("login: Token gerado:", token);
       // Cria o objeto de usuário que será enviado na resposta
       let loginUser = {
@@ -78,7 +78,7 @@ exports.firstLogin = async (req, res) => {
     user.senha = bcryptjs.hashSync(novaSenha, 10);
     user.senha_padrao = false;
     await user.save();
-    const token = jwt.sign({ id: user.id, loginType }, JWT_SECRET, { expiresIn: '8h' });
+    const token = jwt.sign({ id: user.id, loginType }, JWT_SECRET, { expiresIn: '2h' });
     return res.json({ 
       token, 
       user: { 
